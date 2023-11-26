@@ -9,10 +9,17 @@
 
 h1 {
   font-size: 70px;
+  color: rgb(212, 187, 216);
 }
 
 p {
   font-size: 20px;
+  color: rgb(197, 197, 197);
+}
+
+body, html {
+  max-width: 1980px;
+  margin: auto;
 }
 
 body {
@@ -37,6 +44,7 @@ nav {
 }
 nav .part1 logo img {
   height: 70px;
+  filter: grayscale(100);
 }
 nav .part2 {
   width: 60%;
@@ -69,13 +77,68 @@ nav .part2 ul .join_now_button {
   background-repeat: no-repeat;
   background-size: contain;
   position: relative;
+  position: relative;
 }
 .homepage section {
   position: absolute;
-  bottom: 20%;
+  bottom: 10%;
   margin-left: 90px;
   width: 50%;
 }
 .homepage section h1 {
   padding-bottom: 20px;
+  color: rgb(238, 212, 255);
+}
+
+.home_sponsors {
+  padding-top: 80px;
+  display: flex;
+  place-content: center;
+  place-items: center;
+}
+.home_sponsors .logo_container {
+  width: 70%;
+}
+.home_sponsors .logo_container ul {
+  display: flex;
+  justify-content: space-around;
+  padding-left: 20px;
+  place-items: center;
+}
+.home_sponsors .logo_container ul li {
+  font-size: 30px;
+  font-weight: 800;
+  color: gray;
+}
+
+.leaderboard_button {
+  width: 220px;
+  height: 44px;
+  color: black;
+  background-color: yellow;
+  border: none;
+  border-radius: 2px;
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 20px;
+  cursor: pointer;
+}
+.leaderboard_button i {
+  color: black;
+}
+
+.about_page {
+  padding: 90px;
+  display: flex;
+  place-content: center;
+}
+.about_page .about_container {
+  text-align: center;
+  width: 80%;
+}
+.about_page .about_container h1 {
+  font-size: 60px;
+}
+.about_page .about_container p {
+  margin-top: 30px;
 }/*# sourceMappingURL=main.css.map */

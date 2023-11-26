@@ -5,5 +5,43 @@
             2023<br><span style="font-size: 90px;">SundarBazzer<br>Games</span>
         </h1>
         <p>Champions' empowerment, excellence nurtured <br>- Welcome to Sundarbazzer Sports, where dedication leads to success.</p>
+
+        <button class="leaderboard_button">Recent Leaderboard <i class="fas fa-external-link-alt"></i></i></button>
     </section>
+</div>
+
+<!-- if required -->
+{% comment %}
+<div class="home_sponsors">
+    <div class="logo_container">
+        
+        <!-- test code -->
+        <!-- Comment this block of code if server in production -->
+        <ul>
+            <li>LME PAY</li>
+            <li>Oca Ola</li>
+            <li>Supify</li>
+            <li>Mc Onalts</li>
+            <li>SundarBAzzer Mart</li>
+        </ul>
+
+    <!-- server code -->
+    <!-- remove the comment and endcomment line to allow your code come to use -->
+    {% comment %}
+    {% for sponsor in sponsors %}
+        <img src="{{ sponsor.image_path }}" alt="{{ sponsor.image_id }}">
+    {% endfor %}
+    {% endcomment %}
+
+    </div>
+</div>
+
+{% endcomment %}
+
+<div class="about_page">
+    <div class="about_container">
+        <h1>Welcome <br> Sundarbazzer Sports Portal</h1>
+        <p>
+            Sundarbazzer in Lamjung excels in organizing online sports data. Specializing in match statistics, live updates, and innovative dashboards, we offer comprehensive insights into tournaments, player performances, and standings. Our meticulously crafted leaderboards showcase rankings and scores across diverse sporting events, reflecting our commitment to accuracy. Dedicated to revolutionizing sports information accessibility, we cater to passionate fans and industry professionals alike, aiming to redefine standards in online sports data representation and enhance the overall sports experience.</p>
+    </div>
 </div>
