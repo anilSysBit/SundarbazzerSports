@@ -9,7 +9,7 @@
 
 h1 {
   font-size: 70px;
-  color: rgb(212, 187, 216);
+  color: rgb(238, 212, 255);
 }
 
 p {
@@ -129,8 +129,12 @@ nav .part2 ul .join_now_button {
 
 .about_page {
   padding: 90px;
+  margin-top: 100px;
   display: flex;
+  flex-direction: column;
   place-content: center;
+  place-items: center;
+  height: 90vh;
 }
 .about_page .about_container {
   text-align: center;
@@ -141,4 +145,58 @@ nav .part2 ul .join_now_button {
 }
 .about_page .about_container p {
   margin-top: 30px;
+}
+.about_page img {
+  margin-top: 50px;
+}
+
+.recent_events {
+  padding: 90px;
+}
+.recent_events .recent_event_container h2 {
+  padding: 20px;
+  font-size: 30px;
+}
+.recent_events .recent_event_container table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 18px;
+}
+.recent_events .recent_event_container table thead {
+  border-bottom: 1px solid gray;
+}
+.recent_events .recent_event_container table thead tr {
+  border: none;
+}
+.recent_events .recent_event_container table td, .recent_events .recent_event_container table th {
+  text-align: left;
+  padding: 20px;
+}
+.recent_events .recent_event_container table tbody td {
+  color: gray;
+}
+.recent_events .recent_event_container table th {
+  font-size: 18px;
+}
+.recent_events .recent_event_container table .td_event {
+  max-width: 350px;
+}
+.recent_events .recent_event_container table tr {
+  border-bottom: 0.1px dotted gray;
+  height: 127px;
+}
+.recent_events .recent_event_container table .learn-more-bth {
+  background-color: yellow;
+  padding: 10px;
+  width: 150px;
+  color: rgb(39, 38, 38);
+  font-weight: bold;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.latest_news .latest_news_container h2 {
+  text-align: center;
+  font-size: 35px;
 }/*# sourceMappingURL=main.css.map */
