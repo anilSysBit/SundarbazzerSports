@@ -1,27 +1,23 @@
-<!DOCTYPE html>
-{% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'styles/main.css' %}">
-    <script src="https://kit.fontawesome.com/6f2e95887d.js" crossorigin="anonymous"></script>
-</head>
-<body>
-    {% include 'nav.html' %}
+
+{% extends 'index.html' %}
+
+{% block content %}
+
 
     <!-- homepage -->
 
     {% include 'homepage.html' %}
 
+    <!-- recent Events -->
+
     {% include 'recentEvents.html' %}
+
+    <!-- latest News -->
 
     {% include 'latestNews.html' %}
 
-    {% block content %}
+    <!-- Question and Answer -->
 
-    {% endblock %}
-</body>
-</html>
+    {% include 'qna.html' %}
+
+{% endblock %}

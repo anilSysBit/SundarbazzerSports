@@ -6,7 +6,7 @@
     margin: 0;
     box-sizing: border-box;
     font-family: 'Lato', sans-serif;;
-    color: white;
+    color: rgb(169, 169, 169);
 }
 
 h1{
@@ -250,12 +250,15 @@ nav{
             .news_block{
                 width: 250px;
                 padding: 20px;
-                max-height: 500px;
-                // min-height: 300px;
-                overflow: hidden;
                 background-color: #141414;
                 border-radius: 10px;
                 .size_manager{
+                    // position: relative;
+                    height: 100%;
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
                     img{
                         width: 100%;
                     }
