@@ -1,7 +1,11 @@
+
 <nav>
   <div class="part1">
     <logo>
-      <img src="https://sanjogbora.com/wp-content/uploads/2020/11/cropped-SB-logo-trans.png" alt="logo">
+      <img
+        src="https://sanjogbora.com/wp-content/uploads/2020/11/cropped-SB-logo-trans.png"
+        alt="logo"
+      />
     </logo>
   </div>
   <div class="part2">
@@ -13,4 +17,26 @@
       <li class="join_now_button"><a href="#">Join Now</a></li>
     </ul>
   </div>
+  <div class="part3">
+    <i class="fas fa-bars menu-icon" onclick="toggleMenu()"></i>
+    <i class="fas fa-times close-icon active" onclick="toggleClose()"></i>
+  </div>
 </nav>
+
+<script>
+      const part2 = document.querySelector('.part2');
+      const menuIcon = document.querySelector('.menu-icon');
+      const closeIcon = document.querySelector('.close-icon');
+
+      const toggleMenu =()=>{
+        menuIcon.classList.add('active');
+        closeIcon.classList.remove('active');
+        part2.classList.add('responsive')
+      }
+      const toggleClose =()=>{
+        menuIcon.classList.remove('active');
+        closeIcon.classList.add('active');
+        part2.classList.remove('responsive')
+
+      }
+</script>
