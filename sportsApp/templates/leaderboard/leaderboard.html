@@ -1,0 +1,56 @@
+{% extends 'index.html' %}
+
+
+
+{% block content %}
+<div class="leaderboard_container">
+    <div class="size_manager">
+        <h1>Leaderboard</h1>
+        <div class="toggle_box">
+            <div class="options">
+                <a class="active" onclick="toggleActive(0)">Current Score</a>
+                <a onclick="toggleActive(1)">Next Matches</a>
+            </div>
+        </div>
+        <div class="leaderboard_details">
+            <div class="table" id="pointTable">
+                {% include './pointTable.html' %}
+            </div>
+            <div class="table" id="tieSheet" style="display: none;">
+                {% include './tieSheet.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+    function toggleActive(index) {
+        const options = document.querySelectorAll('.options a');
+    const tables = document.querySelectorAll('.leaderboard_details .table');
+
+    // Remove 'active' class from all <a> elements
+    options.forEach((option) => {
+        option.classList.remove('active');
+    });
+
+    // Add 'active' class to the clicked <a> element
+    options[index].classList.add('active');
+
+    // Hide all tables
+    tables.forEach((table) => {
+        table.style.display = 'none';
+    });
+
+    // Show the corresponding table based on the clicked <a> element
+    if (index === 0) {
+        document.getElementById('pointTable').style.display = 'block';
+    } else if (index === 1) {
+        document.getElementById('tieSheet').style.display = 'block';
+    }
+}
+</script>
+{% endblock content %}

@@ -36,6 +36,13 @@ a {
   text-decoration: none;
 }
 
+.avatar {
+  vertical-align: middle;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
 nav {
   height: 70px;
   z-index: 1;
@@ -288,6 +295,120 @@ nav .part3 {
 }
 .accordion.show .accordion-content {
   display: block;
+}
+
+.leaderboard_container .size_manager h1 {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 60px;
+}
+.leaderboard_container .size_manager .toggle_box {
+  padding: 30px;
+  display: flex;
+  place-content: center;
+}
+.leaderboard_container .size_manager .toggle_box .options {
+  border: 1px solid white;
+  border-radius: 5px;
+  display: flex;
+}
+.leaderboard_container .size_manager .toggle_box .options a {
+  font-size: 18px;
+  padding: 15px;
+  cursor: pointer;
+}
+.leaderboard_container .size_manager .toggle_box .options .active {
+  background-color: white;
+  color: black;
+  border-radius: 5px;
+}
+
+.point_table_container {
+  padding-bottom: 150px;
+  width: 100%;
+  margin-top: 50px;
+}
+.point_table_container h2 {
+  text-align: center;
+}
+.point_table_container .size_manager {
+  padding: 100px;
+  padding-top: 50px;
+}
+.point_table_container .size_manager .team_table table {
+  border-collapse: collapse;
+  width: 100%;
+}
+.point_table_container .size_manager .team_table table td, .point_table_container .size_manager .team_table table th {
+  border-bottom: 1px solid rgb(73, 73, 73);
+  text-align: left;
+  padding: 20px;
+}
+.point_table_container .size_manager .team_table table tr td:first-child {
+  width: 100px;
+}
+.point_table_container .size_manager .team_table table tr td:nth-child(3) {
+  width: 100px;
+}
+.point_table_container .size_manager .team_table table tr td:last-child {
+  width: 150px;
+}
+.point_table_container .size_manager .team_table table thead {
+  font-size: 18px;
+}
+.point_table_container .size_manager .team_table table tbody {
+  font-size: 16px;
+}
+
+.tie_sheet_container h2 {
+  text-align: center;
+}
+.tie_sheet_container .size_manager {
+  padding: 90px;
+}
+.tie_sheet_container .size_manager .match_container {
+  margin-top: 50px;
+  border: 2px solid gray;
+  border-radius: 10px;
+}
+.tie_sheet_container .size_manager .match_container .matches {
+  padding: 10px;
+}
+.tie_sheet_container .size_manager .match_container .matches span {
+  padding: 10px;
+  display: flex;
+  justify-content: space-around;
+}
+.tie_sheet_container .size_manager .match_container .matches .team_display {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+.tie_sheet_container .size_manager .match_container .matches .team_display .team {
+  width: 50%;
+  display: flex;
+  gap: 10px;
+  place-content: center;
+  place-items: center;
+  padding: 10px;
+}
+.tie_sheet_container .size_manager .match_container .matches .team_display .team_a {
+  border-right: none;
+}
+.tie_sheet_container .size_manager .match_container .matches .team_display .team_b {
+  border-left: none;
+}
+.tie_sheet_container .size_manager .match_container .matches .team_display .vs_img {
+  vertical-align: middle;
+  height: 100px;
+  width: 100px;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.tie_sheet_container .size_manager .match_container .matches .game_place {
+  padding: 10px;
+  text-align: center;
 }
 
 @media screen and (max-width: 800px) {

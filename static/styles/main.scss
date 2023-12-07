@@ -35,6 +35,12 @@ li {
 a {
   text-decoration: none;
 }
+.avatar {
+  vertical-align: middle;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
 
 nav {
   height: 70px;
@@ -335,6 +341,146 @@ nav {
   }
 
 
+
+
+  // leaderboard
+
+  .leaderboard_container{
+    .size_manager{
+      h1{
+        text-align: center;
+        margin-top: 30px;
+        font-size: 60px;
+      }
+
+      .toggle_box{
+        padding: 30px;
+        display: flex;
+        place-content: center;
+        .options{
+          border: 1px solid white;
+          border-radius: 5px;
+          display: flex;
+          // padding: 10px;
+
+          a{
+            font-size: 18px;
+            // border:  1px solid white;
+            padding: 15px;
+            cursor: pointer;
+          }
+          .active{
+            background-color: white;
+            color: black;
+            border-radius: 5px;
+          }
+        }
+      }
+    }
+  }
+
+  .point_table_container{
+    padding-bottom: 150px;
+    width: 100%;
+    margin-top: 50px;
+    h2{
+      text-align: center;
+    }
+    .size_manager{
+      padding: 100px;
+      padding-top: 50px;
+
+      .team_table{
+        table{
+          border-collapse: collapse;
+          width: 100%;
+          td, th {
+            // border: 1px solid #dddddd;
+            border-bottom: 1px solid rgb(73, 73, 73);
+            text-align: left;
+            padding: 20px;
+          }
+          tr{
+            td{
+              &:first-child{
+                width: 100px;
+              }
+              &:nth-child(3){
+                width: 100px;
+              }
+              &:last-child{
+                width: 150px;
+              }
+            }
+          }
+          thead{
+            font-size: 18px;
+          }
+          tbody{
+            font-size: 16px;
+          }
+
+        }
+      }
+    }
+  }
+
+  .tie_sheet_container{
+    h2{
+      text-align: center;
+    }
+    .size_manager{
+      padding: 90px;
+      .match_container{
+        margin-top: 50px;
+        border: 2px solid gray;
+        border-radius: 10px;
+        .matches{
+          padding: 10px;
+          span{
+            padding: 10px;
+            display: flex;
+            justify-content: space-around;
+            p{}
+          }
+          .team_display{
+            display: flex;
+            justify-content: space-between;
+            // border: 5px solid green;
+            padding: 10px;
+            .team{
+              // border: 2px solid white;
+              width: 50%;
+              display: flex;
+              gap: 10px;
+              place-content: center;
+              place-items: center;
+              padding: 10px;
+            }
+            .team_a{
+              border-right: none;
+            }
+            .team_b{
+              border-left: none;
+            }
+            .vs_img{
+              vertical-align: middle;
+              height: 100px;
+              width: 100px;
+              position: absolute;
+              left: 50%;
+              transform: translate(-50%,-50%);
+              // border: 2px solid white;
+            }
+          }
+          .game_place{
+            padding: 10px;
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
 @media screen and (max-width: 800px) {
     p{
         font-size: 18px;
