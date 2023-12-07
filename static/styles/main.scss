@@ -399,6 +399,8 @@ nav {
             border-bottom: 1px solid rgb(73, 73, 73);
             text-align: left;
             padding: 20px;
+            padding-top: 30px;
+            padding-bottom: 30px;
           }
           tr{
             td{
@@ -632,4 +634,50 @@ nav {
     }
   }
 
+  .point_table_container{
+    .size_manager{
+      padding: 0px;
+
+      .team_table{
+        margin-top: 20px;
+        table{
+          text-align: center;
+          td,th{
+            padding: 7px;
+            text-align: center;
+            padding-top: 25px;
+            padding-bottom: 25px;
+          }
+        }
+      }
+    }
+  }
+
+  .tie_sheet_container{
+    .size_manager{
+      padding: 0;
+      .match_container{
+        padding: 0;
+        .matches{
+          padding: 0;
+          .team_display{
+            // padding: 0;
+
+            .team{
+              // padding: 0;
+              // display: block;
+              flex-direction: column;
+              text-align: center;
+            }
+            .vs_img{
+              height: 50px;
+              width: 50px;
+              transform: translate(-50%,10%);
+
+            }
+          }
+        }
+      }
+    }
+  }
 }

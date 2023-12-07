@@ -343,6 +343,8 @@ nav .part3 {
   border-bottom: 1px solid rgb(73, 73, 73);
   text-align: left;
   padding: 20px;
+  padding-top: 30px;
+  padding-bottom: 30px;
 }
 .point_table_container .size_manager .team_table table tr td:first-child {
   width: 100px;
@@ -545,5 +547,38 @@ nav .part3 {
   }
   .accordin_container .size_manager {
     padding: 0;
+  }
+  .point_table_container .size_manager {
+    padding: 0px;
+  }
+  .point_table_container .size_manager .team_table {
+    margin-top: 20px;
+  }
+  .point_table_container .size_manager .team_table table {
+    text-align: center;
+  }
+  .point_table_container .size_manager .team_table table td, .point_table_container .size_manager .team_table table th {
+    padding: 7px;
+    text-align: center;
+    padding-top: 25px;
+    padding-bottom: 25px;
+  }
+  .tie_sheet_container .size_manager {
+    padding: 0;
+  }
+  .tie_sheet_container .size_manager .match_container {
+    padding: 0;
+  }
+  .tie_sheet_container .size_manager .match_container .matches {
+    padding: 0;
+  }
+  .tie_sheet_container .size_manager .match_container .matches .team_display .team {
+    flex-direction: column;
+    text-align: center;
+  }
+  .tie_sheet_container .size_manager .match_container .matches .team_display .vs_img {
+    height: 50px;
+    width: 50px;
+    transform: translate(-50%, 10%);
   }
 }/*# sourceMappingURL=main.css.map */

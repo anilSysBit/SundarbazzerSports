@@ -1,16 +1,18 @@
 
 <nav>
   <div class="part1">
-    <logo>
-      <img
-        src="https://sanjogbora.com/wp-content/uploads/2020/11/cropped-SB-logo-trans.png"
-        alt="logo"
-      />
-    </logo>
+    <a href="{% url 'home' %}">
+      <logo>
+        <img
+          src="https://sanjogbora.com/wp-content/uploads/2020/11/cropped-SB-logo-trans.png"
+          alt="logo"
+        />
+      </logo>
+    </a>
   </div>
   <div class="part2">
     <ul>
-      <li><a href="#">Leaderboard</a></li>
+      <li><a href="{% url 'leaderboard' %}">Leaderboard</a></li>
       <li><a href="#">Sponsors</a></li>
       <li><a href="#">Events</a></li>
       <li><a href="#">Q&A</a></li>
