@@ -45,20 +45,24 @@ class MatchStatus(models.Model):
     team2_point = models.PositiveIntegerField(default=0)
     winner = models.ForeignKey(Team,on_delete=models.SET_NULL,null=True,blank=True,related_name='won_match')
 
-
+    
     def calc_winner(self):
         team1_score = self.team1_point
         team2_score = self.team2_point
 
-        if team1_score > team1_score:
+        if team1_score > team2_score:
             self.winner = self.game.team1
         elif team2_score > team1_score:
             self.winner = self.game.team2
         else:
             self.winner = None
 
-        self.save()
+        return self.winner
+    
 
+    def save(self, *args, **kwargs):
+        self.calc_winner()  # Calculate the winner before saving
+        super().save(*args, **kwargs)  # Call the original save method to save the object
 
     def __str__(self) -> str:
         return f"{self.winner} is the Winner of the Match of date:{self.game.match_date}"

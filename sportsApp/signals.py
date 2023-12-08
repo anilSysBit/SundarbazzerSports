@@ -1,6 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import MatchStatus,PointTable
+from .models import MatchStatus,PointTable,Team
 
 @receiver(post_save, sender=MatchStatus)
 def update_point_table(sender, instance, created, **kwargs):
@@ -18,3 +18,7 @@ def update_point_table(sender, instance, created, **kwargs):
         point_table_winner.save()
 
         
+@receiver(post_save, sender=Team)
+def create_point_table(sender, instance, created, **kwargs):
+    if created:
+        PointTable.objects.create(team=instance)
