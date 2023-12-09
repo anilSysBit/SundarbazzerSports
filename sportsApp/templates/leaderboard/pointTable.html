@@ -5,79 +5,23 @@
             <table>
                 <thead>
                     <tr>
-                        <th>POS</th>
+                        <th>SYMBOL</th>
                         <th>TEAM</th>
                         <th>POINTS</th>
                         <th>STATUS</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Sundarbazzer Woda 1</td>
-                        <td>4</td>
-                        <td>IN MATCH</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Sundarbazzer Woda 2</td>
-                        <td>3</td>
-                        <td>IN MATCH</td>
-                    </tr>
+                    {% for data in point_table %}
 
-                    <tr>
-                        <td>3</td>
-                        <td>Sundarbazzer Woda 2</td>
-                        <td>0</td>
-                        <td>PENDING</td>
-                    </tr>
+                        <tr>
+                            <td>{{data.team.team_code}}</td>
+                            <td>{{data.team}}</td>
+                            <td>{{data.points}}</td>
+                            <td>{{data.status}}</td>
+                        </tr>
 
-                    <tr>
-                        <td>4</td>
-                        <td>Sundarbazzer Woda 2</td>
-                        <td>0</td>
-                        <td>ELIMINATED</td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>Sundarbazzer Woda 2</td>
-                        <td>3</td>
-                        <td>IN MATCH</td>
-                    </tr>
-
-                    <tr>
-                        <td>6</td>
-                        <td>Sundarbazzer Woda 2</td>
-                        <td>0</td>
-                        <td>PENDING</td>
-                    </tr>
-
-                    <tr>
-                        <td>7</td>
-                        <td>Sundarbazzer Woda 2</td>
-                        <td>0</td>
-                        <td>ELIMINATED</td>
-                    </tr>
-                    <tr>
-                        <td>8</td>
-                        <td>Sundarbazzer Woda 2</td>
-                        <td>3</td>
-                        <td>IN MATCH</td>
-                    </tr>
-
-                    <tr>
-                        <td>9</td>
-                        <td>Sundarbazzer Woda 2</td>
-                        <td>0</td>
-                        <td>PENDING</td>
-                    </tr>
-
-                    <tr>
-                        <td>10</td>
-                        <td>Sundarbazzer Woda 2</td>
-                        <td>0</td>
-                        <td>ELIMINATED</td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>

@@ -30,6 +30,7 @@ class TieSheet(models.Model):
     team2 = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='team2')
     match_date = models.DateField()
     place = models.CharField(max_length=255)
+    match_complete = models.BooleanField(default=False)
 
     def match_day(self):
         day_of_week = self.match_date.strftime('%A')
@@ -40,7 +41,7 @@ class TieSheet(models.Model):
     
 
 class MatchStatus(models.Model):
-    game = models.ForeignKey(TieSheet,on_delete=models.CASCADE)
+    game = models.ForeignKey(TieSheet,on_delete=models.CASCADE,null=True,blank=True)
     team1_point = models.PositiveIntegerField(default=0)
     team2_point = models.PositiveIntegerField(default=0)
     winner = models.ForeignKey(Team,on_delete=models.SET_NULL,null=True,blank=True,related_name='won_match')
@@ -66,4 +67,28 @@ class MatchStatus(models.Model):
 
     def __str__(self) -> str:
         return f"{self.winner} is the Winner of the Match of date:{self.game.match_date}"
+
+
+
+
+# Recent Events
+
+class RecentEvents(models.Model):
+    SPORT_TYPES = (
+        ('NATIONAL','National'),
+        ('FOOTBALL','Football'),
+        ('VOLLEYBALL','Volleyball'),
+        ('TENNIS','Tennis'),
+        ('GLOBAL','Global'),
+        ('CIRCKET','Circket')
+    )
+    date = models.DateField()
+    event_title= models.CharField(max_length=255)
+    event_description = models.TextField()
+    sport_type = models.CharField(max_length=25,choices=SPORT_TYPES,default='NATIONAL')
+
+
+    def __str__(self) -> str:
+        return self.event_title
+    
 
