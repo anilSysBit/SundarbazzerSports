@@ -1,7 +1,7 @@
 from typing import Any
 from django.contrib import admin
-from .models import Team, PointTable, TieSheet, MatchStatus,RecentEvents
-
+from .models import Team, PointTable, TieSheet, MatchStatus,RecentEvents,LatestNews
+from django.utils.html import mark_safe
 # Register your models here.
 
 @admin.register(Team)
@@ -45,3 +45,20 @@ class RecentEventsAdmin(admin.ModelAdmin):
         'sport_type',
 
     )
+
+@admin.register(LatestNews)
+class LatestNewsAdmin(admin.ModelAdmin):
+    list_display = (
+        'start_date',
+        'end_date',
+        'is_active',
+        'image_preview',
+        'sm_text'
+    )
+    def image_preview(self,obj):
+        if obj.image:
+            return mark_safe(f'<img src="{obj.image.url}" width="100" height="100"/>')
+        return "No Image"
+    image_preview.short_description="Image"
+    
+

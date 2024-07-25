@@ -92,3 +92,18 @@ class RecentEvents(models.Model):
         return self.event_title
     
 
+
+class LatestNews(models.Model):
+    start_date = models.DateField()
+    end_date = models.DateField()
+    is_active = models.BooleanField()
+    image = models.ImageField(upload_to="images/")
+    text = models.TextField()
+    created_at= models.DateField(auto_now_add=True,blank=True,null=True)
+
+    def __str__(self) -> str:
+        return ' '.join(self.text.split()[:10])
+    
+    def sm_text(self):
+        return " ".join(self.text.split()[:10])
+    

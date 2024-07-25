@@ -1,0 +1,34 @@
+{% extends 'index.html' %}
+
+
+{% block content %}
+
+<div class="recent_events">
+    <div class="recent_event_container">
+        <h2>Events</h2>
+        <table style="overflow-x: auto;">
+            <thead>
+                <tr class="tr_head">
+                    <th>Date</th>
+                    <th>Event</th>
+                    <th>Sport Type</th>
+                    <th>Learn More</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- test code -->
+                
+                {% for event in recent_events %}
+                <tr>
+                    <td>{{event.date}}</td>
+                    <td class="td_event">{{event.event_title}}...</td>
+                    <td>{{event.sport_type}}</td>
+                    <td><a href="#"><button class="learn-more-bth">View Detail</button></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock content %}

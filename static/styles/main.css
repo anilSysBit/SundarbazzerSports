@@ -205,10 +205,12 @@ nav .part3 {
 }
 
 .learn-more-bth {
-  background-color: yellow;
+  border: 1px solid gray;
   padding: 10px;
-  width: 150px;
+  width: 100%;
+  text-align: center;
   color: rgb(39, 38, 38);
+  background-color: white;
   font-weight: bold;
   border-radius: 5px;
   font-size: 16px;
@@ -223,17 +225,16 @@ nav .part3 {
   font-size: 35px;
 }
 .latest_news .latest_news_container .news_list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  row-gap: 20px;
+  display: grid;
+  grid-template-columns: 24% 24% 24% 24%;
+  justify-content: space-between;
+  gap: 20px;
   margin-top: 90px;
 }
 .latest_news .latest_news_container .news_list .news_block {
-  width: 250px;
   padding: 20px;
-  background-color: #141414;
   border-radius: 10px;
+  box-shadow: 0px 0px 10px rgb(132, 132, 132);
 }
 .latest_news .latest_news_container .news_list .news_block .size_manager {
   height: 100%;
@@ -244,9 +245,16 @@ nav .part3 {
 }
 .latest_news .latest_news_container .news_list .news_block .size_manager img {
   width: 100%;
+  height: 200px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  -o-object-position: center;
+     object-position: center;
+  border-radius: 5px;
 }
 .latest_news .latest_news_container .news_list .news_block .size_manager p {
-  text-align: justify;
+  margin-top: 10px;
+  font-size: 1rem;
 }
 .latest_news .latest_news_container .news_list .news_block .size_manager button {
   margin-top: 10px;
@@ -581,4 +589,28 @@ nav .part3 {
     width: 50px;
     transform: translate(-50%, 10%);
   }
+}
+.main_latest_news {
+  min-height: 100vh;
+  padding-bottom: 100px;
+}
+.main_latest_news .header {
+  max-height: 500px;
+  max-width: 100%;
+  display: flex;
+  margin-top: 20px;
+}
+.main_latest_news .header img {
+  margin: auto;
+  max-height: 400px;
+  max-width: 100%;
+}
+.main_latest_news .body {
+  color: white;
+  margin-bottom: 100px;
+  padding: 0px 100px;
+  margin-top: 50px;
+}
+.main_latest_news .body p {
+  text-align: justify;
 }/*# sourceMappingURL=main.css.map */
