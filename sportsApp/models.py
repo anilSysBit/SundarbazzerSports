@@ -1,5 +1,9 @@
 from django.db import models
 from datetime import datetime
+from django.contrib.auth.models import User
+from django.utils.crypto import get_random_string
+from django.core.mail import send_mail
+from django.conf import settings
 # Create your models here.
 
 class TeamRequest(models.Model):
@@ -18,18 +22,65 @@ class TeamRequest(models.Model):
         return f'{self.name}'
     
 class Team(models.Model):
+    SPORT_TYPES = (
+        ('FOOTBALL','Football'),
+    )
     name = models.CharField(max_length=255, blank=True)
     total_players = models.PositiveIntegerField(blank=True, null=True)
-    sports_genere = models.CharField(max_length=25, blank=True)
+    sports_genere = models.CharField(max_length=25,choices=SPORT_TYPES,default='FOOTBALL',blank=True)
     email = models.EmailField(max_length=100,unique=True,null=True,blank=True)
     address = models.CharField(max_length=255,blank=True,null=True)
     is_verified = models.BooleanField(default=False)
-    created_at = models.DateField(blank=True, null=True)
+    created_at = models.DateField(blank=True, null=True,auto_now_add=True)
+    user = models.OneToOneField(User,on_delete=models.CASCADE,null=True,blank=True)
+    logo = models.ImageField(upload_to="images/teams/",blank=True,null=True)
+    banner = models.ImageField(upload_to='images/banner/',blank=True,null=True)
 
     def __str__(self) -> str:
         return f'{self.name}'
+    
+    def save(self, *args, **kwargs):
+        if not self.pk and self.email:
+            # Generate a random username
+            username = self.email.split('@')[0] + get_random_string(5)
+            
+            # Create the user instance
+            user = User.objects.create(
+                username=username,
+                email=self.email
+            )
+            
+            # Set a random password
+            password = User.objects.make_random_password()
+            user.set_password(password)
+            
+            # Send email with credentials
+            self._send_email(username, self.email, password)
 
+            user.save()
 
+            # Associate the user with the team
+            self.user = user
+
+        super().save(*args, **kwargs)
+    
+    def _send_email(self, username, email, password):
+        subject = 'Your Account Details'
+        message = f"""
+        Hi {username},
+
+        Your account has been created successfully.
+
+        Username: {username}
+        Email: {email}
+        Password: {password}
+
+        Please keep these details safe.
+
+        Regards,
+        Your Team
+        """
+        send_mail(subject, message, settings.EMAIL_HOST_USER, [email], fail_silently=False)
     
 
 
@@ -140,15 +191,47 @@ class Player(models.Model):
     ('O+', 'O+'),
     ('O-', 'O-')
     )
+        # Define choices for football positions
+    GOALKEEPER = 'GK'
+    RIGHT_BACK = 'RB'
+    LEFT_BACK = 'LB'
+    CENTER_BACK = 'CB'
+    DEFENSIVE_MIDFIELDER = 'DM'
+    CENTRAL_MIDFIELDER = 'CM'
+    ATTACKING_MIDFIELDER = 'AM'
+    RIGHT_MIDFIELDER = 'RM'
+    LEFT_MIDFIELDER = 'LM'
+    RIGHT_WINGER = 'RW'
+    LEFT_WINGER = 'LW'
+    FORWARD = 'FW'
+    STRIKER = 'ST'
+
+    POSITION_CHOICES = [
+        (GOALKEEPER, 'Goalkeeper'),
+        (RIGHT_BACK, 'Right Back'),
+        (LEFT_BACK, 'Left Back'),
+        (CENTER_BACK, 'Center Back'),
+        (DEFENSIVE_MIDFIELDER, 'Defensive Midfielder'),
+        (CENTRAL_MIDFIELDER, 'Central Midfielder'),
+        (ATTACKING_MIDFIELDER, 'Attacking Midfielder'),
+        (RIGHT_MIDFIELDER, 'Right Midfielder'),
+        (LEFT_MIDFIELDER, 'Left Midfielder'),
+        (RIGHT_WINGER, 'Right Winger'),
+        (LEFT_WINGER, 'Left Winger'),
+        (FORWARD, 'Forward'),
+        (STRIKER, 'Striker'),
+    ]
     team = models.ForeignKey(Team,on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     jersey_no = models.PositiveIntegerField()
     age = models.PositiveIntegerField()
     weight = models.PositiveIntegerField()
+    profile_image = models.ImageField(upload_to='images/teams/',blank=True,null=True)
     # height stored in cm
     height = models.PositiveIntegerField()
     blood_group = models.CharField(max_length=25,choices=BLOOD_GROUPS)
     address = models.TextField()
+    designation = models.CharField(max_length=100,choices=POSITION_CHOICES,blank=True,null=True)
 
     class Meta:
         constraints = [
@@ -156,3 +239,13 @@ class Player(models.Model):
         ]
     def __str__(self):
         return f"{self.name} ({self.jersey_no}) - {self.team}"
+    
+
+class Coach(models.Model):
+    team = models.OneToOneField(Team,on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    image = models.ImageField(upload_to='images/coach/')
+    created_at = models.DateField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return self.name
