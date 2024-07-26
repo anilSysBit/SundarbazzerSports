@@ -2,14 +2,35 @@ from django.db import models
 from datetime import datetime
 # Create your models here.
 
-class Team(models.Model):
-    team_code = models.CharField(max_length=5)
+class TeamRequest(models.Model):
+    SPORT_TYPES = (
+        ('FOOTBALL','Football'),
+    )
     name = models.CharField(max_length=255)
     total_players = models.PositiveIntegerField(default=10)
-    total_match_played = models.PositiveIntegerField(default=0)
+    sports_genere = models.CharField(max_length=25,choices=SPORT_TYPES,default='FOOTBALL')
+    email = models.EmailField(max_length=100,unique=True,null=True,blank=True)
+    address=models.CharField(max_length=255,blank=True,null=True)
+    created_at = models.DateField(auto_now_add=True)
+
 
     def __str__(self) -> str:
         return f'{self.name}'
+    
+class Team(models.Model):
+    name = models.CharField(max_length=255, blank=True)
+    total_players = models.PositiveIntegerField(blank=True, null=True)
+    sports_genere = models.CharField(max_length=25, blank=True)
+    email = models.EmailField(max_length=100,unique=True,null=True,blank=True)
+    address = models.CharField(max_length=255,blank=True,null=True)
+    is_verified = models.BooleanField(default=False)
+    created_at = models.DateField(blank=True, null=True)
+
+    def __str__(self) -> str:
+        return f'{self.name}'
+
+
+    
 
 
 class PointTable(models.Model):
@@ -107,3 +128,31 @@ class LatestNews(models.Model):
     def sm_text(self):
         return " ".join(self.text.split()[:10])
     
+
+class Player(models.Model):
+    BLOOD_GROUPS = (
+    ('A+', 'A+'),
+    ('A-', 'A-'),
+    ('B+', 'B+'),
+    ('B-', 'B-'),
+    ('AB+', 'AB+'),
+    ('AB-', 'AB-'),
+    ('O+', 'O+'),
+    ('O-', 'O-')
+    )
+    team = models.ForeignKey(Team,on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    jersey_no = models.PositiveIntegerField()
+    age = models.PositiveIntegerField()
+    weight = models.PositiveIntegerField()
+    # height stored in cm
+    height = models.PositiveIntegerField()
+    blood_group = models.CharField(max_length=25,choices=BLOOD_GROUPS)
+    address = models.TextField()
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['team', 'jersey_no'], name='unique_jersey_no_per_team')
+        ]
+    def __str__(self):
+        return f"{self.name} ({self.jersey_no}) - {self.team}"

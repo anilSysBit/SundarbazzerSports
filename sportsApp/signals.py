@@ -1,6 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import MatchStatus,PointTable,Team,TieSheet
+from .models import MatchStatus,PointTable,Team,TieSheet,TeamRequest
 
 @receiver(post_save, sender=MatchStatus)
 def update_point_table(sender, instance, created, **kwargs):
@@ -30,3 +30,5 @@ def change_match_complete_on_tiesheet(sender, instance, created, **kwargs):
 def create_point_table(sender, instance, created, **kwargs):
     if created:
         PointTable.objects.create(team=instance)
+
+

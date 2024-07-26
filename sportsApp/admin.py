@@ -1,15 +1,17 @@
 from typing import Any
 from django.contrib import admin
-from .models import Team, PointTable, TieSheet, MatchStatus,RecentEvents,LatestNews
+from .models import TeamRequest,Team, PointTable, TieSheet, MatchStatus,RecentEvents,LatestNews,Player
 from django.utils.html import mark_safe
 # Register your models here.
 
+@admin.register(TeamRequest)
+class TeamRequestAdmin(admin.ModelAdmin):
+    list_display = ('name', 'total_players','sports_genere','created_at')
+    ordering = ('-created_at',)
+
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
-    list_display = ('name', 'team_code', 'total_players', 'total_match_played')
-    # search_fields = ('name', 'team_code')
-    exclude = ('total_match_played',)
-    
+    list_display = ('name', 'total_players','sports_genere','created_at')
 
 @admin.register(PointTable)
 class PointTableAdmin(admin.ModelAdmin):
@@ -62,3 +64,12 @@ class LatestNewsAdmin(admin.ModelAdmin):
     image_preview.short_description="Image"
     
 
+
+@admin.register(Player)
+class PlayerAdmin(admin.ModelAdmin):
+    list_display = (
+        'name',
+        'jersey_no',
+        'team',
+        'age'
+    )

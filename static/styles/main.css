@@ -24,7 +24,7 @@ html {
 }
 
 body {
-  background-color: #000610;
+  background-color: #0d1117;
   padding: 20px;
 }
 
@@ -84,7 +84,7 @@ nav .part3 {
 }
 
 .homepage {
-  height: 90vh;
+  height: 80vh;
   width: 100%;
   background-image: url("../images/sundarbg2.jpg");
   background-position: center right;
@@ -95,7 +95,7 @@ nav .part3 {
 }
 .homepage section {
   position: absolute;
-  bottom: 10%;
+  bottom: 20%;
   margin-left: 90px;
   width: 50%;
 }
