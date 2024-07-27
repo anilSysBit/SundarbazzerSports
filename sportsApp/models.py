@@ -11,6 +11,7 @@ class TeamRequest(models.Model):
         ('FOOTBALL','Football'),
     )
     name = models.CharField(max_length=255)
+    short_name = models.CharField(unique=True,max_length=10,blank=True,null=True)
     total_players = models.PositiveIntegerField(default=10)
     sports_genere = models.CharField(max_length=25,choices=SPORT_TYPES,default='FOOTBALL')
     email = models.EmailField(max_length=100,unique=True,null=True,blank=True)
@@ -25,16 +26,22 @@ class Team(models.Model):
     SPORT_TYPES = (
         ('FOOTBALL','Football'),
     )
+    GENDER = (
+        ("MALE","male"),
+        ('FEMALE','female'),
+    )
     name = models.CharField(max_length=255, blank=True)
     total_players = models.PositiveIntegerField(blank=True, null=True)
     sports_genere = models.CharField(max_length=25,choices=SPORT_TYPES,default='FOOTBALL',blank=True)
     email = models.EmailField(max_length=100,unique=True,null=True,blank=True)
     address = models.CharField(max_length=255,blank=True,null=True)
     is_verified = models.BooleanField(default=False)
-    created_at = models.DateField(blank=True, null=True,auto_now_add=True)
     user = models.OneToOneField(User,on_delete=models.CASCADE,null=True,blank=True)
     logo = models.ImageField(upload_to="images/teams/",blank=True,null=True)
     banner = models.ImageField(upload_to='images/banner/',blank=True,null=True)
+    gender = models.CharField(max_length=25,blank=True,null=True)
+    created_at = models.DateField(blank=True, null=True,auto_now_add=True)
+    updated_at = models.DateField(auto_now=True,blank=True,null=True)
 
     def __str__(self) -> str:
         return f'{self.name}'
@@ -147,22 +154,18 @@ class MatchStatus(models.Model):
 
 class RecentEvents(models.Model):
     SPORT_TYPES = (
-        ('NATIONAL','National'),
         ('FOOTBALL','Football'),
-        ('VOLLEYBALL','Volleyball'),
-        ('TENNIS','Tennis'),
-        ('GLOBAL','Global'),
-        ('CIRCKET','Circket')
     )
     date = models.DateField()
     event_title= models.CharField(max_length=255)
     event_description = models.TextField()
-    sport_type = models.CharField(max_length=25,choices=SPORT_TYPES,default='NATIONAL')
+    sport_type = models.CharField(max_length=25,choices=SPORT_TYPES,default='FOOTBALL')
 
 
     def __str__(self) -> str:
         return self.event_title
     
+
 
 
 class LatestNews(models.Model):
@@ -249,3 +252,74 @@ class Coach(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+
+
+class TeamStatus(models.Model):
+    team = models.OneToOneField(Team,on_delete=models.PROTECT)
+    total_match_played = models.PositiveIntegerField()
+    created_at = models.DateField(auto_now_add=True)
+
+
+class PlayerStatus(models.Model):
+    player = models.OneToOneField(Player,on_delete=models.PROTECT)
+    total_match_played = models.PositiveIntegerField()
+    total_goals = models.PositiveIntegerField()
+    total_man_of_the_match = models.PositiveIntegerField()
+
+
+
+
+class Event(models.Model):
+    banner = models.ImageField(upload_to='images/events/',blank=True,null=True)
+    title = models.CharField(max_length=255)
+    event_age_limit = models.PositiveIntegerField()
+    is_verified = models.BooleanField(default=False)
+    entry_fee = models.DecimalField(max_digits=10000,decimal_places=3)
+    registration_start_date = models.DateField()
+    resistration_end_date = models.DateField()
+    event_start_date = models.DateTimeField(blank=True,null=True)
+    event_end_date = models.DateTimeField(blank=True,null=True)
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
+    
+    def __str__(self) -> str:
+        return self.title
+
+
+class Sponser(models.Model):
+    SPONSERS_TYPE = (
+        ('PLATFORM_SPONSERS',1),
+        ('EVENT_SPONSERS',2)
+    )
+    name = models.CharField(max_length=100)
+    sponser_type = models.CharField(max_length=25,choices=SPONSERS_TYPE)
+    event = models.ForeignKey(Event,on_delete=models.PROTECT)
+    logo = models.ImageField(upload_to='images/sponsers/',blank=True,null=True)
+    is_verified = models.BooleanField(default=False)
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class Subscriber(models.Model):
+    email = models.EmailField(unique=True)
+    created_at = models.DateField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return self.email
+    
+
+class Messages(models.Model):
+    email = models.EmailField()
+    title = models.CharField(max_length=100)
+    message = models.TextField()
+    created_at = models.DateField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return self.email
+
+
+
