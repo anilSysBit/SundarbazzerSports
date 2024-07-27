@@ -24,7 +24,7 @@
           <a href="#"><i class="fa fa-linkedin"></i></a>  
           <a href="#"><i class="fa fa-facebook"></i></a> 
         </div> -->
-        <p><button>View More</button></p>
+        <a href="{% url 'team_profile' team.id %}"><button>View More</button></a>
       </div>
       {% endfor %}
    </div>

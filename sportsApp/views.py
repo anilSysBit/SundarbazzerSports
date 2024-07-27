@@ -93,3 +93,8 @@ def submit_team_request(request):
 
 def success_state(request):
     return render(request,"./teams/successRequest.html")
+
+
+def team_profile(request,team_id):
+    team = get_object_or_404(Team,id=team_id)
+    return render(request,'./teams/teamProfile.html',{'team':team})

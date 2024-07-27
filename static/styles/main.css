@@ -765,4 +765,96 @@ nav .part3 {
 }
 .main_team_request_container .main_form_container .form-container button:hover {
   background-color: #45a049;
+}
+
+.user_profile {
+  padding: 0px 100px;
+}
+.user_profile .seller_profile_sm .banner_container {
+  overflow: hidden;
+  padding: 0;
+  position: relative;
+  min-height: 400px;
+  height: 200px;
+  display: block;
+}
+.user_profile .seller_profile_sm .banner_container .img_container {
+  height: 70%;
+  width: 100%;
+  background-position: center;
+  background-size: cover;
+}
+.user_profile .seller_profile_sm .banner_container .cards {
+  width: 70%;
+  float: right;
+  margin-top: 20px;
+  display: flex;
+  -moz-column-gap: 20px;
+       column-gap: 20px;
+  padding: 10px;
+}
+.user_profile .seller_profile_sm .banner_container .cards .card {
+  padding: 3px;
+  min-width: 100px;
+  display: flex;
+  place-content: center;
+  border-radius: 5px;
+}
+.user_profile .seller_profile_sm .banner_container .cards .seller {
+  background-color: var(--gb-orange-color);
+}
+.user_profile .seller_profile_sm .banner_container .cards .active {
+  background-color: var(--gb-green-color);
+  color: white;
+}
+.user_profile .seller_profile_sm .banner_container .cards .admin {
+  background-color: var(--blue-strong);
+}
+.user_profile .seller_profile_sm .banner_container .cards .staff {
+  background-color: purple;
+  color: white;
+}
+.user_profile .seller_profile_sm .banner_container .cards .customer {
+  background-color: rgb(187, 175, 0);
+  color: white;
+}
+.user_profile .seller_profile_sm .banner_container .img_container {
+  height: 300px;
+}
+.user_profile .seller_profile_sm .banner_container .profile_picture {
+  height: 40%;
+  position: absolute;
+  left: 50px;
+  bottom: 80px;
+  display: flex;
+  padding: 10px;
+  color: white;
+  -moz-column-gap: 20px;
+       column-gap: 20px;
+}
+.user_profile .seller_profile_sm .banner_container .profile_picture .img_box {
+  height: 150px;
+  width: 150px;
+  background-color: white;
+  box-shadow: 1px 1px 10px white;
+  border-radius: 5px;
+  display: flex;
+  border: 1px solid gray;
+}
+.user_profile .seller_profile_sm .banner_container .profile_picture .img_box img {
+  margin: auto;
+  border-radius: 5px;
+  height: 100%;
+  width: 100%;
+}
+.user_profile .seller_profile_sm .banner_container .profile_picture .details {
+  margin-top: 10px;
+}
+.user_profile .seller_profile_sm .banner_container .profile_picture .details h2 {
+  font-size: 2.2rem;
+  font-weight: 500;
+  mix-blend-mode: difference;
+}
+.user_profile .seller_profile_sm .banner_container .profile_picture .details p {
+  mix-blend-mode: difference;
 }/*# sourceMappingURL=main.css.map */

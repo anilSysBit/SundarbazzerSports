@@ -1,0 +1,22 @@
+{% extends 'index.html' %}
+
+{% load static %}
+{% block content %}
+<div class="user_profile seller_profile_container">
+    <div class="seller_profile_sm">
+        <div class="banner_container">
+            <div class="img_container" 
+            style="background-image: url('{% if team.banner %}{{ team.banner.url }}{% else %}https://th.bing.com/th/id/R.20b2903e7f5697435978ec47d7dcce40?rik=lubGBk%2fDDTVv6g&pid=ImgRaw&r=0{% endif %}');">
+       </div>
+            <div class="profile_picture">
+                <div class="img_box">
+                    <img src="{{ team.logo.url }}" alt="" />
+
+                </div>
+                <div class="details">
+                    <h2>{{ team.name }}</h2>
+                    <p>{{ team.email }}</p>
+                </div>
+            </div>
+        </div>
+{% endblock %}

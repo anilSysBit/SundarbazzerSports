@@ -892,3 +892,110 @@ nav {
     }
   }
 }
+
+
+.user_profile {
+  padding: 0px 100px;
+  .seller_profile_sm {
+    .banner_container {
+      overflow: hidden;
+      padding: 0;
+      // background-color: white;
+      // border: 1px solid white;
+      position: relative;
+      min-height: 400px;
+      height: 200px;
+      display: block;
+      // border: 10px solid blue;
+      // background-color: white;
+      .img_container {
+        // max-height: 250px;
+        // border: 5px solid blue;
+        height: 70%;
+        width: 100%;
+        background-position: center;
+        background-size: cover;
+      }
+      .cards {
+        // border: 2px solid black;
+        width: 70%;
+        float: right;
+        margin-top: 20px;
+        display: flex;
+        column-gap: 20px;
+        padding: 10px;
+        .card {
+          padding: 3px;
+          min-width: 100px;
+          display: flex;
+          place-content: center;
+          border-radius: 5px;
+        }
+        .seller {
+          background-color: var(--gb-orange-color);
+        }
+        .active {
+          background-color: var(--gb-green-color);
+          color: white;
+        }
+        .admin {
+          background-color: var(--blue-strong);
+        }
+        .staff {
+          background-color: purple;
+          color: white;
+        }
+        .customer {
+          background-color: rgb(187, 175, 0);
+          color: white;
+        }
+      }
+      .img_container{
+        height: 300px;
+      }
+      .profile_picture {
+        // border: 2px solid black;
+        height: 40%;
+        // width: 400px;
+
+        position: absolute;
+        left: 50px;
+        bottom: 80px;
+        display: flex;
+        // place-items: center;
+        padding: 10px;
+        color: white;
+        column-gap: 20px;
+        .img_box {
+          height: 150px;
+          // border: 2px solid gray;
+          width: 150px;
+          background-color: white;
+          box-shadow: 1px 1px 10px white;
+          border-radius: 5px;
+          display: flex;
+          border: 1px solid gray;
+
+          img {
+            margin: auto;
+            border-radius: 5px;
+            height: 100%;
+            width: 100%;
+            // border: 2px solid black;
+          }
+        }
+        .details {
+          margin-top: 10px;
+          h2 {
+            font-size: 2.2rem;
+            font-weight: 500;
+            mix-blend-mode: difference;
+          }
+          p {
+            mix-blend-mode: difference;
+          }
+        }
+      }
+    }
+  }
+}
