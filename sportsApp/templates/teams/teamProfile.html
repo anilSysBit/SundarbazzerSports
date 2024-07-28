@@ -1,22 +1,68 @@
-{% extends 'index.html' %}
-
-{% load static %}
-{% block content %}
+{% extends 'index.html' %} {% load static %} {% block content %}
 <div class="user_profile seller_profile_container">
-    <div class="seller_profile_sm">
-        <div class="banner_container">
-            <div class="img_container" 
-            style="background-image: url('{% if team.banner %}{{ team.banner.url }}{% else %}https://th.bing.com/th/id/R.20b2903e7f5697435978ec47d7dcce40?rik=lubGBk%2fDDTVv6g&pid=ImgRaw&r=0{% endif %}');">
-       </div>
-            <div class="profile_picture">
-                <div class="img_box">
-                    <img src="{{ team.logo.url }}" alt="" />
-
-                </div>
-                <div class="details">
-                    <h2>{{ team.name }}</h2>
-                    <p>{{ team.email }}</p>
-                </div>
-            </div>
+  <div class="seller_profile_sm">
+    <div class="banner_container">
+      <div
+        class="img_container"
+        style="background-image: url('{% if team.banner %}{{ team.banner.url }}{% else %}https://th.bing.com/th/id/R.20b2903e7f5697435978ec47d7dcce40?rik=lubGBk%2fDDTVv6g&pid=ImgRaw&r=0{% endif %}');"
+      ></div>
+      <div class="profile_picture">
+        <div class="img_box">
+          <img src="{{ team.logo.url }}" alt="" />
         </div>
-{% endblock %}
+        <div class="details">
+          <h2>{{ team.name }}</h2>
+          <p>{{ team.email }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="coach_info">
+        <img src="{{ coach.image.url }}" alt="">
+        <p class="mt-5">Coach - {{coach.name}}</p>
+    </div>
+    <!-- player formation -->
+
+    <h2>Active Players</h2>
+    <div class="formation">
+        {% for player in players %}
+        <div class="player {{player.position}}">
+            <img src="https://picsum.photos/200/300?random=1" alt="Goalkeeper">
+            <p class="place">{{player.name}}</p>
+            <p style="font-size: 0.8rem;">{{player.position}}</p>
+        </div>
+        {% endfor %}
+    </div>
+    
+
+    <div class="recent_events">
+        <div class="recent_event_container">
+            <h2>Events</h2>
+            <table style="overflow-x: auto;">
+                <thead>
+                    <tr class="tr_head">
+                        <th>Player Name</th>
+                        <th>Posision</th>
+                        <th>Is Active</th>
+                        <th>Learn More</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- test code -->
+                    
+                    {% for player in players %}
+                    <tr>
+                        <td>{{player.name}}</td>
+                        <td class="td_event">{{player.position}}...</td>
+                        <td>OOP</td>
+                        <td><a href="#"><button class="learn-more-bth">View Detail</button></a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    
+  </div>
+  {% endblock %}
+</div>
