@@ -1,6 +1,7 @@
 from django.shortcuts import render,get_object_or_404
 from django.shortcuts import HttpResponse,render,redirect
 from django.core.exceptions import ValidationError
+from .forms import TeamForm
 
 
 from .models import PointTable,TieSheet,RecentEvents,LatestNews,Team,TeamRequest,Coach
@@ -97,6 +98,7 @@ def success_state(request):
 
 
 def team_profile(request,team_id):
+    
     team = get_object_or_404(Team,id=team_id)
     coach = get_object_or_404(Coach,team_id=team_id)
     players = [
@@ -105,7 +107,7 @@ def team_profile(request,team_id):
         {'name': 'Player 3', 'position': 'center-back-1', 'image': 'https://via.placeholder.com/100'},
         {'name': 'Player 4', 'position': 'center-back-2', 'image': 'https://via.placeholder.com/100'},
         {'name': 'Player 5', 'position': 'left-back', 'image': 'https://via.placeholder.com/100'},
-        {'name': 'Player 6', 'position': 'defensive-midfielder', 'image': 'https://via.placeholder.com/100'},
+        # {'name': 'Player 6', 'position': 'defensive-midfielder', 'image': 'https://via.placeholder.com/100'},
         {'name': 'Player 7', 'position': 'right-midfielder', 'image': 'https://via.placeholder.com/100'},
         {'name': 'Player 8', 'position': 'central-midfielder', 'image': 'https://via.placeholder.com/100'},
         {'name': 'Player 9', 'position': 'left-midfielder', 'image': 'https://via.placeholder.com/100'},
@@ -114,3 +116,68 @@ def team_profile(request,team_id):
         {'name': 'Player 12', 'position': 'forward', 'image': 'https://via.placeholder.com/100'}
     ]
     return render(request,'./teams/teamProfile.html',{'team':team,'coach':coach,'players':players})
+
+def create_team(request, res_num):
+    try:
+        team_request = get_object_or_404(TeamRequest, registration_number=res_num)
+        return render(request, 'teams/create_team.html', {'res_data': team_request})
+    except ValidationError:
+        return redirect("success_state")
+
+def submit_team_form(request):
+    if request.method == 'POST':
+        name = request.POST.get("name")
+        short_name = request.POST.get("short_name")
+        total_players = request.POST.get('total_players')
+        sports_genere = request.POST.get("sports_genere")
+        email = request.POST.get("email")
+        address = request.POST.get('address')
+        logo = request.FILES.get('logo')
+        banner = request.FILES.get('banner')
+        gender = request.POST.get('gender')
+        registration_number = request.POST.get('res_num')
+
+
+        print('email',email)
+        errors = []
+        try:
+            # Save the data
+            team_request = Team(
+                name=name,
+                total_players=int(total_players),
+                sports_genere=sports_genere,
+                email=email,
+                address=address,
+                short_name=short_name,
+                logo=logo,
+                banner = banner,
+                gender = gender
+            )
+            team_request.full_clean()  # Validates the model instance
+            team_request.save()
+
+            # After creating the team, delete the team request
+            team_request = get_object_or_404(TeamRequest, registration_number=registration_number)
+            team_request.delete()
+
+
+            return redirect('success_state')  # Redirect to the success page
+
+        except ValidationError as e:
+            errors.extend(e.messages)  # Add model validation errors to the errors list
+            return render(request, './teams/create_team.html', {'res_data':{
+                'errors': errors,
+                'name': name,
+                'total_players': total_players,
+                'sports_genere': sports_genere,
+                'short_name':short_name,
+                'email': email,
+                'address': address,
+                'banner':banner,
+                'logo':logo,
+                'res_num':registration_number,
+                'gender':gender
+            }})
+
+    
+    return render(request, './teams/create_team.html')

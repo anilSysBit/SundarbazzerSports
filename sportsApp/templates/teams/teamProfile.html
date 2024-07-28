@@ -22,28 +22,16 @@
     </div>
     <!-- player formation -->
 
-    <h2>Active Players</h2>
-    <div class="formation">
-        {% for player in players %}
-        <div class="player {{player.position}}">
-            <img src="https://picsum.photos/200/300?random=1" alt="Goalkeeper">
-            <p class="place">{{player.name}}</p>
-            <p style="font-size: 0.8rem;">{{player.position}}</p>
-        </div>
-        {% endfor %}
-    </div>
-    
-
-    <div class="recent_events">
+    <div class="player_listing recent_events">
         <div class="recent_event_container">
-            <h2>Events</h2>
+            <h2>Players</h2>
             <table style="overflow-x: auto;">
                 <thead>
                     <tr class="tr_head">
+                        <th>Image</th>
                         <th>Player Name</th>
                         <th>Posision</th>
                         <th>Is Active</th>
-                        <th>Learn More</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -51,10 +39,11 @@
                     
                     {% for player in players %}
                     <tr>
+                        <td><div class="td_image"><img src="https://picsum.photos/100?random=1" alt=""></div></td>
                         <td>{{player.name}}</td>
                         <td class="td_event">{{player.position}}...</td>
                         <td>OOP</td>
-                        <td><a href="#"><button class="learn-more-bth">View Detail</button></a></td>
+                        <!-- <td><a href="#"><button class="learn-more-bth">View Detail</button></a></td> -->
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -62,6 +51,22 @@
         </div>
     </div>
     
+
+    <h2 class="formation_header">Formation</h2>
+   <div class="form_container">
+    <div class="formation">
+      {% for player in players %}
+      <div class="player {{player.position}}">
+          <!-- <img src="https://picsum.photos/200/300?random=1" alt="Goalkeeper"> -->
+          <p class="place">{{player.name}}</p>
+          <p style="font-size: 0.8rem;">{{player.position}}</p>
+      </div>
+      {% endfor %}
+  </div>
+   </div>
+    
+
+
     
   </div>
   {% endblock %}

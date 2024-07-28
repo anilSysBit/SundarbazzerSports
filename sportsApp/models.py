@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
 from django.core.mail import send_mail
 from django.conf import settings
+from django.core.exceptions import ValidationError
+import uuid
 # Create your models here.
 
 class TeamRequest(models.Model):
@@ -16,12 +18,14 @@ class TeamRequest(models.Model):
     sports_genere = models.CharField(max_length=25,choices=SPORT_TYPES,default='FOOTBALL')
     email = models.EmailField(max_length=100,unique=True,null=True,blank=True)
     address=models.CharField(max_length=255,blank=True,null=True)
+    registration_number = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     created_at = models.DateField(auto_now_add=True)
 
 
     def __str__(self) -> str:
         return f'{self.name}'
     
+
 class Team(models.Model):
     SPORT_TYPES = (
         ('FOOTBALL','Football'),
@@ -33,7 +37,8 @@ class Team(models.Model):
     name = models.CharField(max_length=255, blank=True)
     total_players = models.PositiveIntegerField(blank=True, null=True)
     sports_genere = models.CharField(max_length=25,choices=SPORT_TYPES,default='FOOTBALL',blank=True)
-    email = models.EmailField(max_length=100,unique=True,null=True,blank=True)
+    short_name = models.CharField(unique=True,max_length=10,blank=True,null=True)
+    email = models.EmailField(max_length=100,unique=True)
     address = models.CharField(max_length=255,blank=True,null=True)
     is_verified = models.BooleanField(default=False)
     user = models.OneToOneField(User,on_delete=models.CASCADE,null=True,blank=True)
@@ -183,18 +188,22 @@ class LatestNews(models.Model):
         return " ".join(self.text.split()[:10])
     
 
+from django.core.exceptions import ValidationError
+from django.db import models
+
 class Player(models.Model):
     BLOOD_GROUPS = (
-    ('A+', 'A+'),
-    ('A-', 'A-'),
-    ('B+', 'B+'),
-    ('B-', 'B-'),
-    ('AB+', 'AB+'),
-    ('AB-', 'AB-'),
-    ('O+', 'O+'),
-    ('O-', 'O-')
+        ('A+', 'A+'),
+        ('A-', 'A-'),
+        ('B+', 'B+'),
+        ('B-', 'B-'),
+        ('AB+', 'AB+'),
+        ('AB-', 'AB-'),
+        ('O+', 'O+'),
+        ('O-', 'O-')
     )
-        # Define choices for football positions
+
+    # Define choices for football positions
     GOALKEEPER = 'GK'
     RIGHT_BACK = 'RB'
     LEFT_BACK = 'LB'
@@ -202,12 +211,9 @@ class Player(models.Model):
     DEFENSIVE_MIDFIELDER = 'DM'
     CENTRAL_MIDFIELDER = 'CM'
     ATTACKING_MIDFIELDER = 'AM'
-    RIGHT_MIDFIELDER = 'RM'
-    LEFT_MIDFIELDER = 'LM'
     RIGHT_WINGER = 'RW'
     LEFT_WINGER = 'LW'
     FORWARD = 'FW'
-    STRIKER = 'ST'
 
     POSITION_CHOICES = [
         (GOALKEEPER, 'Goalkeeper'),
@@ -217,32 +223,45 @@ class Player(models.Model):
         (DEFENSIVE_MIDFIELDER, 'Defensive Midfielder'),
         (CENTRAL_MIDFIELDER, 'Central Midfielder'),
         (ATTACKING_MIDFIELDER, 'Attacking Midfielder'),
-        (RIGHT_MIDFIELDER, 'Right Midfielder'),
-        (LEFT_MIDFIELDER, 'Left Midfielder'),
         (RIGHT_WINGER, 'Right Winger'),
         (LEFT_WINGER, 'Left Winger'),
         (FORWARD, 'Forward'),
-        (STRIKER, 'Striker'),
     ]
-    team = models.ForeignKey(Team,on_delete=models.CASCADE)
+
+    team = models.ForeignKey('Team', on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     jersey_no = models.PositiveIntegerField()
     age = models.PositiveIntegerField()
     weight = models.PositiveIntegerField()
-    profile_image = models.ImageField(upload_to='images/teams/',blank=True,null=True)
-    # height stored in cm
+    is_active = models.BooleanField(default=False)
+    profile_image = models.ImageField(upload_to='images/teams/', blank=True, null=True)
     height = models.PositiveIntegerField()
-    blood_group = models.CharField(max_length=25,choices=BLOOD_GROUPS)
+    blood_group = models.CharField(max_length=25, choices=BLOOD_GROUPS)
     address = models.TextField()
-    designation = models.CharField(max_length=100,choices=POSITION_CHOICES,blank=True,null=True)
+    designation = models.CharField(max_length=100, choices=POSITION_CHOICES, blank=True, null=True)
 
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['team', 'jersey_no'], name='unique_jersey_no_per_team')
         ]
+
+    def clean(self):
+        super().clean()
+
+        if self.is_active:
+            active_players = Player.objects.filter(team=self.team, is_active=True)
+            if self.pk:
+                active_players = active_players.exclude(pk=self.pk)
+
+            if active_players.count() >= 11:
+                raise ValidationError(f"Cannot have more than 11 active players in team {self.team}.")
+
+            if active_players.filter(designation=self.designation).exists():
+                raise ValidationError(f"Another active player already holds the position {self.designation} in team {self.team}.")
+
     def __str__(self):
         return f"{self.name} ({self.jersey_no}) - {self.team}"
-    
+
 
 class Coach(models.Model):
     team = models.OneToOneField(Team,on_delete=models.CASCADE)

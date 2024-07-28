@@ -6,7 +6,7 @@ from django.utils.html import mark_safe
 
 @admin.register(TeamRequest)
 class TeamRequestAdmin(admin.ModelAdmin):
-    list_display = ('name', 'total_players','sports_genere','created_at')
+    list_display = ('registration_number','name', 'total_players','sports_genere','created_at')
     ordering = ('-created_at',)
 
 class PlayerInline(admin.TabularInline):
