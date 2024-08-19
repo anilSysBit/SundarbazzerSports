@@ -308,12 +308,12 @@ class Event(models.Model):
 
 class Sponser(models.Model):
     SPONSERS_TYPE = (
-        ('PLATFORM_SPONSERS',1),
-        ('EVENT_SPONSERS',2)
+        ('PLATFORM_SPONSERS','platform'),
+        ('EVENT_SPONSERS','event')
     )
     name = models.CharField(max_length=100)
     sponser_type = models.CharField(max_length=25,choices=SPONSERS_TYPE)
-    event = models.ForeignKey(Event,on_delete=models.PROTECT)
+    event = models.ForeignKey(Event,on_delete=models.PROTECT,null=True,blank=True)
     logo = models.ImageField(upload_to='images/sponsers/',blank=True,null=True)
     is_verified = models.BooleanField(default=False)
     created_at = models.DateField(auto_now_add=True)
@@ -321,6 +321,19 @@ class Sponser(models.Model):
 
     def __str__(self) -> str:
         return self.name
+    
+
+    def clean(self):
+        # Custom validation logic
+        if self.sponser_type == 'EVENT_SPONSERS' and not self.event:
+            raise ValidationError('Event must be selected if the sponsor type is "EVENT_SPONSERS".')
+        elif self.sponser_type == 'PLATFORM_SPONSERS' and self.event:
+            raise ValidationError('Event should not be selected if the sponsor type is "PLATFORM_SPONSERS".')
+
+    def save(self, *args, **kwargs):
+        # Call the clean method before saving
+        self.clean()
+        super(Sponser, self).save(*args, **kwargs)
 
 
 class Subscriber(models.Model):

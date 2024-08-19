@@ -976,6 +976,9 @@ nav .part3 {
   max-height: 60px;
 }
 
+.create_team {
+  width: 100%;
+}
 .create_team .main_form_container {
   border: 1px solid green;
   width: 100%;
@@ -985,9 +988,10 @@ nav .part3 {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+  justify-content: space-between;
 }
 .create_team .main_form_container form .form-control {
-  width: 49%;
+  width: 45%;
   min-width: 300px;
 }
 .create_team .button-wrap {

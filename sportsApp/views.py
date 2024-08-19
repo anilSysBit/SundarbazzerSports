@@ -117,14 +117,15 @@ def team_profile(request,team_id):
     ]
     return render(request,'./teams/teamProfile.html',{'team':team,'coach':coach,'players':players})
 
-def create_team(request, res_num):
-    try:
-        team_request = get_object_or_404(TeamRequest, registration_number=res_num)
-        return render(request, 'teams/create_team.html', {'res_data': team_request})
-    except ValidationError:
-        return redirect("success_state")
 
-def submit_team_form(request):
+def create_team(request, res_num):
+    if request.method == 'GET':
+        try:
+            team_request = get_object_or_404(TeamRequest, registration_number=res_num)
+            return render(request, 'teams/create_team.html', {'res_data': team_request,'res_num':res_num})
+        except ValidationError:
+            return redirect("")
+        
     if request.method == 'POST':
         name = request.POST.get("name")
         short_name = request.POST.get("short_name")
@@ -135,7 +136,7 @@ def submit_team_form(request):
         logo = request.FILES.get('logo')
         banner = request.FILES.get('banner')
         gender = request.POST.get('gender')
-        registration_number = request.POST.get('res_num')
+        # registration_number = request.POST.get('res_num')
 
 
         print('email',email)
@@ -157,7 +158,7 @@ def submit_team_form(request):
             team_request.save()
 
             # After creating the team, delete the team request
-            team_request = get_object_or_404(TeamRequest, registration_number=registration_number)
+            team_request = get_object_or_404(TeamRequest, registration_number=res_num)
             team_request.delete()
 
 
@@ -175,9 +176,10 @@ def submit_team_form(request):
                 'address': address,
                 'banner':banner,
                 'logo':logo,
-                'res_num':registration_number,
+                'registration_num':res_num,
                 'gender':gender
             }})
 
     
     return render(request, './teams/create_team.html')
+

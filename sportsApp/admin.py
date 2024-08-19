@@ -2,12 +2,22 @@ from typing import Any
 from django.contrib import admin
 from .models import TeamRequest,Team, PointTable,Coach, TieSheet, MatchStatus,RecentEvents,LatestNews,Player,Messages,Subscriber,Event,TeamStatus,PlayerStatus,Sponser
 from django.utils.html import mark_safe
+from .utils import send_registration_mail
 # Register your models here.
 
 @admin.register(TeamRequest)
 class TeamRequestAdmin(admin.ModelAdmin):
     list_display = ('registration_number','name', 'total_players','sports_genere','created_at')
     ordering = ('-created_at',)
+    actions = ['send_registration_email_action']
+
+    def send_registration_email_action(self,request,queryset):
+        for team_request in queryset:
+            email = team_request.email  # Assuming there's an email field in TeamRequest model
+            registration_number = team_request.registration_number
+            send_registration_mail(team_request.name,email, registration_number)
+        self.message_user(request, "Emails sent successfully")
+    send_registration_email_action.short_description = "Send registration email"
 
 class PlayerInline(admin.TabularInline):
     model = Player

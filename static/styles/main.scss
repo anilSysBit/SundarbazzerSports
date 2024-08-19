@@ -1144,8 +1144,11 @@ nav {
 
 
 .create_team{
+  width: 100%;
+  // border: 5px solid white;
   .main_form_container{
     border: 1px solid green;
+    // box-shadow: 1px 1px 10px green;
     width: 100%;
     
     form{
@@ -1153,9 +1156,10 @@ nav {
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
+      justify-content: space-between;
       .form-control{
         // border: 1px solid white;
-        width: 49%;
+        width: 45%;
         min-width: 300px;
       }
     }
