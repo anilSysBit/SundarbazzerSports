@@ -47,20 +47,7 @@ class PointTableAdmin(admin.ModelAdmin):
     # search_fields = ('team__name',)
     ordering = ('points','team')
 
-@admin.register(TieSheet)
-class TieSheetAdmin(admin.ModelAdmin):
-    list_display = ('team1', 'team2', 'match_date', 'place','match_complete')
-    # list_filter = ('match_date', 'place')
-    # search_fields = ('team1__name', 'team2__name')
-    exclude = ('match_complete',)
 
-@admin.register(MatchStatus)
-class MatchStatusAdmin(admin.ModelAdmin):
-    list_display = ('game', 'team1_point', 'team2_point', 'winner')
-    # list_filter = ('game__match_date', 'winner__name')
-    # search_fields = ('game__team1__name', 'game__team2__name', 'winner__name')
-    exclude = ('winner',)
-    
 
 
 
