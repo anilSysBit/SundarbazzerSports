@@ -1,6 +1,7 @@
 from typing import Any
 from django.contrib import admin
-from .models import TeamRequest,Team, PointTable,Coach,Goal,Fall,Substitution,PlayerMatchEvents, TieSheet, Match,MatchStatus,RecentEvents,LatestNews,Player,Messages,Subscriber,Event,TeamStatus,PlayerStatus,Sponser
+from .models import TeamRequest,Team,EventMember,Guest, PointTable,Coach,Goal,Fall,Substitution,PlayerMatchEvents, TieSheet, Match,MatchStatus,RecentEvents,LatestNews,Player,Messages,Subscriber,Event,TeamStatus,PlayerStatus,Sponser
+
 from django.utils.html import mark_safe
 from .utils import send_registration_mail
 # Register your models here.
@@ -170,3 +171,19 @@ class SubscriberAdmin(admin.ModelAdmin):
 class MessagesAdmin(admin.ModelAdmin):
     list_display = ('email', 'title', 'message', 'created_at')
     search_fields = ('email', 'title')
+
+
+
+
+
+
+
+# Admin to add Event members
+@admin.register(EventMember)
+class EventMemberAdmin(admin.ModelAdmin):
+    list_display = ('name','designation','payment','event')
+
+
+@admin.register(Guest)
+class GuestAdmin(admin.ModelAdmin):
+    list_display = ('name','designation','is_event_guest','match')

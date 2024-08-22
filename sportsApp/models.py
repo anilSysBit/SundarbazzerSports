@@ -481,6 +481,16 @@ class PlayerStatus(models.Model):
     updated_at = models.DateTimeField(auto_now=True,blank=True,null=True)
 
 
+# Requesting before creating a event
+class EventRequest(models.Model):
+    requestor_name = models.CharField(max_length=100)
+    event_name = models.CharField(max_length=100)
+    description = models.TextField(blank=True,null=True)
+    email = models.EmailField(max_length=100)
+    phone = models.CharField(max_length=10)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
 # Model for the event
 
 class Event(models.Model):
@@ -497,8 +507,10 @@ class Event(models.Model):
     entry_fee = models.DecimalField(max_digits=10000,decimal_places=3)
     registration_start_date = models.DateField()
     resistration_end_date = models.DateField()
-    event_start_date = models.DateTimeField(blank=True,null=True)
-    event_end_date = models.DateTimeField(blank=True,null=True)
+    event_start_date = models.DateField(blank=True,null=True)
+    event_end_date = models.DateField(blank=True,null=True)
+    email = models.EmailField(max_length=100,blank=True,null=True)
+    phone = models.CharField(max_length=10,blank=True,null=True)
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
     
@@ -518,12 +530,12 @@ class Guest(models.Model):
 
 # Event Members (Add Event Members)
 
-class EventMembers(models.Model):
-    event = models.ForeignKey(Event,on_delete=models.CASCADE)
+class EventMember(models.Model):
+    name = models.CharField(max_length=50)
     designation = models.CharField(max_length=50)
+    event = models.ForeignKey(Event,on_delete=models.CASCADE)
     description = models.TextField(blank=True,null=True)
     payment = models.DecimalField(max_digits=10,decimal_places=2,help_text="Payment you will give for this event",blank=True,null=True)
-    name = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
