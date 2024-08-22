@@ -1,5 +1,5 @@
 from django import forms
-from .models import Team
+from .models import Team,Payment
 from django.core.mail import send_mail
 from django.conf import settings
 from django.utils.crypto import get_random_string
@@ -54,3 +54,21 @@ class TeamForm(forms.ModelForm):
         Your Team
         """
         send_mail(subject, message, settings.EMAIL_HOST_USER, [email], fail_silently=False)
+
+
+
+
+class PaymentForm(forms.ModelForm):
+    class Meta:
+        model = Payment
+        fields = ['transaction_type', 'mobile_number', 'email', 'amount', 'tax_amount', 'service_charge', 'delivery_charge', 'total_amount']
+        widgets = {
+            'transaction_type': forms.Select(),
+            'amount': forms.NumberInput(attrs={'step': '0.01'}),
+            'tax_amount': forms.NumberInput(attrs={'step': '0.01'}),
+            'service_charge': forms.NumberInput(attrs={'step': '0.01'}),
+            'delivery_charge': forms.NumberInput(attrs={'step': '0.01'}),
+            'total_amount': forms.NumberInput(attrs={'step': '0.01'}),
+            'created_at': forms.HiddenInput(),
+            'updated_at': forms.HiddenInput(),
+        }

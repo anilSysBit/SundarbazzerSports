@@ -1,0 +1,52 @@
+{% extends 'index.html' %}
+
+
+{% block content %}
+<style>
+    .form-container{
+        display: flex;
+    }
+    form{
+        border: 1px solid white;
+        padding:10px;
+        margin-top: 20px;
+        width: 50%;
+        margin: auto;
+    }
+    form div{
+        /* border: 1px solid white; */
+        padding:10px;
+        display: flex;
+        flex-direction: column;
+        /* width:50%; */
+    }
+    form div input,select{
+        height: 40px;
+        color:white;
+        padding:5px;
+        border-radius: 5px;
+        background-color: transparent;
+    }
+    form select option{
+        color: black;
+    }
+    form button{
+        height:50px;
+        margin-top: 20px;
+        min-width: 120px;
+        color: black;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+</style>
+<div class="form-container">
+    <form action="">
+    <p>Transaction Form</p>
+    {% csrf_token %}
+
+    {{form.as_div}}
+    <button type="submit">Submit</button>
+</form>
+</div>
+
+{% endblock content %}

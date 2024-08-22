@@ -1,7 +1,7 @@
 from django.shortcuts import render,get_object_or_404
 from django.shortcuts import HttpResponse,render,redirect
 from django.core.exceptions import ValidationError
-from .forms import TeamForm
+from .forms import PaymentForm
 
 
 from .models import PointTable,TieSheet,RecentEvents,LatestNews,Team,TeamRequest,Coach
@@ -183,3 +183,9 @@ def create_team(request, res_num):
     
     return render(request, './teams/create_team.html')
 
+
+
+
+def esewa_payment(request):
+    form = PaymentForm()
+    return render(request,'./payments/payment_summary.html',{'form':form})
