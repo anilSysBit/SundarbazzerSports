@@ -617,6 +617,33 @@ class Messages(models.Model):
         return self.email
 
 
+class Payment(models.Model):
+    TRANSACTION_TYPE = (
+        ('EVENT_REGISTRATION_PAYMENT','event payment'),
+        ('TEAM_REGISTRATION_PAYMENT','Team Registration payment'),
+        ('EVENT_MEMBER_PAYMENT','Event Member Payment'),
+        ('WIN_TEAM_PAYMENT','Winning Team Payment'),
+        ('PLAYER_PAYMENT','PLAYER PAYMENT')
+        ('OTHERS','others')
+    )
+    transaction_type = models.CharField(max_length=50,choices=TRANSACTION_TYPE)
+    mobile_number = models.CharField(max_length=10)
+    email = models.EmailField(max_length=100,blank=True,null=True)
+    amount = models.DecimalField(max_digits=10,decimal_places=2)
+    tax_amount = models.DecimalField(max_digits=10,decimal_places=2,blank=True,null=True)
+    service_charge = models.DecimalField(max_digits=10,decimal_places=2,blank=True,null=True)
+    delivery_charge = models.DecimalField(max_digits=10,decimal_places=2,blank=True,null=True)
+    total_amount = models.DecimalField(max_digits=10,decimal_places=2)
+    
 
 
+class Transaction(models.Model):
+    status = models.CharField(max_length=20)
+    total_amount = models.DecimalField(max_digits=10,decimal_places=2)
+    transaction_uuid  = models.CharField(max_length=255)
+    payment_code = models.CharField(max_length=255)
+    payment = models.OneToOneField(Payment,on_delete=models.RESTRICT)
+    description = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
