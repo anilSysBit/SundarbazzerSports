@@ -1,6 +1,6 @@
 from typing import Any
 from django.contrib import admin
-from .models import TeamRequest,Team,EventMember,Guest, PointTable,Coach,Goal,Fall,Substitution,PlayerMatchEvents, TieSheet, Match,MatchStatus,RecentEvents,LatestNews,Player,Messages,Subscriber,Event,TeamStatus,PlayerStatus,Sponser
+from .models import TeamRequest,Team,EventMember,EventTeam,EventRequest,Guest, PointTable,Coach,Goal,Fall,Substitution,PlayerMatchEvents, TieSheet, Match,MatchStatus,RecentEvents,LatestNews,Player,Messages,Subscriber,Event,TeamStatus,Sponser
 
 from django.utils.html import mark_safe
 from .utils import send_registration_mail
@@ -122,11 +122,7 @@ class TeamStatusAdmin(admin.ModelAdmin):
     search_fields = ('team__name',)
     # list_filter = ('created_at',)
 
-@admin.register(PlayerStatus)
-class PlayerStatusAdmin(admin.ModelAdmin):
-    list_display = ('player', 'total_match_played', 'total_goals', 'total_man_of_the_match')
-    search_fields = ('player__name',)
-    # list_filter = ('created_at',)
+
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
@@ -154,7 +150,11 @@ class PlayerEventsInline(admin.TabularInline):
 @admin.register(Match)
 class MatchAdmin(admin.ModelAdmin):
     inlines = [GoalInline,FallInline,SubstitutionInline,PlayerEventsInline]
-    list_display = ('team1','team2','match_date','place','match_complete')
+    list_display = ('team_vs','match_date','place','match_complete')
+
+
+    def team_vs(self,obj):
+        return f'{obj.team1} vs {obj.team2}'
 
 @admin.register(Sponser)
 class SponserAdmin(admin.ModelAdmin):
@@ -176,7 +176,10 @@ class MessagesAdmin(admin.ModelAdmin):
 
 
 
-
+# event request
+@admin.register(EventRequest)
+class EventRequest(admin.ModelAdmin):
+    list_display = ('requestor_name','email','phone')
 
 # Admin to add Event members
 @admin.register(EventMember)
@@ -187,3 +190,9 @@ class EventMemberAdmin(admin.ModelAdmin):
 @admin.register(Guest)
 class GuestAdmin(admin.ModelAdmin):
     list_display = ('name','designation','is_event_guest','match')
+
+
+# add a event team
+@admin.register(EventTeam)
+class EventTeamAdmin(admin.ModelAdmin):
+    list_display = ('event','team')

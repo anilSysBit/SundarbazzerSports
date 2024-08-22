@@ -188,7 +188,40 @@ class Player(models.Model):
     def __str__(self):
         return f"{self.name} ({self.jersey_no}) - {self.team}"
 
+# Model for the event
 
+class Event(models.Model):
+    EVENT_TYPE = (
+        ('LEAGUE','League'),
+        ('KNOCKOUT','Knockout'),
+        ('FRIENDLY','Friendly')
+    )
+    title = models.CharField(max_length=255)
+    event_type = models.CharField(max_length=20,choices=EVENT_TYPE,blank=True,null=True)
+    banner = models.ImageField(upload_to='images/events/',blank=True,null=True)
+    event_age_limit = models.PositiveIntegerField()
+    is_verified = models.BooleanField(default=False)
+    entry_fee = models.DecimalField(max_digits=10000,decimal_places=3)
+    registration_start_date = models.DateField()
+    resistration_end_date = models.DateField()
+    event_start_date = models.DateField(blank=True,null=True)
+    event_end_date = models.DateField(blank=True,null=True)
+    email = models.EmailField(max_length=100,blank=True,null=True)
+    phone = models.CharField(max_length=10,blank=True,null=True)
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
+    
+    def __str__(self) -> str:
+        return self.title
+    
+class EventTeam(models.Model):
+    event = models.ForeignKey(Event,on_delete=models.CASCADE)
+    team = models.ForeignKey(Team,on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.team.name
 
 # Match Model
 class Match(models.Model):
@@ -199,14 +232,13 @@ class Match(models.Model):
         ('interrupted', 'Interrupted'),
         ('canceled', 'Canceled'),
     ]
-    team1 = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='team1')
-    team2 = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='team2')
+    event = models.ForeignKey(Event,on_delete=models.CASCADE,blank=True,null=True)
+    team1 = models.ForeignKey(EventTeam, on_delete=models.CASCADE, related_name='team1')
+    team2 = models.ForeignKey(EventTeam, on_delete=models.CASCADE, related_name='team2')
     match_date = models.DateTimeField()
     place = models.CharField(max_length=255)
     match_complete = models.BooleanField(default=False)
-    event = models.ForeignKey('Event',on_delete=models.CASCADE)
     duration = models.DurationField(null=True,blank=True)
-    man_of_match = models.OneToOneField('Player',on_delete=models.CASCADE)
     notes = models.TextField(null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True,blank=True,null=True)
     updated_at = models.DateTimeField(auto_now=True,blank=True,null=True)
@@ -214,6 +246,23 @@ class Match(models.Model):
     def match_day(self):
         day_of_week = self.match_date.strftime('%A')
         return day_of_week
+    
+
+    def clean(self) -> None:
+        super().clean()
+
+        if self.team1 == self.team2:
+            raise ValidationError("Team 1 and Team2 Cannot be the same")
+        
+        if not self.team1.event == self.event:
+            raise ValidationError("Team1 Should be of the Same Event")
+        if not self.team2.event == self.event:
+            raise ValidationError("Team2 Should be of the Same Event")
+    
+    def save(self, *args, **kwargs):
+        # Ensure clean is called when saving
+        self.clean()
+        super().save(*args, **kwargs)
     
     def __str__(self):
         return f"{self.team1} vs {self.team2} on {self.match_date}"
@@ -472,51 +521,18 @@ class TeamStatus(models.Model):
     created_at = models.DateField(auto_now_add=True)
 
 
-class PlayerStatus(models.Model):
-    player = models.OneToOneField(Player,on_delete=models.PROTECT)
-    total_match_played = models.PositiveIntegerField()
-    total_goals = models.PositiveIntegerField()
-    total_man_of_the_match = models.PositiveIntegerField()
-    created_at = models.DateTimeField(auto_now_add=True,blank=True,null=True)
-    updated_at = models.DateTimeField(auto_now=True,blank=True,null=True)
-
-
 # Requesting before creating a event
 class EventRequest(models.Model):
     requestor_name = models.CharField(max_length=100)
     event_name = models.CharField(max_length=100)
     description = models.TextField(blank=True,null=True)
+    event_budget = models.DecimalField(max_digits=10,decimal_places=10,blank=True,null=True)
     email = models.EmailField(max_length=100)
     phone = models.CharField(max_length=10)
     created_at = models.DateTimeField(auto_now_add=True)
 
 
-# Model for the event
 
-class Event(models.Model):
-    EVENT_TYPE = (
-        ('LEAGUE','League'),
-        ('KNOCKOUT','Knockout'),
-        ('FRIENDLY','Friendly')
-    )
-    title = models.CharField(max_length=255)
-    event_type = models.CharField(max_length=20,choices=EVENT_TYPE,blank=True,null=True)
-    banner = models.ImageField(upload_to='images/events/',blank=True,null=True)
-    event_age_limit = models.PositiveIntegerField()
-    is_verified = models.BooleanField(default=False)
-    entry_fee = models.DecimalField(max_digits=10000,decimal_places=3)
-    registration_start_date = models.DateField()
-    resistration_end_date = models.DateField()
-    event_start_date = models.DateField(blank=True,null=True)
-    event_end_date = models.DateField(blank=True,null=True)
-    email = models.EmailField(max_length=100,blank=True,null=True)
-    phone = models.CharField(max_length=10,blank=True,null=True)
-    created_at = models.DateField(auto_now_add=True)
-    updated_at = models.DateField(auto_now=True)
-    
-    def __str__(self) -> str:
-        return self.title
-    
 
 # Model For League Game
 
@@ -540,6 +556,7 @@ class EventMember(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     
+
 class EventManagement(models.Model):
     
     created_at = models.DateTimeField(auto_now_add=True,blank=True,null=True)
@@ -555,6 +572,7 @@ class Sponser(models.Model):
     sponser_type = models.CharField(max_length=25,choices=SPONSERS_TYPE)
     event = models.ForeignKey(Event,on_delete=models.PROTECT,null=True,blank=True)
     logo = models.ImageField(upload_to='images/sponsers/',blank=True,null=True)
+    description = models.TextField(blank=True,null=True)
     is_verified = models.BooleanField(default=False)
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
