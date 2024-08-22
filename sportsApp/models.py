@@ -190,10 +190,6 @@ class Player(models.Model):
 
 
 
-
-
-
-
 # Match Model
 class Match(models.Model):
     MATCH_STATUS_CHOICES = [
@@ -222,7 +218,7 @@ class Match(models.Model):
     def __str__(self):
         return f"{self.team1} vs {self.team2} on {self.match_date}"
     
-
+ 
     
 class Refree(models.Model):
     REFREE_POSITION = (
@@ -512,11 +508,28 @@ class Event(models.Model):
 
 # Model For League Game
 
+class Guest(models.Model):
+    name = models.CharField(max_length=100)
+    designation = models.CharField(max_length=100)
+    is_event_guest = models.BooleanField(default=False)
+    match = models.ForeignKey(Match,on_delete=models.SET_NULL,blank=True,null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
+# Event Members (Add Event Members)
+
+class EventMembers(models.Model):
+    event = models.ForeignKey(Event,on_delete=models.CASCADE)
+    designation = models.CharField(max_length=50)
+    description = models.TextField(blank=True,null=True)
+    payment = models.DecimalField(max_digits=10,decimal_places=2,help_text="Payment you will give for this event",blank=True,null=True)
+    name = models.CharField(max_length=50)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     
 class EventManagement(models.Model):
-    pass
+    
     created_at = models.DateTimeField(auto_now_add=True,blank=True,null=True)
     updated_at = models.DateTimeField(auto_now=True,blank=True,null=True)
 
@@ -551,6 +564,10 @@ class Sponser(models.Model):
         super(Sponser, self).save(*args, **kwargs)
 
 
+
+# Models for the Platform
+
+
 class Subscriber(models.Model):
     email = models.EmailField(unique=True)
     created_at = models.DateField(auto_now_add=True)
@@ -568,6 +585,8 @@ class Messages(models.Model):
 
     def __str__(self) -> str:
         return self.email
+
+
 
 
 
