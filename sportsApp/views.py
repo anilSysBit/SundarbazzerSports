@@ -2,6 +2,12 @@ from django.shortcuts import render,get_object_or_404
 from django.shortcuts import HttpResponse,render,redirect
 from django.core.exceptions import ValidationError
 from .forms import PaymentForm
+from .models import Payment
+import uuid
+import hmac
+import hashlib
+import base64
+from django.conf import settings
 
 
 from .models import PointTable,TieSheet,RecentEvents,LatestNews,Team,TeamRequest,Coach
@@ -189,3 +195,51 @@ def create_team(request, res_num):
 def esewa_payment(request):
     form = PaymentForm()
     return render(request,'./payments/payment_summary.html',{'form':form})
+
+
+def generate_signature(fields, secret_key):
+    signed_fields = fields['signed_field_names'].split(',')
+    sorted_fields = {field: fields[field] for field in signed_fields}
+    signature_data = ",".join(f"{k}={v}" for k, v in sorted_fields.items())
+    signature = hmac.new(
+        bytes(secret_key, 'utf-8'),
+        bytes(signature_data, 'utf-8'),
+        hashlib.sha256
+    ).digest()
+    return base64.b64encode(signature).decode()
+
+
+def payment_form(request):
+    transaction_uuid = uuid.uuid4().hex
+    amount = 100
+    tax_amount = 10
+    total_amount = amount + tax_amount
+    product_code = "EPAYTEST"
+    success_url = "https://esewa.com.np"
+    failure_url = "https://google.com"
+
+    fields = {
+        'amount': amount,
+        'tax_amount': tax_amount,
+        'total_amount': total_amount,
+        'transaction_uuid': transaction_uuid,
+        'product_code': product_code,
+        'product_service_charge': 0,
+        'product_delivery_charge': 0,
+        'success_url': success_url,
+        'failure_url': failure_url,
+        'signed_field_names': 'total_amount,transaction_uuid,product_code',
+    }
+
+    secret_key = '8gBm/:&EnhH.1/q'
+    signature = generate_signature(fields, secret_key)
+
+    # Save payment information to the database
+
+    context = {
+        'fields': fields,
+        'signature': signature,
+        'esewa_url': 'https://rc-epay.esewa.com.np/api/epay/main/v2/form'
+    }
+
+    return render(request, 'payments/esewa_payment.html', context)
