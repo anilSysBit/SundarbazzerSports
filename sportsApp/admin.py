@@ -199,4 +199,4 @@ class EventTeamAdmin(admin.ModelAdmin):
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ('transaction_type','mobile_number','amount','tax_amount','total_amount')
+    list_display = ('transaction_type','transaction_uuid','user','amount','tax_amount','total_amount')

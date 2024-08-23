@@ -1,13 +1,16 @@
 from django.shortcuts import render,get_object_or_404
 from django.shortcuts import HttpResponse,render,redirect
 from django.core.exceptions import ValidationError
-from .forms import PaymentForm
-from .models import Payment
+from django.http import HttpResponseBadRequest
+from .models import Payment,Transaction
+from django.contrib.auth.models import User
 import uuid
 import hmac
 import hashlib
+import json
 import base64
 from django.conf import settings
+
 
 
 from .models import PointTable,TieSheet,RecentEvents,LatestNews,Team,TeamRequest,Coach
@@ -193,8 +196,69 @@ def create_team(request, res_num):
 
 
 def esewa_payment(request):
-    form = PaymentForm()
-    return render(request,'./payments/payment_summary.html',{'form':form})
+    return render(request,'./payments/payment_summary.html')
+
+from decimal import Decimal
+def payment_request(request):
+    if request.method == 'POST':
+        # Example user ID and transaction type
+        # Save payment information to the database
+        payment_type = 'EVENT_REGISTRATION_PAYMENT'
+        user_id = User.objects.get(pk=1)
+        transaction_uuid = uuid.uuid4().hex
+
+
+        amount = 100
+        # amount = request.POST.get('total_amount')
+        Payment.objects.create(
+            transaction_type = payment_type,
+            transaction_uuid = transaction_uuid,
+            user = user_id,
+            total_amount = amount,
+        )
+        
+        # Extract total_amount from the POST request
+        if amount is None:
+            return HttpResponseBadRequest('Total amount not found in request.')
+
+        # Print the total amount for debugging
+        print('Total amount:', amount)
+
+
+        tax_amount = 10
+        total_amount = amount + tax_amount
+        product_code = "EPAYTEST"
+        success_url = "https://esewa.com.np"
+        failure_url = "https://google.com"
+
+        fields = {
+            'amount': amount,
+            'tax_amount': tax_amount,
+            'total_amount': total_amount,
+            'transaction_uuid': transaction_uuid,
+            'product_code': product_code,
+            'product_service_charge': 0,
+            'product_delivery_charge': 0,
+            'success_url': success_url,
+            'failure_url': failure_url,
+            'signed_field_names': 'total_amount,transaction_uuid,product_code',
+        }
+
+        secret_key = '8gBm/:&EnhH.1/q'
+        signature = generate_signature(fields, secret_key)
+
+
+
+        context = {
+            'fields': fields,
+            'signature': signature,
+            'esewa_url': 'https://rc-epay.esewa.com.np/api/epay/main/v2/form'
+        }
+
+        return render(request, 'payments/esewa_payment.html', context)
+
+    return HttpResponseBadRequest('Invalid request method.')
+
 
 
 def generate_signature(fields, secret_key):
@@ -210,36 +274,54 @@ def generate_signature(fields, secret_key):
 
 
 def payment_form(request):
-    transaction_uuid = uuid.uuid4().hex
-    amount = 100
-    tax_amount = 10
-    total_amount = amount + tax_amount
-    product_code = "EPAYTEST"
-    success_url = "https://esewa.com.np"
-    failure_url = "https://google.com"
+    pass
 
-    fields = {
-        'amount': amount,
-        'tax_amount': tax_amount,
-        'total_amount': total_amount,
-        'transaction_uuid': transaction_uuid,
-        'product_code': product_code,
-        'product_service_charge': 0,
-        'product_delivery_charge': 0,
-        'success_url': success_url,
-        'failure_url': failure_url,
-        'signed_field_names': 'total_amount,transaction_uuid,product_code',
-    }
 
-    secret_key = '8gBm/:&EnhH.1/q'
-    signature = generate_signature(fields, secret_key)
 
-    # Save payment information to the database
+def esewa_response(request):
+    if request.method == 'POST':
+        encoded_response = request.POST.get('response')  # Get the base64-encoded response
 
-    context = {
-        'fields': fields,
-        'signature': signature,
-        'esewa_url': 'https://rc-epay.esewa.com.np/api/epay/main/v2/form'
-    }
+        if not encoded_response:
+            return HttpResponseBadRequest('No response data found.')
 
-    return render(request, 'payments/esewa_payment.html', context)
+        try:
+            # Decode the base64-encoded string
+            decoded_response = base64.b64decode(encoded_response).decode('utf-8')
+
+            # Parse the JSON string to a Python dictionary
+            response_data = json.loads(decoded_response)
+
+            # Extract data
+            transaction_code = response_data.get('transaction_code')
+            status = response_data.get('status')
+            total_amount = response_data.get('total_amount')
+            transaction_uuid = response_data.get('transaction_uuid')
+            product_code = response_data.get('product_code')
+            signature = response_data.get('signature')
+
+            # Find or create the payment instance
+            try:
+                payment = Payment.objects.get(transaction_uuid=transaction_uuid)
+            except Payment.DoesNotExist:
+                # Handle the case where the payment does not exist
+                return HttpResponseBadRequest('Payment not found.')
+
+            # Save the transaction details to the database
+            Transaction.objects.create(
+                status=status,
+                total_amount=total_amount,
+                transaction_uuid=transaction_uuid,
+                product_code=product_code,
+                ref_id=transaction_code,
+                payment=payment,
+                description=f"Transaction for {product_code}",
+            )
+
+            # Redirect to the /payment page
+            return redirect('/payment')
+        
+        except (base64.binascii.Error, json.JSONDecodeError) as e:
+            return HttpResponseBadRequest(f'Invalid response data: {str(e)}')
+
+    return HttpResponseBadRequest('Invalid request method.')

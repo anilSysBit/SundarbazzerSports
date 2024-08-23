@@ -12,5 +12,8 @@ urlpatterns = [
     path("success_state/",views.success_state,name="success_state"),
     path('create-team/<uuid:res_num>/', views.create_team, name='create-team'),
     path('payment/',views.esewa_payment,name='payment'),
-    path('esewa/',views.payment_form,name='payment_form')
+    path('payment/request/',views.payment_request,name='payment_request'),
+    path('esewa/',views.payment_form,name='payment_form'),
+    path('esewa/response/',views.esewa_response,name='esewa_response')
+
 ]

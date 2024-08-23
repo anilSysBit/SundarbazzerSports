@@ -43,13 +43,15 @@
     }
 </style>
 <div class="form-container">
-    <form action="">
-    <p>Transaction Form</p>
-    {% csrf_token %}
-
-    {{form.as_div}}
-    <button type="submit">Submit</button>
-</form>
+    <form action="{% url 'payment_request' %}" method="post">
+        <p>Payment Form</p>
+        {% csrf_token %}
+        <div>
+            <label for="">Amount</label>
+            <input type="number" name="total_amount" value="100"> <!-- Removed 'disabled' -->
+        </div>
+        <button type="submit">Submit</button>
+    </form>
 </div>
 
 {% endblock content %}

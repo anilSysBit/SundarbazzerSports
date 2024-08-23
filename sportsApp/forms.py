@@ -58,17 +58,3 @@ class TeamForm(forms.ModelForm):
 
 
 
-class PaymentForm(forms.ModelForm):
-    class Meta:
-        model = Payment
-        fields = ['transaction_type', 'mobile_number', 'email', 'amount', 'tax_amount', 'service_charge', 'delivery_charge', 'total_amount']
-        widgets = {
-            'transaction_type': forms.Select(),
-            'amount': forms.NumberInput(attrs={'step': '0.01'}),
-            'tax_amount': forms.NumberInput(attrs={'step': '0.01'}),
-            'service_charge': forms.NumberInput(attrs={'step': '0.01'}),
-            'delivery_charge': forms.NumberInput(attrs={'step': '0.01'}),
-            'total_amount': forms.NumberInput(attrs={'step': '0.01'}),
-            'created_at': forms.HiddenInput(),
-            'updated_at': forms.HiddenInput(),
-        }
