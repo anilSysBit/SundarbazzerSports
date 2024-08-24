@@ -13,7 +13,7 @@ urlpatterns = [
     path('create-team/<uuid:res_num>/', views.create_team, name='create-team'),
     path('payment/',views.esewa_payment,name='payment'),
     path('payment/request/',views.payment_request,name='payment_request'),
-    path('esewa/',views.payment_form,name='payment_form'),
-    path('esewa/response/',views.esewa_response,name='esewa_response')
+    path('esewa/response/',views.esewa_response,name='esewa_response'),
+    path("payment/successfull",views.esewa_response,name='payment_successfull')
 
 ]

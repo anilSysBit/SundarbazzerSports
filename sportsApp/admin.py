@@ -1,6 +1,6 @@
 from typing import Any
 from django.contrib import admin
-from .models import TeamRequest,Payment,Team,EventMember,EventTeam,EventRequest,Guest, PointTable,Coach,Goal,Fall,Substitution,PlayerMatchEvents, TieSheet, Match,MatchStatus,RecentEvents,LatestNews,Player,Messages,Subscriber,Event,TeamStatus,Sponser
+from .models import TeamRequest,Payment,Team,Transaction,EventMember,EventTeam,EventRequest,Guest, PointTable,Coach,Goal,Fall,Substitution,PlayerMatchEvents, TieSheet, Match,MatchStatus,RecentEvents,LatestNews,Player,Messages,Subscriber,Event,TeamStatus,Sponser
 
 from django.utils.html import mark_safe
 from .utils import send_registration_mail
@@ -200,3 +200,10 @@ class EventTeamAdmin(admin.ModelAdmin):
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
     list_display = ('transaction_type','transaction_uuid','user','amount','tax_amount','total_amount')
+
+@admin.register(Transaction)
+class TransactionAdmin(admin.ModelAdmin):
+    list_display = ('transaction_uuid','payment_user','total_amount','ref_id','status')
+
+    def payment_user(self,obj):
+        return obj.payment.user

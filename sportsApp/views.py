@@ -2,6 +2,7 @@ from django.shortcuts import render,get_object_or_404
 from django.shortcuts import HttpResponse,render,redirect
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseBadRequest
+from django.db import IntegrityError
 from .models import Payment,Transaction
 from django.contrib.auth.models import User
 import uuid
@@ -228,7 +229,7 @@ def payment_request(request):
         tax_amount = 10
         total_amount = amount + tax_amount
         product_code = "EPAYTEST"
-        success_url = "https://esewa.com.np"
+        success_url = "http://127.0.0.1:8000/payment/successfull"
         failure_url = "https://google.com"
 
         fields = {
@@ -273,14 +274,14 @@ def generate_signature(fields, secret_key):
     return base64.b64encode(signature).decode()
 
 
-def payment_form(request):
+def payment_success(request):
     pass
 
 
-
 def esewa_response(request):
-    if request.method == 'POST':
-        encoded_response = request.POST.get('response')  # Get the base64-encoded response
+    if request.method == 'GET':
+        # Extract the encoded response directly from the query string
+        encoded_response = request.GET.get('data')
 
         if not encoded_response:
             return HttpResponseBadRequest('No response data found.')
@@ -307,20 +308,24 @@ def esewa_response(request):
                 # Handle the case where the payment does not exist
                 return HttpResponseBadRequest('Payment not found.')
 
-            # Save the transaction details to the database
-            Transaction.objects.create(
-                status=status,
-                total_amount=total_amount,
-                transaction_uuid=transaction_uuid,
-                product_code=product_code,
-                ref_id=transaction_code,
-                payment=payment,
-                description=f"Transaction for {product_code}",
-            )
+            try:
+                # Attempt to create a new transaction
+                Transaction.objects.create(
+                    status=status,
+                    total_amount=total_amount,
+                    transaction_uuid=transaction_uuid,
+                    product_code=product_code,
+                    ref_id=transaction_code,
+                    payment=payment,
+                    description=f"Transaction for {product_code}",
+                )
+            except IntegrityError:
+                # If an IntegrityError occurs, redirect to the home page
+                return redirect('home')  # Replace 'home' with your actual home page route name
 
             # Redirect to the /payment page
-            return redirect('/payment')
-        
+            return render(request, './payments/payment_successfull.html')
+
         except (base64.binascii.Error, json.JSONDecodeError) as e:
             return HttpResponseBadRequest(f'Invalid response data: {str(e)}')
 

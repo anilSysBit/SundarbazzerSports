@@ -641,11 +641,12 @@ class Payment(models.Model):
 class Transaction(models.Model):
     status = models.CharField(max_length=20)
     total_amount = models.DecimalField(max_digits=10,decimal_places=2)
-    transaction_uuid  = models.CharField(max_length=255)
+    transaction_uuid  = models.CharField(max_length=255,unique=True)
     product_code = models.CharField(max_length=255)
     ref_id = models.CharField(max_length=255)
-    payment = models.OneToOneField(Payment,on_delete=models.RESTRICT,null=True,blank=True)
+    payment = models.ForeignKey(Payment,on_delete=models.RESTRICT,null=True,blank=True)
     description = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    
