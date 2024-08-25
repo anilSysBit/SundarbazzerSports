@@ -137,3 +137,4 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'anil.wagle808@gmail.com'  # Replace with your email
 EMAIL_HOST_PASSWORD = 'nszktmkyffxoudee'  # Replace with your email password
+

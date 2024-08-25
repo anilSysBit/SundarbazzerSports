@@ -2,32 +2,29 @@
 
 
 {% block content %}
-
+{% load static %}
 <div class="recent_events">
-    <div class="recent_event_container">
+    <div class="events_sm">
         <h2>Events</h2>
-        <table style="overflow-x: auto;">
-            <thead>
-                <tr class="tr_head">
-                    <th>Date</th>
-                    <th>Event</th>
-                    <th>Sport Type</th>
-                    <th>Learn More</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- test code -->
-                
-                {% for event in recent_events %}
-                <tr>
-                    <td>{{event.date}}</td>
-                    <td class="td_event">{{event.event_title}}...</td>
-                    <td>{{event.sport_type}}</td>
-                    <td><a href="#"><button class="learn-more-bth">View Detail</button></a></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+
+        {% for event in events %}
+            <div class="event_list_container">
+                <img src="{{event.banner.url}}" alt="">
+                <h3 class="txt-center">{{ event.title }}</h3>
+                <div class="data_container">
+                    <div class="first_box">
+                        <p class="mt-5">Game Type - {{ event.event_type }}</p>
+                        <p class="mt-5">Under : {{ event.event_age_limit }}</p>
+                        <p>Entry Fee : <span class="bold_span">Rs. {{ event.entry_fee }} /-</span></p>
+                        <p class="event_date mt-10">Game Will Starts From <span class="bold_span">{{ event.event_start_date }}</span></p>
+                    </div>
+                    <div class="second_box">
+                        <p class="registration">Apply Before <span class="bold_span"> {{ event.resistration_end_date }} </span></p>
+                        <button class="base_btn mt-5">Apply as Team</button>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
     </div>
 </div>
 

@@ -3,7 +3,7 @@ from django.shortcuts import HttpResponse,render,redirect
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseBadRequest
 from django.db import IntegrityError
-from .models import Payment,Transaction
+from .models import Payment,Transaction,Event
 from django.contrib.auth.models import User
 import uuid
 import hmac
@@ -30,8 +30,8 @@ def leaderboard(request):
 
 
 def events(request):
-    recent_events = RecentEvents.objects.all().order_by('-date')
-    return render(request,'./eventPage.html',{'recent_events':recent_events})
+    recent_events = Event.objects.all()
+    return render(request,'./eventPage.html',{'events':recent_events})
 
 
 def latest_news_page(request, news_id):

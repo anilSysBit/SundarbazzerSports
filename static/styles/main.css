@@ -1,9 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: "Lato", sans-serif;
+  font-family: "Poppins", sans-serif;
   color: rgb(224, 224, 224);
 }
 
@@ -19,13 +20,38 @@ p {
 
 body,
 html {
-  max-width: 1980px;
+  max-width: 1400px;
   margin: auto;
 }
 
 body {
-  background-color: #000511;
-  padding: 20px;
+  background-color: #1c1e1a;
+  position: relative;
+}
+
+.ball-container {
+  position: absolute;
+  overflow: hidden;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Prevent balls from interfering with clicks */
+  z-index: 0; /* Balls are behind other content */
+}
+
+.ball {
+  transition: transform 0.3s ease;
+  border-radius: 50%;
+  z-index: 10;
+  border: 2px solid white;
+  background-color: white;
+  height: 50px;
+  width: 50px;
+}
+.ball:hover {
+  transform: scale(1.2) translateY(-10px); /* Slightly larger and raised effect */
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3); /* Add shadow effect */
 }
 
 li {
@@ -44,18 +70,47 @@ a {
 }
 
 nav {
-  height: 70px;
+  box-shadow: 0px 0px 5px rgb(227, 227, 227);
+  border-radius: 50px;
+  margin-top: 10px;
+  background-color: #131610;
+  height: 80px;
   z-index: 1;
   width: 100%;
+  padding: 5px;
   display: flex;
   justify-content: space-around;
+  position: relative;
 }
-nav .part1 logo {
+nav .blur_back {
+  border: 2px solid white;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.2;
+  filter: blur(2px);
+}
+nav .part1 {
+  width: 30%;
+}
+nav .part1 .logo {
+  height: 70px;
+  width: 70px;
+  border: 2px solid white;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
   cursor: pointer;
 }
-nav .part1 logo img {
-  height: 70px;
-  filter: grayscale(100);
+nav .part1 .logo img {
+  height: 100%;
+  width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  -o-object-position: center;
+     object-position: center;
 }
 nav .part2 {
   width: 60%;
@@ -64,19 +119,20 @@ nav .part2 {
   place-content: center;
 }
 nav .part2 ul {
+  height: 100%;
   position: absolute;
   right: 0;
-  top: 5px;
   display: flex;
   place-items: center;
   justify-content: space-between;
-  width: 60%;
+  width: 100%;
 }
 nav .part2 ul li {
   font-size: 17px;
+  text-transform: uppercase;
 }
 nav .part2 ul .join_now_button {
-  border: 2px solid white;
+  font-weight: bold;
   padding: 5px;
 }
 nav .part3 {
@@ -84,20 +140,21 @@ nav .part3 {
 }
 
 .homepage {
-  height: 80vh;
+  height: 90vh;
   width: 100%;
-  background-image: url("../images/sundarbg2.jpg");
+  background-image: url("../images/ftbg.svg");
   background-position: center right;
   background-repeat: no-repeat;
   background-size: contain;
-  position: relative;
-  position: relative;
 }
 .homepage section {
-  position: absolute;
   bottom: 20%;
-  margin-left: 90px;
+  height: 80%;
   width: 50%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  place-content: center;
 }
 .homepage section h1 {
   padding-bottom: 20px;
@@ -128,25 +185,37 @@ nav .part3 {
   color: gray;
 }
 
-.leaderboard_button {
-  width: 220px;
-  height: 44px;
-  color: black;
-  background-color: yellow;
+.base_btn {
   border: none;
-  border-radius: 2px;
-  font-size: 18px;
-  font-weight: 600;
+  background-color: white;
+  color: black;
+  padding: 2px;
+  min-height: 40px;
+  min-width: 100px;
+  border-radius: 8px;
+}
+
+.leaderboard_button {
+  padding-left: 20px;
+  padding-right: 20px;
+  min-width: 100px;
+  min-height: 44px;
+  background-color: #04206d;
+  color: white;
+  border-radius: 50px;
+  border: none;
+  font-size: 1rem;
   margin-top: 20px;
   cursor: pointer;
+}
+.leaderboard_button:hover {
+  background-color: #010c2a;
 }
 .leaderboard_button i {
   color: black;
 }
 
 .about_page {
-  padding: 90px;
-  margin-top: 100px;
   display: flex;
   flex-direction: column;
   place-content: center;
@@ -165,10 +234,13 @@ nav .part3 {
 }
 .about_page img {
   margin-top: 50px;
+  animation: jump 2s infinite;
 }
 
 .recent_events {
-  padding: 90px;
+  padding: 0px 90px;
+  margin-top: 10px;
+  min-height: 100vh;
 }
 .recent_events .recent_event_container h2 {
   padding: 20px;
@@ -1014,4 +1086,69 @@ nav .part3 {
 }
 .create_team .button-wrap::after {
   content: "Select a file";
+}
+
+.mt-5 {
+  margin-top: 5px;
+}
+
+.mt-7 {
+  margin-top: 7px;
+}
+
+.mt-10 {
+  margin-top: 10px;
+}
+
+.mt-20 {
+  margin-top: 15px;
+}
+
+.txt-center {
+  text-align: center;
+}
+
+.bold_span {
+  font-weight: bold;
+}
+
+.event_list_container {
+  border: 2px solid white;
+  width: 50%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.event_list_container h3 {
+  margin-top: 5px;
+  font-size: 25px;
+}
+.event_list_container .data_container {
+  padding: 10px;
+  padding-bottom: 10px;
+  display: flex;
+}
+.event_list_container .data_container .first_box {
+  width: 50%;
+  margin-top: 10px;
+}
+.event_list_container .data_container .second_box {
+  width: 50%;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.event_list_container .data_container .registration {
+  margin-top: 20px;
+  font-size: 0.9rem;
+}
+.event_list_container .data_container .event_date {
+  font-size: 0.9rem;
+}
+.event_list_container img {
+  width: 100%;
+  max-height: 250px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  -o-object-position: center;
+     object-position: center;
 }/*# sourceMappingURL=main.css.map */
