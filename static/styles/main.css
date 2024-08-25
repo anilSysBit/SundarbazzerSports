@@ -140,12 +140,12 @@ nav .part3 {
 }
 
 .homepage {
-  height: 90vh;
+  height: 100vh;
   width: 100%;
-  background-image: url("../images/ftbg.svg");
   background-position: center right;
   background-repeat: no-repeat;
   background-size: contain;
+  display: flex;
 }
 .homepage section {
   bottom: 20%;
@@ -158,10 +158,19 @@ nav .part3 {
 }
 .homepage section h1 {
   padding-bottom: 20px;
-  color: rgb(238, 212, 255);
+  font-size: 4rem;
 }
 .homepage section h1 span {
-  font-size: 90px;
+  background-image: linear-gradient(45deg, white, rgba(156, 156, 156, 0.1));
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.homepage section p {
+  font-size: 0.9rem;
+}
+.homepage .goal_img {
+  width: 50%;
 }
 
 .home_sponsors {
@@ -204,7 +213,7 @@ nav .part3 {
   color: white;
   border-radius: 50px;
   border: none;
-  font-size: 1rem;
+  font-size: 0.9rem;
   margin-top: 20px;
   cursor: pointer;
 }
