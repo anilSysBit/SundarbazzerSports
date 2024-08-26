@@ -5,8 +5,9 @@
 {% load static %}
 <div class="recent_events">
     <div class="events_sm">
-        <h2>Events</h2>
+        <h2 class="txt-center">Events</h2>
 
+        <p class="mt-15"></p>
         {% for event in events %}
             <div class="event_list_container">
                 <img src="{{event.banner.url}}" alt="">

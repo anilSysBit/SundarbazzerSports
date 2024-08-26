@@ -15,16 +15,18 @@
 
     <div class="card">
         <img src="{{ team.logo.url }}" alt="John">
-        <h2>{{ team.name }}</h2>
-        <p class="title">{{team.sports_genere}} Team</p>
-        <p>Address - {{team.address}}</p>
-        <!-- <div style="margin: 24px 0;">
-          <a href="#"><i class="fa fa-dribbble"></i></a> 
-          <a href="#"><i class="fa fa-twitter"></i></a>  
-          <a href="#"><i class="fa fa-linkedin"></i></a>  
-          <a href="#"><i class="fa fa-facebook"></i></a> 
-        </div> -->
-        <a href="{% url 'team_profile' team.id %}"><button>View More</button></a>
+        <div class="cover">
+          <h2>{{ team.name }}</h2>
+          <!-- <p class="title">{{team.sports_genere}} Team</p> -->
+          <!-- <p>Address - {{team.address}}</p> -->
+          <!-- <div style="margin: 24px 0;">
+            <a href="#"><i class="fa fa-dribbble"></i></a> 
+            <a href="#"><i class="fa fa-twitter"></i></a>  
+            <a href="#"><i class="fa fa-linkedin"></i></a>  
+            <a href="#"><i class="fa fa-facebook"></i></a> 
+          </div> -->
+          <a href="{% url 'team_profile' team.id %}" class="view_more"> <i class="fa fa-arrow-right"></i></a>
+        </div>
       </div>
       {% endfor %}
    </div>

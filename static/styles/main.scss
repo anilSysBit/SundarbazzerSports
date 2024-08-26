@@ -146,7 +146,7 @@ a {
     border-radius: 50%;
     background-color: rgba(0,0,0,0.9);
     position: absolute;
-    top: 200px;
+    top: 180px;
     transform-origin: 50%;
     z-index: -1;
     left: 30%;
@@ -350,9 +350,13 @@ nav {
   font-size: 0.9rem;
   margin-top: 20px;
   cursor: pointer;
+  &.outline{
+    background-color: transparent;
+    border: 1px solid white;
+  }
   &:hover{
     background-color:#010c2a;
-
+    box-shadow: 0px 0px 10px gray;
   }
   i {
     color: black;
@@ -448,7 +452,7 @@ nav {
 
 .recent_events {
   // padding: 90px;
-  padding: 0px 90px;
+  // padding: 0px 90px;
   margin-top: 10px;
   min-height: 100vh;
   .recent_event_container {
@@ -1007,8 +1011,9 @@ nav {
   }
   .team_container{
     display: grid;
-    grid-template-columns: 20% 20% 20% 20%;
+    grid-template-columns: 23% 23% 23% 23%;
     justify-content: space-between;
+    gap: 20px;
   }
   .filter_box{
     padding: 10px 0px;
@@ -1045,10 +1050,43 @@ nav {
     // margin: auto;
     text-align: center;
     font-family: arial;
-    padding: 10px;
-    border-radius: 5px;
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: .5s ease;
+    cursor: pointer;
+    
+    .view_more{
+      position: absolute;
+      bottom: 10%;
+      right: 10%;
+      opacity: 0.3;
+      font-weight: 400;
+      font-size: 0.9rem;
+    }
+    &:hover{
+      box-shadow: 0px 0px 10px gray;
+      .view_more{
+        opacity: 1;
+      }
+    }
+    .cover{
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-color: rgba($color: #000000, $alpha: 0.7);
+      display: flex;
+      place-content: center;
+      place-items: center;
+      flex-direction: column;
+    }
     h2{
-      font-size: 25px;
+      font-size: 20px;
+    }
+    p{
+      font-size: 1rem;
     }
     img{
       width: 100%;
@@ -1057,6 +1095,9 @@ nav {
       object-position: center;
 
     }
+    button{
+      width: 100%;
+    }
   }
   
   .title {
@@ -1064,21 +1105,7 @@ nav {
     font-size: 18px;
   }
   
-  button {
-    border: none;
-    outline: 0;
-    display: inline-block;
-    padding: 8px;
-    color: white;
-    background-color:transparent;
-    border: 1px solid rgb(63, 63, 63);
-    text-align: center;
-    cursor: pointer;
-    width: 100%;
-    font-size: 18px;
-    margin-top: 10px;
-    border-radius: 5px;
-  }
+
   
   a {
     text-decoration: none;
@@ -1518,5 +1545,52 @@ nav {
     max-height: 250px;
     object-fit: cover;
     object-position: center;
+  }
+}
+
+
+.auth_option_container{
+  h1{
+    margin-top: 20px;
+    font-size: 3rem;
+  }
+
+  .auth_boxes{
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+    height: 50vh;
+    .box{
+      height: 90%;
+      width:45%;
+      box-shadow: 0px 0px 10px gray;
+      border-radius: 10px;
+      padding: 10px;
+      position: relative;
+      overflow: hidden;
+      .outer{
+        position: absolute;
+        left: 0;
+        border: 2px solid black;
+        bottom: 0;
+        width: 100%;
+        background-color: rgba($color: black, $alpha: 0.7);
+        height: 100%;
+        padding: 10px;
+        display: flex;
+        place-content: center;
+        place-items: center;
+        flex-direction: column;
+        h3{
+          font-size: 25px;
+        }
+      }
+      img{
+        height: 100%;
+        width:100%;
+        object-fit: cover;
+        object-position: center;
+      }
+    }
   }
 }

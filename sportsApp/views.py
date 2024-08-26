@@ -330,3 +330,8 @@ def esewa_response(request):
             return HttpResponseBadRequest(f'Invalid response data: {str(e)}')
 
     return HttpResponseBadRequest('Invalid request method.')
+
+
+
+def join_now(request):
+    return render(request, './auth/auth_options.html')

@@ -16,7 +16,8 @@ urlpatterns = [
     path('payment/',views.esewa_payment,name='payment'),
     path('payment/request/',views.payment_request,name='payment_request'),
     path('esewa/response/',views.esewa_response,name='esewa_response'),
-    path("payment/successfull",views.esewa_response,name='payment_successfull')
+    path("payment/successfull",views.esewa_response,name='payment_successfull'),
+    path("join",views.join_now,name='join_now')
 
 ]
 
