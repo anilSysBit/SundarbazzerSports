@@ -2,6 +2,7 @@ from django.urls import path,include
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+from sportsApp.view2 import EventView
 
 urlpatterns = [
     path('',views.index,name='home'),
@@ -17,7 +18,9 @@ urlpatterns = [
     path('payment/request/',views.payment_request,name='payment_request'),
     path('esewa/response/',views.esewa_response,name='esewa_response'),
     path("payment/successfull",views.esewa_response,name='payment_successfull'),
-    path("join",views.join_now,name='join_now')
+    path("join",views.join_now,name='join_now'),
+    # for event
+    path("organizer/",EventView.index , name='event_dashboard')
 
 ]
 

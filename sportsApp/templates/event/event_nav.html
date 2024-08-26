@@ -1,0 +1,51 @@
+
+<nav>
+  <!-- <div class="blur_back"></div> -->
+  <div class="part1 organizer_logo">
+    <a href="{% url 'home' %}">
+      
+      <div class="logo ">
+        <img
+          src="https://th.bing.com/th/id/OIG4.onB2FLDSZtb9ECxW7JEW?w=1024&h=1024&rs=1&pid=ImgDetMain"
+          alt="logo"
+        />
+      </div>
+      <p>Organizer</p>
+    </a>
+  </div>
+  <div class="part2">
+    <ul>
+      <li><a href="{% url 'leaderboard' %}">Events</a></li>
+      <li><a href="#">Matchs</a></li>
+      <li><a href="{% url 'events' %}">Sponsers</a></li>
+      <li class="profile">
+        <p>Anil Wagle</p>
+        <div class="avatar">
+          
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="part3">
+    <i class="fas fa-bars menu-icon" onclick="toggleMenu()"></i>
+    <i class="fas fa-times close-icon active" onclick="toggleClose()"></i>
+  </div>
+</nav>
+
+<script>
+      const part2 = document.querySelector('.part2');
+      const menuIcon = document.querySelector('.menu-icon');
+      const closeIcon = document.querySelector('.close-icon');
+
+      const toggleMenu =()=>{
+        menuIcon.classList.add('active');
+        closeIcon.classList.remove('active');
+        part2.classList.add('responsive')
+      }
+      const toggleClose =()=>{
+        menuIcon.classList.remove('active');
+        closeIcon.classList.add('active');
+        part2.classList.remove('responsive')
+
+      }
+</script>
