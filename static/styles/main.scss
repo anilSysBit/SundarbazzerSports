@@ -8,6 +8,9 @@
   color: rgb(224, 224, 224);
 }
 
+:root{
+  --global_blue:rgb(84, 84, 255);
+}
 h1 {
   font-size: 70px;
   // color: rgb(212, 187, 216);
@@ -73,15 +76,121 @@ a {
   border-radius: 50%;
 }
 
+.homepage{
+  position: relative;
+  // border: 2px solid white;
+  .wrapper {
+    width: 100px;
+    height: 300px;
+    position: absolute;
+    right: 25%;
+    bottom: 5%;
+    // border: 2px solid white;
+    // position: relative;
+    z-index: 1;
+    border: 2px solid blackr;
+    // animation: path 10s alternate infinite ease;
+
+
+  }
+  
+  .circle {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    background-image: url("https://creazilla-store.fra1.digitaloceanspaces.com/cliparts/14789/soccer-ball-sports-clipart-md.png");
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    // background-color: #fff;
+    // border: 2px solid white;
+    left: 15%;
+    transform-origin: 50%;
+    animation: circle7124 .5s alternate infinite ease;
+  }
+  
+  @keyframes circle7124 {
+    0% {
+      top: 100px;
+      // height: 50px;
+      border-radius: 50px 50px 25px 25px;
+      // transform: rotate(90deg);
+    }
+  
+    40% {
+      // height: 60px;
+      border-radius: 50%;
+    }
+    
+    100% {
+      transform:rotate(40deg);
+      top: 0%;
+    }
+  }
+  
+  .circle:nth-child(2) {
+    left: 45%;
+    animation-delay: .2s;
+  }
+  
+  .circle:nth-child(3) {
+    left: auto;
+    right: 15%;
+    animation-delay: .3s;
+  }
+  
+  .shadow {
+    width: 50px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: rgba(0,0,0,0.9);
+    position: absolute;
+    top: 200px;
+    transform-origin: 50%;
+    z-index: -1;
+    left: 30%;
+    filter: blur(1px);
+    animation: shadow046 .5s alternate infinite ease;
+  }
+  
+  @keyframes shadow046 {
+    0% {
+      transform: scaleX(1.5);
+    }
+  
+    40% {
+      transform: scaleX(1) ;
+      opacity: .7;
+    }
+  
+    100% {
+      transform: scaleX(.2) ;
+      opacity: .4;
+    }
+  }
+  
+  .shadow:nth-child(4) {
+    left: 45%;
+    animation-delay: .2s
+  }
+  
+  .shadow:nth-child(5) {
+    left: auto;
+    right: 15%;
+    animation-delay: .3s;
+  }
+  
+}
 
 nav {
   // border: 2px solid white;
   box-shadow: 0px 0px 5px rgb(227, 227, 227);
   border-radius: 50px;
-  margin-top: 10px;
+  margin-top: 30px;
   background-color: #131610;
   // filter: blur(10px);
-  height: 80px;
+  height: 66px;
   z-index: 1;
   width: 100%;
   padding: 5px;
@@ -104,8 +213,8 @@ nav {
   .part1 {
     width: 30%;
     .logo {
-      height: 70px;
-      width: 70px;
+      height: 50px;
+      width: 50px;
       border: 2px solid white;
       border-radius: 50%;
       overflow: hidden;
@@ -250,31 +359,90 @@ nav {
   }
 }
 
+.big_primary{
+  font-size: 50px;
+  color: var(--global_blue);
+}
 .about_page {
-  // padding: 90px;
-  // margin-top: 30px;
-  display: flex;
-  flex-direction: column;
-  place-content: center;
-  place-items: center;
   height: 90vh;
   .about_container {
     text-align: center;
-    width: 80%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    .heading{
+      width: 40%;
+
+      // border: 2px solid black;
+      text-align: left;
+      .achievement{
+        // border: 2px solid white;
+        margin-top: 20px;
+        box-shadow: 1px 1px 10px rgb(166, 166, 166);
+        border-radius: 10px;
+        padding: 10px;
+        h2{
+          font-size: 35px;
+        }
+      }
+    }
+    .other_info{
+      width: 55%;
+      .sponsers{
+        min-height: 150px;
+        // border: 2px solid white;
+        padding: 5px;
+        border-radius: 10px;
+        box-shadow: 1px 1px 5px gray;
+        margin-top: 5px;
+        display: flex;
+        column-gap: 10px;
+        place-content: center;
+        place-items: center;
+        img{
+          max-height: 100px;
+          // border: 1px solid rgb(190, 190, 190);
+          box-shadow: 0px 0px 5px gray;
+          border-radius: 10px;
+          padding: 10px;
+          max-height: 70px;
+        }
+      }
+    }
 
     h1 {
-      font-size: 60px;
+      font-size: 36px;
+      // color:var(--global_blue);
+    stroke-width: 1px;
+    -webkit-text-stroke-width: 1px;
+    color: transparent;
+    stroke-width: 1px;
+    -webkit-text-stroke-color: var(--global_blue);
+    stroke: var(--global_blue);
+    }
+    .read{
+      cursor: pointer;
+      margin-top: 5px;
     }
     p {
-      margin-top: 30px;
+      text-align: left;
     }
   }
-  img {
-    margin-top: 50px;
-    animation: jump 2s infinite;
+}
+@keyframes jump {
+  0%, 100% {
+      transform: translateY(0) rotate(0deg);
+  }
+  30% {
+      transform: translateY(-100px) rotate(-20deg);
+  }
+  50% {
+      transform: translateY(0) rotate(0deg);
+  }
+  70% {
+      transform: translateY(-100px) rotate(20deg);
   }
 }
-
 // Recent Events on Homepage
 
 
