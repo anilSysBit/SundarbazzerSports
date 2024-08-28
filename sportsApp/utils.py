@@ -18,7 +18,7 @@ def send_registration_mail(team_name,email,registration_number):
         then you will get your login credentials to personalize your team members
         and will receive a portal to manage your team
 
-        link: http://127.0.0.1:3434/create-team/{registration_number}'
+        link: http://127.0.0.1:8000/create-team/{registration_number}'
 
         Please keep these details safe.
 

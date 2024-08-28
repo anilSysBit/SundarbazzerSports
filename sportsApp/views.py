@@ -3,7 +3,7 @@ from django.shortcuts import HttpResponse,render,redirect
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseBadRequest
 from django.db import IntegrityError
-from .models import Payment,Transaction,Event
+from .models import Payment,Transaction,Event,Match
 from django.contrib.auth.models import User
 import uuid
 import hmac
@@ -24,9 +24,10 @@ def index(request):
 
 
 def leaderboard(request):
-    point_table = PointTable.objects.all().order_by('-points')
-    tie_sheet = TieSheet.objects.all().order_by('-match_date')
-    return render(request,'./leaderboard/leaderboard.html',{'point_table':point_table,'tie_sheet':tie_sheet})
+    # point_table = PointTable.objects.all().order_by('-points')
+    tie_sheet = Match.objects.select_related('team1__team','team2__team','event').all()
+
+    return render(request,'./leaderboard/leaderboard.html',{'tie_sheet':tie_sheet})
 
 
 def events(request):

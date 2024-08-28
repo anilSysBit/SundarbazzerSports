@@ -26,7 +26,6 @@ SECRET_KEY = 'django-insecure-=^ls9hgz&^^zsfgh1=^)9e(k0yk^nb3qect4!xtqvl#n6@xzwp
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -74,7 +73,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'projectsb.wsgi.application'
 
-ALLOWED_HOSTS = ['127.0.0.1', '.vercel.app', '.now.sh']
+# ALLOWED_HOSTS = ['127.0.0.1', '.vercel.app', '.now.sh']
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -138,3 +137,4 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'anil.wagle808@gmail.com'  # Replace with your email
 EMAIL_HOST_PASSWORD = 'nszktmkyffxoudee'  # Replace with your email password
 
+ALLOWED_HOSTS = ['127.0.0.1','localhost','*.ngrok-free.app','bb6b-2405-acc0-1207-c4cd-4-8eec-cc15-194e.ngrok-free.app']

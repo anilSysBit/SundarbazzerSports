@@ -1313,29 +1313,25 @@ nav .part3 {
 }
 
 .event_list_container {
-  border: 2px solid white;
-  width: 50%;
+  border: 1px solid gray;
+  width: 40%;
+  height: 50vh;
   border-radius: 8px;
   overflow: hidden;
+  position: relative;
 }
 .event_list_container h3 {
   margin-top: 5px;
   font-size: 25px;
 }
 .event_list_container .data_container {
-  padding: 10px;
-  padding-bottom: 10px;
-  display: flex;
-}
-.event_list_container .data_container .first_box {
-  width: 50%;
-  margin-top: 10px;
-}
-.event_list_container .data_container .second_box {
-  width: 50%;
-  margin-top: 10px;
-  display: flex;
-  flex-direction: column;
+  min-height: 300px;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.2);
 }
 .event_list_container .data_container .registration {
   margin-top: 20px;
@@ -1396,4 +1392,45 @@ nav .part3 {
      object-fit: cover;
   -o-object-position: center;
      object-position: center;
+}
+
+.event_org_homepage {
+  padding: 30px;
+}
+.event_org_homepage h3 {
+  margin-top: 10px;
+}
+.event_org_homepage .header {
+  display: flex;
+  justify-content: space-between;
+}
+.event_org_homepage .ongoing_events {
+  min-height: 40vh;
+  margin-top: 20px;
+}
+.event_org_homepage .ongoing_events p {
+  text-align: center;
+}
+.event_org_homepage .analysis_boxes {
+  margin-top: 20px;
+  display: grid;
+  justify-content: space-between;
+  grid-template-columns: 22% 22% 22% 22%;
+}
+.event_org_homepage .analysis_boxes .box {
+  box-shadow: 0px 0px 10px gray;
+  border-radius: 10px;
+  min-height: 100px;
+  padding: 10px;
+  display: flex;
+  place-content: center;
+  place-items: center;
+  flex-direction: column;
+  gap: 10px;
+}
+.event_org_homepage .analysis_boxes .box img {
+  max-height: 40px;
+}
+.event_org_homepage .analysis_boxes .box .title {
+  font-weight: bold;
 }/*# sourceMappingURL=main.css.map */

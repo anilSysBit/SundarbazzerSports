@@ -7,22 +7,15 @@
     <div class="events_sm">
         <h2 class="txt-center">Events</h2>
 
-        <p class="mt-15"></p>
         {% for event in events %}
             <div class="event_list_container">
                 <img src="{{event.banner.url}}" alt="">
-                <h3 class="txt-center">{{ event.title }}</h3>
                 <div class="data_container">
-                    <div class="first_box">
-                        <p class="mt-5">Game Type - {{ event.event_type }}</p>
-                        <p class="mt-5">Under : {{ event.event_age_limit }}</p>
-                        <p>Entry Fee : <span class="bold_span">Rs. {{ event.entry_fee }} /-</span></p>
-                        <p class="event_date mt-10">Game Will Starts From <span class="bold_span">{{ event.event_start_date }}</span></p>
-                    </div>
-                    <div class="second_box">
+                        <h3 class="txt-center">{{ event.title }}</h3>
                         <p class="registration">Apply Before <span class="bold_span"> {{ event.resistration_end_date }} </span></p>
-                        <button class="base_btn mt-5">Apply as Team</button>
-                    </div>
+                        <p class="event_date mt-10">Game Will Starts From <span class="bold_span">{{ event.event_start_date }}</span></p>
+                        <button class="leaderboard_button mt-5">Apply as Team</button>
+                        <button class="leaderboard_button mt-5 outline">View Details</button>
                 </div>
             </div>
         {% endfor %}

@@ -7,4 +7,4 @@ from django.conf import settings
 
 
 def index(request):
-    return render(request,'./event/event_index.html')
+    return render(request,'./event/event_home.html')

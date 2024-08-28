@@ -20,7 +20,7 @@ urlpatterns = [
     path("payment/successfull",views.esewa_response,name='payment_successfull'),
     path("join",views.join_now,name='join_now'),
     # for event
-    path("organizer/",EventView.index , name='event_dashboard')
+    path("organizer/",EventView.index , name='organizer')
 
 ]
 
