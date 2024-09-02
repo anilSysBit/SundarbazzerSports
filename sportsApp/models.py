@@ -6,6 +6,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.core.exceptions import ValidationError
 import uuid
+from . import constants
 # Create your models here.
 
 class TeamRequest(models.Model):
@@ -30,10 +31,7 @@ class Team(models.Model):
     SPORT_TYPES = (
         ('FOOTBALL','Football'),
     )
-    GENDER = (
-        ("MALE","male"),
-        ('FEMALE','female'),
-    )
+
     name = models.CharField(max_length=255, blank=True)
     total_players = models.PositiveIntegerField(blank=True, null=True)
     sports_genere = models.CharField(max_length=25,choices=SPORT_TYPES,default='FOOTBALL',blank=True)
@@ -44,7 +42,7 @@ class Team(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE,null=True,blank=True)
     logo = models.ImageField(upload_to="images/teams/",blank=True,null=True)
     banner = models.ImageField(upload_to='images/banner/',blank=True,null=True)
-    gender = models.CharField(max_length=25,blank=True,null=True)
+    gender = models.CharField(max_length=25,choices=constants.GENDER_OPTIONS.CHOICES,blank=True,null=True)
     created_at = models.DateField(blank=True, null=True,auto_now_add=True)
     updated_at = models.DateField(auto_now=True,blank=True,null=True)
 

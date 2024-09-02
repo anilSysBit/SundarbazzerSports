@@ -18,9 +18,10 @@ from .models import PointTable,TieSheet,RecentEvents,LatestNews,Team,TeamRequest
 
 # Create your views here.
 def index(request):
-    recent_events = RecentEvents.objects.all().order_by('-date')[:5]
-    latest_news = LatestNews.objects.all()
-    return render(request,'main.html',{'recent_events':recent_events,'latest_news':latest_news})
+    # recent_events = RecentEvents.objects.all().order_by('-date')[:5]
+    return HttpResponse("<h1 style=text-align:center;margin-top:50px;>Welcome Nepal Sports Game API</h1>")
+    # latest_news = LatestNews.objects.all()
+    # return render(request,'main.html',{'recent_events':recent_events,'latest_news':latest_news})
 
 
 def leaderboard(request):
