@@ -1,6 +1,6 @@
 from django.db import models
 from datetime import datetime
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,Group
 from django.utils.crypto import get_random_string
 from django.core.mail import send_mail
 from django.conf import settings
@@ -52,14 +52,16 @@ class Team(models.Model):
     def save(self, *args, **kwargs):
         if not self.pk and self.email:
             # Generate a random username
-            username = self.email.split('@')[0] + get_random_string(5)
+            username = self.email.split('@')[0]
             
             # Create the user instance
             user = User.objects.create(
                 username=username,
-                email=self.email
+                email=self.email,
+                is_staff=True,
             )
-            
+            group, created = Group.objects.get_or_create(name='TeamGroup')  # Replace 'TeamGroup' with your group name
+            user.groups.add(group)
             # Set a random password
             password = User.objects.make_random_password()
             user.set_password(password)

@@ -21,7 +21,7 @@ class TeamRequestViewSet(ModelViewSet):
 class TeamViewSet(ModelViewSet):
     # queryset = Team.objects.all()
     serializer_class = TeamSerializer
-    permission_classes = [IsAdminUser,IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         return Team.objects.filter(is_verified = True)
