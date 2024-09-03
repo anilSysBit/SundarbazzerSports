@@ -9,6 +9,12 @@ class TeamRequestViewSet(ModelViewSet):
     queryset = TeamRequest.objects.all()
     serializer_class = TeamRequestSerializer
     
+
+    
 class TeamViewSet(ModelViewSet):
-    queryset = Team.objects.all()
+    # queryset = Team.objects.all()
+
     serializer_class = TeamSerializer
+
+    def get_queryset(self):
+        return Team.objects.filter(is_verified = True)
