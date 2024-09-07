@@ -190,15 +190,26 @@ class Player(models.Model):
 
 # Model for the event
 
+class EventOrganizer(models.Model):
+    name = models.CharField(max_length=100)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
+
+    def __str__(self) -> str:
+        return self.name
+
 class Event(models.Model):
     EVENT_TYPE = (
         ('LEAGUE','League'),
         ('KNOCKOUT','Knockout'),
         ('FRIENDLY','Friendly')
     )
+
     title = models.CharField(max_length=255)
     event_type = models.CharField(max_length=20,choices=EVENT_TYPE,blank=True,null=True)
     banner = models.ImageField(upload_to='images/events/',blank=True,null=True)
+    event_organizer = models.ForeignKey(EventOrganizer,on_delete=models.CASCADE,blank=True,null=True)
     event_age_limit = models.PositiveIntegerField()
     is_verified = models.BooleanField(default=False)
     entry_fee = models.DecimalField(max_digits=10000,decimal_places=3)
@@ -549,7 +560,7 @@ class Guest(models.Model):
 class EventMember(models.Model):
     name = models.CharField(max_length=50)
     designation = models.CharField(max_length=50)
-    event = models.ForeignKey(Event,on_delete=models.CASCADE)
+    event_organizer = models.ForeignKey(EventOrganizer,on_delete=models.CASCADE,blank=True,null=True)
     description = models.TextField(blank=True,null=True)
     payment = models.DecimalField(max_digits=10,decimal_places=2,help_text="Payment you will give for this event",blank=True,null=True)
     created_at = models.DateTimeField(auto_now_add=True)

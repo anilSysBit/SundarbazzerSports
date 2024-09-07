@@ -1,6 +1,6 @@
 from typing import Any
 from django.contrib import admin
-from .models import TeamRequest,Payment,Team,Transaction,EventMember,EventTeam,EventRequest,Guest, PointTable,Coach,Goal,Fall,Substitution,PlayerMatchEvents, TieSheet, Match,MatchStatus,RecentEvents,LatestNews,Player,Messages,Subscriber,Event,TeamStatus,Sponser
+from .models import TeamRequest,Payment,Team,Transaction,EventMember,EventTeam,EventOrganizer,EventRequest,Guest, PointTable,Coach,Goal,Fall,Substitution,PlayerMatchEvents, TieSheet, Match,MatchStatus,RecentEvents,LatestNews,Player,Messages,Subscriber,Event,TeamStatus,Sponser
 
 from django.utils.html import mark_safe
 from .utils import send_registration_mail
@@ -174,7 +174,10 @@ class MessagesAdmin(admin.ModelAdmin):
 
 
 
-
+# Event organzier Admin
+@admin.register(EventOrganizer)
+class EventOrganizerAdmin(admin.ModelAdmin):
+    list_display = ('name','user','updated_at')
 
 # event request
 @admin.register(EventRequest)
@@ -184,7 +187,7 @@ class EventRequest(admin.ModelAdmin):
 # Admin to add Event members
 @admin.register(EventMember)
 class EventMemberAdmin(admin.ModelAdmin):
-    list_display = ('name','designation','payment','event')
+    list_display = ('name','designation','payment','event_organizer')
 
 
 @admin.register(Guest)

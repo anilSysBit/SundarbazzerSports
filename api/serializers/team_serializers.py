@@ -14,3 +14,5 @@ class TeamSerializer(serializers.ModelSerializer):
         model = Team
         # fields = "__all__"
         exclude = ['user']
+
+
