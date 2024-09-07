@@ -1,4 +1,7 @@
-class GENDER_OPTIONS:
+from django.db import models
+
+
+class GENDER_OPTIONS():
     MALE = 'MALE'
     FEMALE = 'FEMALE'
     OTHERS = 'OTHERS'
@@ -8,3 +11,7 @@ class GENDER_OPTIONS:
         (FEMALE,'Female'),
         (OTHERS,'Others')
     )
+
+
+class POSITION_OPTIONS(models.TextChoices):
+    pass

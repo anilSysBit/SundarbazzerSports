@@ -11,7 +11,7 @@ from . import constants
 
 class TeamRequest(models.Model):
     SPORT_TYPES = (
-        ('FOOTBALL','Football'),
+        ('FOOTBALL','Football'),    
     )
     name = models.CharField(max_length=255)
     short_name = models.CharField(unique=True,max_length=10,blank=True,null=True)
@@ -49,52 +49,6 @@ class Team(models.Model):
     def __str__(self) -> str:
         return f'{self.name}'
     
-    def save(self, *args, **kwargs):
-        if not self.pk and self.email:
-            # Generate a random username
-            username = self.email.split('@')[0]
-            
-            # Create the user instance
-            user = User.objects.create(
-                username=username,
-                email=self.email,
-                is_staff=True,
-            )
-            group, created = Group.objects.get_or_create(name='TeamGroup')  # Replace 'TeamGroup' with your group name
-            user.groups.add(group)
-            # Set a random password
-            password = User.objects.make_random_password()
-            user.set_password(password)
-            
-            # Send email with credentials
-            self._send_email(username, self.email, password)
-
-            user.save()
-
-            # Associate the user with the team
-            self.user = user
-
-        super().save(*args, **kwargs)
-    
-    def _send_email(self, username, email, password):
-        subject = 'Your Account Details'
-        message = f"""
-        Hi {username},
-
-        Your account has been created successfully.
-
-        Username: {username}
-        Email: {email}
-        Password: {password}
-
-        Please keep these details safe.
-
-        Regards,
-        Your Team
-        """
-        send_mail(subject, message, settings.EMAIL_HOST_USER, [email], fail_silently=False)
-    
-
 
 class PointTable(models.Model):
     PENDING = 'Pending'
