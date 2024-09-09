@@ -7,6 +7,8 @@ from sportsApp.utils import send_mail
 from django.contrib.auth.models import User,Group
 from django.conf import settings
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
+
 
 class TeamRequestSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,10 +17,26 @@ class TeamRequestSerializer(serializers.ModelSerializer):
 
 
 class TeamSerializer(serializers.ModelSerializer):
+    logo = serializers.SerializerMethodField()
+    banner = serializers.SerializerMethodField()
     class Meta:
         model = Team
-        # fields = "__all__"
-        exclude = ['user']
+        fields = ['id','name','short_name','email','address','logo','banner','gender']
+
+
+    def get_logo(self, obj):
+        # Return the full URL for the logo field
+        if obj.logo:
+            request = self.context.get('request')
+            return request.build_absolute_uri(obj.logo.url)
+        return None
+
+    def get_banner(self, obj):
+        # Return the full URL for the banner field
+        if obj.banner:
+            request = self.context.get('request')
+            return request.build_absolute_uri(obj.banner.url)
+        return None
 
     
     def create(self, validated_data):
@@ -47,3 +65,9 @@ class TeamSerializer(serializers.ModelSerializer):
                 fail_silently=False
             )
         return team
+    
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email']  # Add other fields as needed
