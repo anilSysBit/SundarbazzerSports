@@ -146,7 +146,10 @@ class Player(models.Model):
 
 class EventOrganizer(models.Model):
     name = models.CharField(max_length=100)
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    user = models.OneToOneField(User,on_delete=models.CASCADE,related_name='event')
+    address = models.CharField(max_length=255,null=True,blank=True)
+    logo = models.ImageField(upload_to='images/events/',blank=True,null=True)
+    banner = models.ImageField(upload_to='images/banner/',blank=True,null=True)
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
 

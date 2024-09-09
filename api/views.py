@@ -126,3 +126,18 @@ class TeamProfileAPIView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class EventProfileApiView(APIView):
+    permission_classes = [HasTeamGroupPermission,IsAuthenticated]
+
+    def get(self,request):
+        user= request.user
+
+        if not hasattr(user, 'team'):
+            return Response({'detail': 'No team associated with this user.'}, status=status.HTTP_404_NOT_FOUND)
+        
+        team = user.event
+
+        serializer = TeamSerializer(team, context={'request': request})
+        return Response(serializer.data,status=status.HTTP_200_OK)
