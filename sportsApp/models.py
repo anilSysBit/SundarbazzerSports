@@ -146,7 +146,8 @@ class Player(models.Model):
 
 class EventOrganizer(models.Model):
     name = models.CharField(max_length=100)
-    user = models.OneToOneField(User,on_delete=models.CASCADE,related_name='event')
+    user = models.OneToOneField(User,on_delete=models.CASCADE,related_name='organizer')
+    email = models.EmailField(max_length=100,blank=True,null=True)
     address = models.CharField(max_length=255,null=True,blank=True)
     logo = models.ImageField(upload_to='images/events/',blank=True,null=True)
     banner = models.ImageField(upload_to='images/banner/',blank=True,null=True)

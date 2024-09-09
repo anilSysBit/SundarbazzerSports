@@ -6,14 +6,14 @@ from .views import (
     TeamRequestViewSet,
     TeamViewSet,
     # EventViewSet,
-    EventOrganizerViewSet,
     EventListView, 
     EventDetailView, 
     EventCreateView, 
     EventUpdateView, 
     EventDeleteView,
     UserProfileAPIView,
-    TeamProfileAPIView
+    TeamProfileAPIView,
+    EventProfileApiView
     )
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -31,7 +31,6 @@ team_list = TeamViewSet.as_view({
 router.register(r'team-requests',TeamRequestViewSet,basename='teamrequest')
 router.register(r'teams',TeamViewSet,basename='teams')
 # router.register(r'events',EventViewSet,basename='event')
-router.register(r'event-organizer',EventOrganizerViewSet,basename='event_organizer')
 
 
 urlpatterns = [
@@ -47,4 +46,6 @@ urlpatterns = [
     path('events/<int:pk>/delete/', EventDeleteView.as_view(), name='event-delete'),
     path('profile/',UserProfileAPIView.as_view(),name='user-profile'),
     path('team/profile/',TeamProfileAPIView.as_view(),name='team-profile'),
+    path('organizer/profile/',EventProfileApiView.as_view(),name='organizer-profile'),
+    path('organizer/create/',EventProfileApiView.as_view(),name='create-organizer'),
 ]

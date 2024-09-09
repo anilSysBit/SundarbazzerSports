@@ -9,13 +9,13 @@ from .serializers.team_serializers import TeamRequestSerializer,TeamSerializer,U
 from django.contrib.auth.models import User
 from .serializers.event_serializers import EventListSerializer, EventOrganizerSerializer
 from rest_framework.permissions import IsAuthenticated,IsAdminUser,AllowAny
-from .permissions import IsAnonymous,HasTeamGroupPermission
+from .permissions import IsAnonymous,HasTeamGroupPermission,HasEventOrganizerGroupPermission
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import NotFound
-
+from rest_framework.decorators import permission_classes
 
 class TeamRequestViewSet(ModelViewSet):
     # http_method_names = ['post']
@@ -85,9 +85,7 @@ class EventDeleteView(generics.DestroyAPIView):
     serializer_class = EventListSerializer
 
 
-class EventOrganizerViewSet(ModelViewSet):
-    queryset = EventOrganizer.objects.all()
-    serializer_class = EventOrganizerSerializer
+
 
 
 
@@ -129,15 +127,23 @@ class TeamProfileAPIView(APIView):
     
 
 class EventProfileApiView(APIView):
-    permission_classes = [HasTeamGroupPermission,IsAuthenticated]
 
+    @permission_classes([IsAuthenticated])
     def get(self,request):
         user= request.user
 
-        if not hasattr(user, 'team'):
-            return Response({'detail': 'No team associated with this user.'}, status=status.HTTP_404_NOT_FOUND)
+        if not hasattr(user, 'organizer'):
+            return Response({'detail': 'No organizer associated with this user.'}, status=status.HTTP_404_NOT_FOUND)
         
-        team = user.event
+        organizer = user.organizer
 
-        serializer = TeamSerializer(team, context={'request': request})
+        serializer = EventOrganizerSerializer(organizer, context={'request': request})
         return Response(serializer.data,status=status.HTTP_200_OK)
+    
+
+    def post(self,request):
+        serializer = EventOrganizerSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
