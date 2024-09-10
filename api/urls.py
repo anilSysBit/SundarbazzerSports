@@ -8,7 +8,9 @@ from .views import (
     UserProfileAPIView,
     TeamProfileAPIView,
     EventProfileApiView,
-    EventUserViewSet
+    EventUserViewSet,
+    OrganizerEventViewSet,
+    UserListMatchViewSet
     )
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -39,4 +41,6 @@ urlpatterns = [
     path('team/profile/',TeamProfileAPIView.as_view(),name='team-profile'),
     path('organizer/profile/',EventProfileApiView.as_view(),name='organizer-profile'),
     path('organizer/create/',EventProfileApiView.as_view(),name='create-organizer'),
+    path('organizer/events/',OrganizerEventViewSet.as_view(),name='organizer-events'),
+    path('matches/',UserListMatchViewSet.as_view(),name='matches')
 ]

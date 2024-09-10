@@ -4,10 +4,10 @@ from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework import generics
-from sportsApp.models import TeamRequest,Team,Event, EventOrganizer
+from sportsApp.models import TeamRequest,Team,Event, EventOrganizer,Match
 from .serializers.team_serializers import TeamRequestSerializer,TeamSerializer,UserProfileSerializer
 from django.contrib.auth.models import User
-from .serializers.event_serializers import EventListSerializer, EventOrganizerSerializer
+from .serializers.event_serializers import EventListSerializer, EventOrganizerSerializer,OrganizerEventListSerializer,MatchListUserSerializer
 from rest_framework.permissions import IsAuthenticated,IsAdminUser,AllowAny
 from .permissions import IsAnonymous,HasTeamGroupPermission,HasEventOrganizerGroupPermission
 from rest_framework.decorators import action
@@ -128,6 +128,35 @@ class EventUserViewSet(APIView):
     def get(self,request):
        events = Event.objects.all()
        serializer = EventListSerializer(events,many=True)
-
        return Response(serializer.data,status=status.HTTP_200_OK)
 
+
+
+class OrganizerEventViewSet(APIView):
+
+    permission_classes =[HasEventOrganizerGroupPermission]
+
+
+    def get(self,request):
+        user = request.user
+
+        if not hasattr(user, 'organizer'):
+            return Response({'detail': 'You are not an organizer'}, status=status.HTTP_404_NOT_FOUND)
+
+        organizer = user.organizer
+
+        events = Event.objects.filter(event_organizer=organizer)
+
+        serializer = OrganizerEventListSerializer(events,many=True)
+
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    
+
+
+
+class UserListMatchViewSet(APIView):
+
+    def get(self,request):
+        match = Match.objects.all()
+        serializer = MatchListUserSerializer(match,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)

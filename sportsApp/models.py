@@ -168,7 +168,7 @@ class Event(models.Model):
     title = models.CharField(max_length=255)
     event_type = models.CharField(max_length=20,choices=EVENT_TYPE,blank=True,null=True)
     banner = models.ImageField(upload_to='images/events/',blank=True,null=True)
-    event_organizer = models.ForeignKey(EventOrganizer,on_delete=models.CASCADE,blank=True,null=True)
+    event_organizer = models.ForeignKey(EventOrganizer,on_delete=models.CASCADE,blank=True,null=True,related_name='events')
     event_age_limit = models.PositiveIntegerField()
     is_verified = models.BooleanField(default=False)
     entry_fee = models.DecimalField(max_digits=10000,decimal_places=3)
@@ -200,7 +200,7 @@ class Match(models.Model):
         ('interrupted', 'Interrupted'),
         ('canceled', 'Canceled'),
     ]
-    event = models.ForeignKey(Event,on_delete=models.CASCADE,blank=True,null=True)
+    event = models.ForeignKey(Event,on_delete=models.CASCADE,blank=True,null=True,related_name='matches')
     team1 = models.ForeignKey(EventTeam, on_delete=models.CASCADE, related_name='team1')
     team2 = models.ForeignKey(EventTeam, on_delete=models.CASCADE, related_name='team2')
     match_date = models.DateTimeField()

@@ -33,11 +33,7 @@ class HasEventOrganizerGroupPermission(BasePermission):
     """
 
     def has_permission(self, request, view):
-        # Allow safe methods (GET, HEAD, OPTIONS) for any user
-        if request.method in SAFE_METHODS:
-            return True
-        
         # Check if the user belongs to the 'teamGroup'
-        return request.user.groups.filter(name='EventOrganizer').exists()
+        return request.user.is_authenticated and request.user.groups.filter(name='EventOrganizer').exists()
 
 

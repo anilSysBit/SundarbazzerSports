@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from sportsApp.models import TeamRequest, Team
+from sportsApp.models import TeamRequest, Team, Match
 
 from rest_framework.permissions import IsAuthenticated
 from django.db import transaction
@@ -71,3 +71,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email']  # Add other fields as needed
+
+
+
+

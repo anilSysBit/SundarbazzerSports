@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from sportsApp.models import TeamRequest, Team, Event, EventOrganizer
+from sportsApp.models import TeamRequest, Team, Event, EventOrganizer,Match
 
 from rest_framework.permissions import IsAuthenticated
 from django.db import transaction, IntegrityError
@@ -11,14 +11,33 @@ from django.shortcuts import get_object_or_404
 
 
 class EventListSerializer(serializers.ModelSerializer):
-    email = serializers.ReadOnlyField(source='event_organizer.email')
-    phone = serializers.ReadOnlyField(source='event_organizer.phone')
+    email = serializers.SerializerMethodField()
+    phone = serializers.SerializerMethodField()
+    organizer_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Event
-        fields = ['title','event_type','banner','event_age_limit','entry_fee','registration_start_date','email','phone','resistration_end_date','event_start_date','event_end_date','is_verified','created_at','updated_at']
+        fields = ['title','event_type','banner','event_age_limit','entry_fee','organizer_name','registration_start_date','email','phone','resistration_end_date','event_start_date','event_end_date','is_verified','created_at','updated_at']
         read_only_fields = ['created_at','updated_at']
 
+ # Method to get email from the EventOrganizer model
+    def get_email(self, obj):
+        return obj.event_organizer.user.email if obj.event_organizer else None
+
+    # Method to get phone from the EventOrganizer model
+    def get_phone(self, obj):
+        return obj.event_organizer.phone if obj.event_organizer else None
+    
+     # Method to get email from the EventOrganizer model
+    def get_organizer_name(self, obj):
+        return obj.event_organizer.name if obj.event_organizer else None
+
+
+class OrganizerEventListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Event
+        fields = ['title','event_type','banner','event_age_limit','entry_fee','registration_start_date','resistration_end_date','event_start_date','event_end_date','is_verified','created_at','updated_at']
+        read_only_fields = ['created_at','updated_at']
 
 class EventOrganizerSerializer(serializers.ModelSerializer):
     
@@ -55,4 +74,28 @@ class EventOrganizerSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({'email': 'A user with this email already exists.'})
 
 
+class EventSmallSerializer(serializers.ModelSerializer):
+    organizer_name = serializers.SerializerMethodField()
+    class Meta:
+        model = Event
+        fields = ['title','organizer_name']
 
+        # Method to get email from the EventOrganizer model
+    def get_organizer_name(self, obj):
+        return obj.event_organizer.name if obj.event_organizer else None
+    
+
+class TeamSmallSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Team
+        fields = ['id','name','address','gender']
+
+
+class MatchListUserSerializer(serializers.ModelSerializer):
+    event = EventSmallSerializer(read_only=True)
+    team1 = TeamSmallSerializer(read_only=True)
+    team2 = TeamSmallSerializer(read_only=True)
+    class Meta:
+        model = Match
+        fields = ['id','event','place','team1','team2','match_date','duration','notes','created_at','updated_at']
+        read_only_fields = ['created_at','updated_at']
