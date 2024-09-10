@@ -11,12 +11,17 @@ from django.shortcuts import get_object_or_404
 
 
 class EventListSerializer(serializers.ModelSerializer):
+    email = serializers.ReadOnlyField(source='event_organizer.email')
+    phone = serializers.ReadOnlyField(source='event_organizer.phone')
+
     class Meta:
         model = Event
-        fields = "__all__"
+        fields = ['title','event_type','banner','event_age_limit','entry_fee','registration_start_date','email','phone','resistration_end_date','event_start_date','event_end_date','is_verified','created_at','updated_at']
+        read_only_fields = ['created_at','updated_at']
 
 
 class EventOrganizerSerializer(serializers.ModelSerializer):
+    
     email = serializers.EmailField(write_only=True)
     password = serializers.CharField(write_only=True)
     user_email = serializers.ReadOnlyField(source='user.email')  # Include user's email
@@ -48,3 +53,6 @@ class EventOrganizerSerializer(serializers.ModelSerializer):
 
         except IntegrityError:
             raise serializers.ValidationError({'email': 'A user with this email already exists.'})
+
+
+

@@ -149,6 +149,7 @@ class EventOrganizer(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE,related_name='organizer')
     email = models.EmailField(max_length=100,blank=True,null=True)
     address = models.CharField(max_length=255,null=True,blank=True)
+    phone = models.CharField(max_length=10,blank=True,null=True)
     logo = models.ImageField(upload_to='images/events/',blank=True,null=True)
     banner = models.ImageField(upload_to='images/banner/',blank=True,null=True)
     created_at = models.DateField(auto_now_add=True)
@@ -175,8 +176,6 @@ class Event(models.Model):
     resistration_end_date = models.DateField()
     event_start_date = models.DateField(blank=True,null=True)
     event_end_date = models.DateField(blank=True,null=True)
-    email = models.EmailField(max_length=100,blank=True,null=True)
-    phone = models.CharField(max_length=10,blank=True,null=True)
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
     

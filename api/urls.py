@@ -5,15 +5,10 @@ from rest_framework.routers import DefaultRouter
 from .views import (
     TeamRequestViewSet,
     TeamViewSet,
-    # EventViewSet,
-    EventListView, 
-    EventDetailView, 
-    EventCreateView, 
-    EventUpdateView, 
-    EventDeleteView,
     UserProfileAPIView,
     TeamProfileAPIView,
-    EventProfileApiView
+    EventProfileApiView,
+    EventUserViewSet
     )
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -39,12 +34,8 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('teams/create/<str:request_id>/',team_list,name='team-create-with-request-id'),
-    path('events/', EventListView.as_view(), name='event-list'),
-    path('events/<int:pk>/', EventDetailView.as_view(), name='event-detail'),
-    path('events/create/', EventCreateView.as_view(), name='event-create'),
-    path('events/<int:pk>/update/', EventUpdateView.as_view(), name='event-update'),
-    path('events/<int:pk>/delete/', EventDeleteView.as_view(), name='event-delete'),
     path('profile/',UserProfileAPIView.as_view(),name='user-profile'),
+    path('events/',EventUserViewSet.as_view(),name='events'),
     path('team/profile/',TeamProfileAPIView.as_view(),name='team-profile'),
     path('organizer/profile/',EventProfileApiView.as_view(),name='organizer-profile'),
     path('organizer/create/',EventProfileApiView.as_view(),name='create-organizer'),
