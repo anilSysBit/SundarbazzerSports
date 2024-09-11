@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from sportsApp.models import TeamRequest, Team, Event, EventOrganizer,Match
+from sportsApp.models import TeamRequest, Team, Event, EventOrganizer,Match,EventTeam
 
 from rest_framework.permissions import IsAuthenticated
 from django.db import transaction, IntegrityError
@@ -78,7 +78,7 @@ class EventSmallSerializer(serializers.ModelSerializer):
     organizer_name = serializers.SerializerMethodField()
     class Meta:
         model = Event
-        fields = ['title','organizer_name']
+        fields = ('title','organizer_name')
 
         # Method to get email from the EventOrganizer model
     def get_organizer_name(self, obj):
@@ -88,14 +88,22 @@ class EventSmallSerializer(serializers.ModelSerializer):
 class TeamSmallSerializer(serializers.ModelSerializer):
     class Meta:
         model = Team
-        fields = ['id','name','address','gender']
+        fields = ("id","name","address","gender","short_name",)
 
+
+class EventTeamSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EventTeam
+        fields = ('id',)
+    
+    def to_representation(self, instance):
+        data= super().to_representation(instance)
+        return TeamSmallSerializer(instance.team).data
 
 class MatchListUserSerializer(serializers.ModelSerializer):
-    event = EventSmallSerializer(read_only=True)
-    team1 = TeamSmallSerializer(read_only=True)
-    team2 = TeamSmallSerializer(read_only=True)
+    event = EventSmallSerializer(required=False)
+    team1 = EventTeamSerializer(required=False)
+    team2 = EventTeamSerializer(required=False)
     class Meta:
         model = Match
-        fields = ['id','event','place','team1','team2','match_date','duration','notes','created_at','updated_at']
-        read_only_fields = ['created_at','updated_at']
+        fields = ('id','event','place','team1','team2','match_date','duration','notes','created_at','updated_at',)

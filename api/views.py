@@ -101,8 +101,10 @@ class TeamProfileAPIView(APIView):
     
 
 class EventProfileApiView(APIView):
+    permission_classes= []
 
-    @permission_classes([IsAuthenticated])
+    # @permission_classes([IsAuthenticated])
+
     def get(self,request):
         user= request.user
 

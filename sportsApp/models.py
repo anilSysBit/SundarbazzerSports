@@ -32,19 +32,19 @@ class Team(models.Model):
         ('FOOTBALL','Football'),
     )
 
-    name = models.CharField(max_length=255, blank=True)
+    name = models.CharField(max_length=255,db_index=1)
     total_players = models.PositiveIntegerField(blank=True, null=True)
     sports_genere = models.CharField(max_length=25,choices=SPORT_TYPES,default='FOOTBALL',blank=True)
     short_name = models.CharField(unique=True,max_length=10,blank=True,null=True)
-    email = models.EmailField(max_length=100,unique=True)
+    # email = models.EmailField(max_length=100,unique=True)
     address = models.CharField(max_length=255,blank=True,null=True)
     is_verified = models.BooleanField(default=False)
     user = models.OneToOneField(User,on_delete=models.CASCADE,null=True,blank=True,related_name='team')
     logo = models.ImageField(upload_to="images/teams/",blank=True,null=True)
     banner = models.ImageField(upload_to='images/banner/',blank=True,null=True)
     gender = models.CharField(max_length=25,choices=constants.GENDER_OPTIONS.CHOICES,blank=True,null=True)
-    created_at = models.DateField(blank=True, null=True,auto_now_add=True)
-    updated_at = models.DateField(auto_now=True,blank=True,null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return f'{self.name}'
@@ -201,8 +201,8 @@ class Match(models.Model):
         ('canceled', 'Canceled'),
     ]
     event = models.ForeignKey(Event,on_delete=models.CASCADE,blank=True,null=True,related_name='matches')
-    team1 = models.ForeignKey(EventTeam, on_delete=models.CASCADE, related_name='team1')
-    team2 = models.ForeignKey(EventTeam, on_delete=models.CASCADE, related_name='team2')
+    team1 = models.ForeignKey(EventTeam, on_delete=models.CASCADE, related_name='match_team1')
+    team2 = models.ForeignKey(EventTeam, on_delete=models.CASCADE, related_name='match_team2')
     match_date = models.DateTimeField()
     place = models.CharField(max_length=255)
     match_complete = models.BooleanField(default=False)
