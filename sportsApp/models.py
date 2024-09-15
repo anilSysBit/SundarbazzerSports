@@ -235,7 +235,33 @@ class Match(models.Model):
     def __str__(self):
         return f"{self.team1} vs {self.team2} on {self.match_date}"
     
- 
+class EventMemberRole(models.Model):
+    name = models.CharField(max_length=50,unique=True)
+    short_name = models.CharField(max_length=5,unique=True)
+    description = models.TextField(blank=True,null=True)
+    is_verified = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return self.name
+
+class EventMember(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField(max_length=100,blank=True,null=True)
+    phone = models.CharField(max_length=10)
+    is_verified = models.BooleanField(default=False)
+    organizer = models.ForeignKey(EventOrganizer,on_delete=models.CASCADE)
+    role = models.ForeignKey(EventMemberRole,on_delete=models.CASCADE)
+    salary = models.DecimalField(max_digits=6,decimal_places=3,blank=True,null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+    def __str__(self) -> str:
+        return f'${self.first_name} {self.last_name}'
+
     
 class Refree(models.Model):
     REFREE_POSITION = (
@@ -514,16 +540,6 @@ class Guest(models.Model):
 
 # Event Members (Add Event Members)
 
-class EventMember(models.Model):
-    name = models.CharField(max_length=50)
-    designation = models.CharField(max_length=50)
-    event_organizer = models.ForeignKey(EventOrganizer,on_delete=models.CASCADE,blank=True,null=True)
-    description = models.TextField(blank=True,null=True)
-    payment = models.DecimalField(max_digits=10,decimal_places=2,help_text="Payment you will give for this event",blank=True,null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    
 
 class EventManagement(models.Model):
     

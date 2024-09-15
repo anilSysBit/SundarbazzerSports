@@ -187,7 +187,7 @@ class EventRequest(admin.ModelAdmin):
 # Admin to add Event members
 @admin.register(EventMember)
 class EventMemberAdmin(admin.ModelAdmin):
-    list_display = ('name','designation','payment','event_organizer')
+    list_display = ('first_name','last_name','role','salary','organizer')
 
 
 @admin.register(Guest)
