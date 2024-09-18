@@ -147,13 +147,12 @@ class Player(models.Model):
 class EventOrganizer(models.Model):
     name = models.CharField(max_length=100)
     user = models.OneToOneField(User,on_delete=models.CASCADE,related_name='organizer')
-    email = models.EmailField(max_length=100,blank=True,null=True)
     address = models.CharField(max_length=255,null=True,blank=True)
     phone = models.CharField(max_length=10,blank=True,null=True)
     logo = models.ImageField(upload_to='images/events/',blank=True,null=True)
     banner = models.ImageField(upload_to='images/banner/',blank=True,null=True)
-    created_at = models.DateField(auto_now_add=True)
-    updated_at = models.DateField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return self.name
@@ -176,6 +175,8 @@ class Event(models.Model):
     resistration_end_date = models.DateField()
     event_start_date = models.DateField(blank=True,null=True)
     event_end_date = models.DateField(blank=True,null=True)
+    match_duration = models.DurationField(blank=True,null=True)
+    default_address = models.CharField(max_length=255,blank=True,null=True)
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
     
@@ -203,10 +204,10 @@ class Match(models.Model):
     event = models.ForeignKey(Event,on_delete=models.CASCADE,blank=True,null=True,related_name='matches')
     team1 = models.ForeignKey(EventTeam, on_delete=models.CASCADE, related_name='match_team1')
     team2 = models.ForeignKey(EventTeam, on_delete=models.CASCADE, related_name='match_team2')
+    is_address_default = models.BooleanField(default=False)
     match_date = models.DateTimeField()
-    place = models.CharField(max_length=255)
+    place = models.CharField(max_length=255,blank=True,null=True)
     match_complete = models.BooleanField(default=False)
-    duration = models.DurationField(null=True,blank=True)
     notes = models.TextField(null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True,blank=True,null=True)
     updated_at = models.DateTimeField(auto_now=True,blank=True,null=True)
@@ -459,10 +460,6 @@ class MatchStatus(models.Model):
 
 
 
-
-
-
-
 # Recent Events
 
 class RecentEvents(models.Model):
@@ -554,8 +551,9 @@ class Sponser(models.Model):
     )
     name = models.CharField(max_length=100)
     sponser_type = models.CharField(max_length=25,choices=SPONSERS_TYPE)
-    event = models.ForeignKey(Event,on_delete=models.PROTECT,null=True,blank=True)
+    event = models.ForeignKey(EventOrganizer,on_delete=models.PROTECT,null=True,blank=True)
     logo = models.ImageField(upload_to='images/sponsers/',blank=True,null=True)
+    banner = models.ImageField(upload_to='images/sponsers/',blank=True,null=True)
     description = models.TextField(blank=True,null=True)
     is_verified = models.BooleanField(default=False)
     created_at = models.DateField(auto_now_add=True)
