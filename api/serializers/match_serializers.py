@@ -15,8 +15,9 @@ from .event_serializers import EventSmallSerializer,EventTeamSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
-
-
+from django.utils import timezone
+from ..response import SuccessResponse,ErrorResponse
+from django.db.models import Q
 
 class MatchListUserSerializer(serializers.ModelSerializer):
     event = EventSmallSerializer(required=False)
@@ -24,7 +25,7 @@ class MatchListUserSerializer(serializers.ModelSerializer):
     team2 = EventTeamSerializer(required=False)
     class Meta:
         model = Match
-        fields = ('id','event','place','team1','team2','match_date','notes','created_at','updated_at',)
+        fields = ('id','event','place','team1','team2','match_date','match_time','notes','created_at','updated_at',)
 
 
 
@@ -32,7 +33,7 @@ class MatchCreateSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Match
-        fields = ('event','team1','team2','match_date','is_address_default','place','notes')
+        fields = ('event','team1','team2','match_date','match_time','is_address_default','place','notes')
 
     def validate(self, data):
         is_address_default = data.get('is_address_default') or False
@@ -42,6 +43,21 @@ class MatchCreateSerializer(serializers.ModelSerializer):
         if is_address_default is False and not place:
             raise serializers.ValidationError({"place": "This field is required when 'is_address_default' is False."})
         
+                # Get event and teams
+        event = data.get('event')
+        team1 = data.get('team1')
+        team2 = data.get('team2')
+        match_date = data.get('match_date')
+
+        # Check for existing matches for the same event
+        if Match.objects.filter(
+            Q(event=event, team1=team1, team2=team2, match_date=match_date) | 
+            Q(event=event, team1=team1, team2=team2, match_date__gte=timezone.now())
+        ).exists():
+
+            raise serializers.ValidationError({
+                'match': 'A match between these teams is already scheduled for this event.'
+            })
         return data
 
 
@@ -65,9 +81,9 @@ class MatchViewSet(APIView):
 
         if serializers.is_valid():
             serializers.save()
-            return Response(serializers.data,status=status.HTTP_201_CREATED)
+            return SuccessResponse("Successfully Created a Match",serializers.data,status=status.HTTP_201_CREATED)
         else:
-            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+            return ErrorResponse("Some Error Occured",serializers.errors, status=status.HTTP_400_BAD_REQUEST)
         
 
 

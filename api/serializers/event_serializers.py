@@ -78,12 +78,13 @@ class EventSmallSerializer(serializers.ModelSerializer):
     organizer_name = serializers.SerializerMethodField()
     class Meta:
         model = Event
-        fields = ('title','organizer_name')
+        fields = ('title','organizer_name','default_address')
 
         # Method to get email from the EventOrganizer model
     def get_organizer_name(self, obj):
         return obj.event_organizer.name if obj.event_organizer else None
     
+
 
 class TeamSmallSerializer(serializers.ModelSerializer):
     class Meta:
