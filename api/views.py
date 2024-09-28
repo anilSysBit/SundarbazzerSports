@@ -7,7 +7,7 @@ from rest_framework import generics
 from sportsApp.models import TeamRequest,Team,Event, EventOrganizer,Match
 from .serializers.team_serializers import TeamRequestSerializer,TeamSerializer,UserProfileSerializer
 from django.contrib.auth.models import User
-from .serializers.event_serializers import EventListSerializer, EventOrganizerSerializer,OrganizerEventListSerializer,MatchListUserSerializer
+from .serializers.event_serializers import EventListSerializer, EventOrganizerSerializer,OrganizerEventListSerializer
 from rest_framework.permissions import IsAuthenticated,IsAdminUser,AllowAny
 from .permissions import IsAnonymous,HasTeamGroupPermission,HasEventOrganizerGroupPermission
 from rest_framework.decorators import action
@@ -155,10 +155,3 @@ class OrganizerEventViewSet(APIView):
     
 
 
-
-class UserListMatchViewSet(APIView):
-
-    def get(self,request):
-        match = Match.objects.all()
-        serializer = MatchListUserSerializer(match,many=True)
-        return Response(serializer.data,status=status.HTTP_200_OK)

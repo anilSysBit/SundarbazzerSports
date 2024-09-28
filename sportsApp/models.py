@@ -194,13 +194,6 @@ class EventTeam(models.Model):
 
 # Match Model
 class Match(models.Model):
-    MATCH_STATUS_CHOICES = [
-        ('scheduled', 'Scheduled'),
-        ('ongoing', 'Ongoing'),
-        ('completed', 'Completed'),
-        ('interrupted', 'Interrupted'),
-        ('canceled', 'Canceled'),
-    ]
     event = models.ForeignKey(Event,on_delete=models.CASCADE,blank=True,null=True,related_name='matches')
     team1 = models.ForeignKey(EventTeam, on_delete=models.CASCADE, related_name='match_team1')
     team2 = models.ForeignKey(EventTeam, on_delete=models.CASCADE, related_name='match_team2')
@@ -211,7 +204,7 @@ class Match(models.Model):
     notes = models.TextField(null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True,blank=True,null=True)
     updated_at = models.DateTimeField(auto_now=True,blank=True,null=True)
-
+    
     def match_day(self):
         day_of_week = self.match_date.strftime('%A')
         return day_of_week

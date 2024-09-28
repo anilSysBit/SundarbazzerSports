@@ -32,7 +32,7 @@ class CoachInline(admin.TabularInline):
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
     inlines = [CoachInline,PlayerInline]
-    list_display = ('name','logo_preview' ,'total_players','sports_genere','is_verified','created_at')
+    list_display = ('id','name','logo_preview' ,'total_players','sports_genere','is_verified','created_at')
     readonly_fields = ('user',)
     def logo_preview(self,obj):
         if obj.logo:
@@ -126,7 +126,7 @@ class TeamStatusAdmin(admin.ModelAdmin):
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('title', 'event_age_limit', 'is_verified', 'entry_fee', 'registration_start_date', 'resistration_end_date', 'event_start_date', 'event_end_date', 'created_at', 'updated_at')
+    list_display = ('id','title', 'event_age_limit', 'is_verified', 'entry_fee', 'registration_start_date', 'resistration_end_date', 'event_start_date', 'event_end_date', 'created_at', 'updated_at')
     search_fields = ('title',)
     # list_filter = ('is_verified', 'registration_start_date', 'resistration_end_date', 'event_start_date', 'event_end_date', 'created_at', 'updated_at')
 
@@ -198,7 +198,7 @@ class GuestAdmin(admin.ModelAdmin):
 # add a event team
 @admin.register(EventTeam)
 class EventTeamAdmin(admin.ModelAdmin):
-    list_display = ('event','team')
+    list_display = ('id','event','team')
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):

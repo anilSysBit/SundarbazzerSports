@@ -100,10 +100,3 @@ class EventTeamSerializer(serializers.ModelSerializer):
         data= super().to_representation(instance)
         return TeamSmallSerializer(instance.team).data
 
-class MatchListUserSerializer(serializers.ModelSerializer):
-    event = EventSmallSerializer(required=False)
-    team1 = EventTeamSerializer(required=False)
-    team2 = EventTeamSerializer(required=False)
-    class Meta:
-        model = Match
-        fields = ('id','event','place','team1','team2','match_date','duration','notes','created_at','updated_at',)
