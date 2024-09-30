@@ -50,6 +50,17 @@ class Team(models.Model):
         return f'{self.name}'
     
 
+class TeamDesign(models.Model):
+    team = models.OneToOneField(Team,on_delete=models.CASCADE)
+    primary_color = models.CharField(max_length=100,blank=True,null=True)
+    secondary_color = models.CharField(max_length=100,blank=True,null=True)
+    jersey_number_color = models.CharField(max_length=100,blank=True,null=True)
+    neckline_color=models.CharField(max_length=100,blank=True,null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    
+
 class PointTable(models.Model):
     PENDING = 'Pending'
     STATUS_CHOICES = (
@@ -304,18 +315,11 @@ class MatchInterruption(models.Model):
 
 # Models for Fall Goal
 class Goal(models.Model):
-
-    GOAL_TYPE = (
-        ('NORMAL',"Normal"),
-        ('PENALTY',"Penalty"),
-        ('FREEKICK','Freekick'),
-        ('CORNER','Corner')
-    )
     match = models.OneToOneField(Match,on_delete=models.CASCADE)
     team = models.ForeignKey(Team,on_delete=models.CASCADE)
     player = models.ForeignKey(Player,on_delete=models.CASCADE)
     goal_description = models.CharField(max_length=255)
-    goal_type = models.CharField(max_length=20,choices=GOAL_TYPE,default="NORMAL")
+    goal_type = models.CharField(max_length=20,choices=constants.GOAL_TYPE.choices,default=constants.GOAL_TYPE.OPEN_PLAY)
     goal_time = models.TimeField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

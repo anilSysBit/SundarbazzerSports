@@ -1,6 +1,6 @@
 from typing import Any
 from django.contrib import admin
-from .models import TeamRequest,Payment,Team,Transaction,EventMember,EventTeam,EventOrganizer,EventRequest,Guest, PointTable,Coach,Goal,Fall,Substitution,PlayerMatchEvents, TieSheet, Match,MatchStatus,RecentEvents,LatestNews,Player,Messages,Subscriber,Event,TeamStatus,Sponser
+from .models import TeamRequest,Payment,Team,Transaction,EventMember,EventTeam,EventOrganizer,EventRequest,Guest, PointTable,Coach,Goal,Fall,Substitution,PlayerMatchEvents, TieSheet, Match,MatchStatus,RecentEvents,LatestNews,Player,Messages,Subscriber,Event,TeamStatus,Sponser,TeamDesign
 
 from django.utils.html import mark_safe
 from .utils import send_registration_mail
@@ -20,18 +20,21 @@ class TeamRequestAdmin(admin.ModelAdmin):
         self.message_user(request, "Emails sent successfully")
     send_registration_email_action.short_description = "Send registration email"
 
-class PlayerInline(admin.TabularInline):
+class PlayerInline(admin.StackedInline):
     model = Player
     extra = 1
 
-class CoachInline(admin.TabularInline):
+class CoachInline(admin.StackedInline):
     model = Coach
     extra = 1
+
+class TeamDesignInline(admin.StackedInline):
+    model = TeamDesign
 
 
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
-    inlines = [CoachInline,PlayerInline]
+    inlines = [TeamDesignInline,CoachInline,PlayerInline]
     list_display = ('id','name','logo_preview' ,'total_players','sports_genere','is_verified','created_at')
     readonly_fields = ('user',)
     def logo_preview(self,obj):
@@ -146,6 +149,8 @@ class SubstitutionInline(admin.TabularInline):
 class PlayerEventsInline(admin.TabularInline):
     model = PlayerMatchEvents
     extra = 1
+
+
 
 @admin.register(Match)
 class MatchAdmin(admin.ModelAdmin):
