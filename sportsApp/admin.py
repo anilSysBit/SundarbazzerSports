@@ -1,6 +1,6 @@
 from typing import Any
 from django.contrib import admin
-from .models import TeamRequest,Payment,Team,Transaction,EventMember,EventTeam,EventOrganizer,EventRequest,Guest, PointTable,Coach,Goal,Fall,Substitution,PlayerMatchEvents, TieSheet, Match,MatchStatus,RecentEvents,LatestNews,Player,Messages,Subscriber,Event,TeamStatus,Sponser,TeamDesign
+from .models import TeamRequest,TeamOwner,Payment,Team,Transaction,EventMember,EventTeam,EventOrganizer,EventRequest,Guest, PointTable,Coach,Goal,Fall,Substitution,PlayerMatchEvents, TieSheet, Match,MatchStatus,RecentEvents,LatestNews,Player,Messages,Subscriber,Event,TeamStatus,Sponser,TeamDesign
 
 from django.utils.html import mark_safe
 from .utils import send_registration_mail
@@ -30,11 +30,12 @@ class CoachInline(admin.StackedInline):
 
 class TeamDesignInline(admin.StackedInline):
     model = TeamDesign
-
+class TeamOwnerInline(admin.StackedInline):
+    model = TeamOwner
 
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
-    inlines = [TeamDesignInline,CoachInline,PlayerInline]
+    inlines = [TeamOwnerInline,TeamDesignInline,CoachInline,PlayerInline]
     list_display = ('id','name','logo_preview' ,'total_players','sports_genere','is_verified','created_at')
     readonly_fields = ('user',)
     def logo_preview(self,obj):

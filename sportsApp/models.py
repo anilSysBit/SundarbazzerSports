@@ -49,6 +49,16 @@ class Team(models.Model):
     def __str__(self) -> str:
         return f'{self.name}'
     
+class TeamOwner(models.Model):
+    team = models.OneToOneField(Team,on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    phone = models.CharField(max_length=50,blank=True,null=True)
+    email = models.EmailField(max_length=100,blank=True,null=True)
+    age = models.PositiveIntegerField(blank=True,null=True)
+    image = models.ImageField(upload_to='images/teams/owner/', blank=True, null=True)
+    descrption = models.TextField(blank=True,null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 class TeamDesign(models.Model):
     team = models.OneToOneField(Team,on_delete=models.CASCADE)
@@ -91,42 +101,19 @@ class Player(models.Model):
         ('O-', 'O-')
     )
 
-    # Define choices for football positions
-    GOALKEEPER = 'GK'
-    RIGHT_BACK = 'RB'
-    LEFT_BACK = 'LB'
-    CENTER_BACK = 'CB'
-    DEFENSIVE_MIDFIELDER = 'DM'
-    CENTRAL_MIDFIELDER = 'CM'
-    ATTACKING_MIDFIELDER = 'AM'
-    RIGHT_WINGER = 'RW'
-    LEFT_WINGER = 'LW'
-    FORWARD = 'FW'
-
-    POSITION_CHOICES = [
-        (GOALKEEPER, 'Goalkeeper'),
-        (RIGHT_BACK, 'Right Back'),
-        (LEFT_BACK, 'Left Back'),
-        (CENTER_BACK, 'Center Back'),
-        (DEFENSIVE_MIDFIELDER, 'Defensive Midfielder'),
-        (CENTRAL_MIDFIELDER, 'Central Midfielder'),
-        (ATTACKING_MIDFIELDER, 'Attacking Midfielder'),
-        (RIGHT_WINGER, 'Right Winger'),
-        (LEFT_WINGER, 'Left Winger'),
-        (FORWARD, 'Forward'),
-    ]
-
     team = models.ForeignKey('Team', on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     jersey_no = models.PositiveIntegerField()
     age = models.PositiveIntegerField()
+    email = models.EmailField(max_length=100,blank=True,null=True)
+    phone = models.CharField(max_length=10,blank=True,null=True)
     weight = models.PositiveIntegerField()
     is_active = models.BooleanField(default=False)
     profile_image = models.ImageField(upload_to='images/teams/', blank=True, null=True)
     height = models.PositiveIntegerField()
-    blood_group = models.CharField(max_length=25, choices=BLOOD_GROUPS)
-    address = models.TextField()
-    designation = models.CharField(max_length=100, choices=POSITION_CHOICES, blank=True, null=True)
+    blood_group = models.CharField(max_length=25, choices=constants.BLOOD_GROUPS.choices)
+    address = models.TextField(blank=True,null=True)
+    designation = models.CharField(max_length=100, choices=constants.PLAYER_POSITION.choices, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True,blank=True,null=True)
     updated_at = models.DateTimeField(auto_now=True,blank=True,null=True)
 
@@ -135,20 +122,6 @@ class Player(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['team', 'jersey_no'], name='unique_jersey_no_per_team')
         ]
-
-    def clean(self):
-        super().clean()
-
-        if self.is_active:
-            active_players = Player.objects.filter(team=self.team, is_active=True)
-            if self.pk:
-                active_players = active_players.exclude(pk=self.pk)
-
-            if active_players.count() >= 11:
-                raise ValidationError(f"Cannot have more than 11 active players in team {self.team}.")
-
-            if active_players.filter(designation=self.designation).exists():
-                raise ValidationError(f"Another active player already holds the position {self.designation} in team {self.team}.")
 
     def __str__(self):
         return f"{self.name} ({self.jersey_no}) - {self.team}"
@@ -240,7 +213,15 @@ class Match(models.Model):
     
     def __str__(self):
         return f"{self.team1} vs {self.team2} on {self.match_date}"
-    
+
+
+# class MatchPlayers(models.Model):
+#     match = models.ForeignKey(Match,on_delete=models.CASCADE)
+#     player = models.ForeignKey(Player,on_delete=models.CASCADE)
+#     designation = models.CharField(max_length=50,choices=constants.PLAYER_POSITION.choices)
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+
 class EventMemberRole(models.Model):
     name = models.CharField(max_length=50,unique=True)
     short_name = models.CharField(max_length=5,unique=True)
@@ -496,6 +477,10 @@ class LatestNews(models.Model):
 class Coach(models.Model):
     team = models.OneToOneField(Team,on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
+    phone = models.CharField(max_length=50,blank=True,null=True)
+    email = models.EmailField(max_length=100,blank=True,null=True)
+    age = models.PositiveIntegerField(blank=True,null=True)
+    description = models.TextField(blank=True,null=True)
     image = models.ImageField(upload_to='images/coach/')
     created_at = models.DateField(auto_now_add=True)
 
