@@ -57,6 +57,8 @@ class MatchCreateSerializer(serializers.ModelSerializer):
         return data
 
 
+
+
 class MatchViewSet(APIView):
     permission_classes = [HasEventOrganizerGroupPermission]
 
@@ -83,10 +85,14 @@ class MatchViewSet(APIView):
         
 
 
- 
+
+
 class UserListMatchViewSet(APIView):
 
     def get(self,request):
         match = Match.objects.all()
         serializer = MatchListUserSerializer(match,many=True)
         return Response(serializer.data,status=status.HTTP_200_OK)   
+
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #

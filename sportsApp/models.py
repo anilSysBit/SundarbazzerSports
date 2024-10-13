@@ -90,16 +90,6 @@ class TieSheet(models.Model):
 
 
 class Player(models.Model):
-    BLOOD_GROUPS = (
-        ('A+', 'A+'),
-        ('A-', 'A-'),
-        ('B+', 'B+'),
-        ('B-', 'B-'),
-        ('AB+', 'AB+'),
-        ('AB-', 'AB-'),
-        ('O+', 'O+'),
-        ('O-', 'O-')
-    )
 
     team = models.ForeignKey('Team', on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
