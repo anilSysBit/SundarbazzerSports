@@ -42,68 +42,67 @@ def latest_news_page(request, news_id):
 
 
 def teams(request):
-    verified_teams = Team.objects.filter(is_verified=True)
+    verified_teams = Team.objects.all()
     return render(request,'./teams/teamPage.html',{'teams':verified_teams})
 
 
 
 # view for requesting the team
 
-def submit_team_request(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        total_players = request.POST.get('total_players')
-        sports_genere = request.POST.get('sports_genere')
-        email = request.POST.get('email')
-        address = request.POST.get('address')
+# def submit_team_request(request):
+#     if request.method == 'POST':
+#         name = request.POST.get('name')
+#         total_players = request.POST.get('total_players')
+#         sports_genere = request.POST.get('sports_genere')
+#         email = request.POST.get('email')
+#         address = request.POST.get('address')
 
-        # Perform validation
-        errors = []
-        if not name:
-            errors.append("Name is required.")
-        if not total_players or not total_players.isdigit() or int(total_players) < 1:
-            errors.append("Total players must be a positive integer.")
-        if sports_genere not in dict(TeamRequest.SPORT_TYPES).keys():
-            errors.append("Invalid sports genre.")
-        if email and TeamRequest.objects.filter(email=email).exists():
-            errors.append("Email must be unique.")
+#         # Perform validation
+#         errors = []
+#         if not name:
+#             errors.append("Name is required.")
+#         if not total_players or not total_players.isdigit() or int(total_players) < 1:
+#             errors.append("Total players must be a positive integer.")
+#         if sports_genere not in dict(TeamRequest.SPORT_TYPES).keys():
+#             errors.append("Invalid sports genre.")
+#         if email and TeamRequest.objects.filter(email=email).exists():
+#             errors.append("Email must be unique.")
         
-        if errors:
-            return render(request, './teams/teamRequestForm.html', {
-                'errors': errors,
-                'name': name,
-                'total_players': total_players,
-                'sports_genere': sports_genere,
-                'email': email,
-                'address': address
-            })
+#         if errors:
+#             return render(request, './teams/create_team.html', {
+#                 'errors': errors,
+#                 'name': name,
+#                 'total_players': total_players,
+#                 'sports_genere': sports_genere,
+#                 'email': email,
+#                 'address': address
+#             })
 
-        try:
-            # Save the data
-            team_request = TeamRequest(
-                name=name,
-                total_players=int(total_players),
-                sports_genere=sports_genere,
-                email=email,
-                address=address
-            )
-            team_request.full_clean()  # Validates the model instance
-            team_request.save()
-            return redirect('success_state')  # Redirect to the success page
+#         try:
+#             # Save the data
+#             team_request = TeamRequest(
+#                 name=name,
+#                 total_players=int(total_players),
+#                 sports_genere=sports_genere,
+#                 email=email,
+#                 address=address
+#             )
+#             team_request.full_clean()  # Validates the model instance
+#             team_request.save()
+#             return redirect('success_state')  # Redirect to the success page
 
-        except ValidationError as e:
-            errors.extend(e.messages)  # Add model validation errors to the errors list
-            return render(request, './teams/teamRequestForm.html', {
-                'errors': errors,
-                'name': name,
-                'total_players': total_players,
-                'sports_genere': sports_genere,
-                'email': email,
-                'address': address
-            })
+#         except ValidationError as e:
+#             errors.extend(e.messages)  # Add model validation errors to the errors list
+#             return render(request, './teams/create_team.html', {
+#                 'errors': errors,
+#                 'name': name,
+#                 'total_players': total_players,
+#                 'sports_genere': sports_genere,
+#                 'email': email,
+#                 'address': address
+#             })
 
     
-    return render(request, './teams/teamRequestForm.html')
 
 def success_state(request):
     return render(request,"./teams/successRequest.html")
@@ -130,19 +129,10 @@ def team_profile(request,team_id):
     return render(request,'./teams/teamProfile.html',{'team':team,'coach':coach,'players':players})
 
 
-def create_team(request, res_num):
-    if request.method == 'GET':
-        try:
-            team_request = get_object_or_404(TeamRequest, registration_number=res_num)
-            return render(request, 'teams/create_team.html', {'res_data': team_request,'res_num':res_num})
-        except ValidationError:
-            return redirect("")
-        
+def create_team(request):
     if request.method == 'POST':
         name = request.POST.get("name")
         short_name = request.POST.get("short_name")
-        total_players = request.POST.get('total_players')
-        sports_genere = request.POST.get("sports_genere")
         email = request.POST.get("email")
         address = request.POST.get('address')
         logo = request.FILES.get('logo')
@@ -153,14 +143,15 @@ def create_team(request, res_num):
 
         print('email',email)
         errors = []
+
+        
         try:
             # Save the data
             team_request = Team(
                 name=name,
-                total_players=int(total_players),
-                sports_genere=sports_genere,
-                email=email,
                 address=address,
+                user=request.user,
+                is_organizers_team = True,
                 short_name=short_name,
                 logo=logo,
                 banner = banner,
@@ -169,11 +160,6 @@ def create_team(request, res_num):
             team_request.full_clean()  # Validates the model instance
             team_request.save()
 
-            # After creating the team, delete the team request
-            team_request = get_object_or_404(TeamRequest, registration_number=res_num)
-            team_request.delete()
-
-
             return redirect('success_state')  # Redirect to the success page
 
         except ValidationError as e:
@@ -181,19 +167,17 @@ def create_team(request, res_num):
             return render(request, './teams/create_team.html', {'res_data':{
                 'errors': errors,
                 'name': name,
-                'total_players': total_players,
-                'sports_genere': sports_genere,
                 'short_name':short_name,
                 'email': email,
                 'address': address,
                 'banner':banner,
                 'logo':logo,
-                'registration_num':res_num,
                 'gender':gender
             }})
 
     
     return render(request, './teams/create_team.html')
+
 
 
 

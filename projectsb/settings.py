@@ -163,4 +163,4 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'anil.wagle808@gmail.com'  # Replace with your email
 EMAIL_HOST_PASSWORD = 'nszktmkyffxoudee'  # Replace with your email password
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost','*.ngrok-free.app','bb6b-2405-acc0-1207-c4cd-4-8eec-cc15-194e.ngrok-free.app']
+ALLOWED_HOSTS = ['*','127.0.0.1','localhost','*.ngrok-free.app','bb6b-2405-acc0-1207-c4cd-4-8eec-cc15-194e.ngrok-free.app']

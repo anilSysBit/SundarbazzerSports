@@ -17,7 +17,9 @@
       </div>
     </div>
     <div class="coach_info">
+        {% if coach.image.url %}
         <img src="{{ coach.image.url }}" alt="">
+        {% endif %}
         <p class="mt-5">Coach - {{coach.name}}</p>
     </div>
     <!-- player formation -->

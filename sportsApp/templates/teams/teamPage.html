@@ -7,28 +7,77 @@
     <h2 class="header">Teams</h2>
 
     <div class="filter_box">
-        <a href="{% url 'submit_team_request' %}">Request For New Team</a>
+        <a href="{% url 'create-team' %}">Create New Team</a>
         <input type="search" placeholder="Search"/>
     </div>
    <div class="team_container">
-    {% for team in teams %}
 
-    <div class="card">
-        <img src="{{ team.logo.url }}" alt="John">
-        <div class="cover">
-          <h2>{{ team.name }}</h2>
-          <!-- <p class="title">{{team.sports_genere}} Team</p> -->
-          <!-- <p>Address - {{team.address}}</p> -->
-          <!-- <div style="margin: 24px 0;">
-            <a href="#"><i class="fa fa-dribbble"></i></a> 
-            <a href="#"><i class="fa fa-twitter"></i></a>  
-            <a href="#"><i class="fa fa-linkedin"></i></a>  
-            <a href="#"><i class="fa fa-facebook"></i></a> 
-          </div> -->
-          <a href="{% url 'team_profile' team.id %}" class="view_more"> <i class="fa fa-arrow-right"></i></a>
-        </div>
-      </div>
-      {% endfor %}
+   </div>
+
+   <!-- Popop alert for team deletiion -->
+   <form class="custom_alert_box" id="alert-box-delete-team">
+  </form>
+  <form class="custom_alert_box" id="alert-box-team-active">
+  </form>
+
+
+   <div class="team_listing">
+    <table class="responsive-table">
+      <tbody>
+        <thead>
+          <tr>
+            <th>SN</th>
+            <th>Name</th>
+            <th>Logo</th>
+            <th>Total Players</th>
+            <th>Is Verified</th>
+            <th>User</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+
+        <tbody>
+          {% for team in teams %}
+
+              <tr>
+                <td>1</td>
+                <td>{{team.name}}</td>
+                <td class="td_image">
+                  {% if team.logo %}
+                  <img src="{{ team.logo.url }}" alt="Team Logo">
+                  {% else %}
+                      <img src="https://th.bing.com/th/id/OIP.uLJFR9Vm_r14XQ5dJnSljQHaHa?rs=1&pid=ImgDetMain" alt="Default Team Logo">
+                  {% endif %}
+                </td>
+                <td>{{team.total_players}}</td>
+                <td>
+                  <div class="checkbox_wrapper">
+                    <input type="checkbox" class="" id="team_checkbox{{team.id}}" {% if team.is_verified %} checked {% endif%} onchange="handleChangeTeamCheckbox('team_checkbox{{team.id}}','{{team.name}}')"/>
+                  </div>
+                  
+                </td>
+                <td>{{team.user}}</td>
+                <td>
+                  <div class="td_actions">
+                    <button class="global_btn" >
+                      <span class="icon material-symbols-outlined">
+                        edit
+                        </span>
+                    </button>
+                    <button class="global_btn outline" onclick="handleOpenAlert('Do you want to delete this team {{team.name}}?','You make lose the team data if you delete.')">
+                      <span class="icon material-symbols-outlined">
+                        delete
+                        </span>
+                    </button>
+                  </div>
+                  
+                </td>
+              </tr>
+            {% endfor %}
+        </tbody>
+      </tbody>
+    </table>
    </div>
 </div>
 

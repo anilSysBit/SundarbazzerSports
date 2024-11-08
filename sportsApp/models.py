@@ -33,9 +33,10 @@ class Team(models.Model):
     )
 
     name = models.CharField(max_length=255,db_index=1)
-    total_players = models.PositiveIntegerField(blank=True, null=True)
+    total_players = models.PositiveIntegerField(default=10,blank=True, null=True)
     sports_genere = models.CharField(max_length=25,choices=SPORT_TYPES,default='FOOTBALL',blank=True)
     short_name = models.CharField(unique=True,max_length=10,blank=True,null=True)
+    is_organizers_team = models.BooleanField(default=False)
     # email = models.EmailField(max_length=100,unique=True)
     address = models.CharField(max_length=255,blank=True,null=True)
     is_verified = models.BooleanField(default=False)
