@@ -138,7 +138,7 @@ const handleDeleteTeam =async(event)=>{
 
 function handleOpenAlert (id,message,note) {
     updateGlobalState(id)
-    alertboxDeleteTeam.showAlert(message,note,()=>handleDeleteTeam(id))
+    alertboxDeleteTeam.showAlert(message,note)
 }
 
 
@@ -241,4 +241,11 @@ function sendSelectedData() {
     console.log("Selected Data for Request:", selectedData);
     // Here you could send selectedData via a fetch or AJAX request
     // e.g., fetch('/your-endpoint', { method: 'POST', body: JSON.stringify(selectedData) })
+}
+
+
+// for sidebar toggle
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  sidebar.classList.toggle('collapsed');
 }

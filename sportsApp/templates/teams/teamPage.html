@@ -1,11 +1,11 @@
-{% extends 'index.html' %}
+{% extends 'event\event_index.html' %}
 
 {% load static %}
 {% block content %}
 
 <div class="page_container">
-    <h2 class="header">Teams</h2>
 
+  <h2>Teams</h2>
     <div class="filter_box">
         <a href="{% url 'create-team' %}">Create New Team</a>
         <div class="search">
