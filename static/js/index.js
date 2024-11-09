@@ -188,3 +188,57 @@ function handleChangeTeamCheckbox(id,teamName){
     })
     
 }
+
+
+const selectedData = [];
+
+// Function to toggle row selection
+function toggleSelection(row, checkbox) {
+    if (checkbox.checked) {
+        row.classList.add('selected');
+        // Collect data from row
+        const rowData = {
+            productName: row.cells[1].innerText,
+            price: row.cells[2].innerText,
+            quantity: row.cells[3].innerText
+        };
+        selectedData.push(rowData);
+    } else {
+        row.classList.remove('selected');
+        // Remove deselected data
+        const productName = row.cells[1].innerText;
+        const index = selectedData.findIndex(data => data.productName === productName);
+        if (index > -1) selectedData.splice(index, 1);
+    }
+}
+
+// Function to handle "Select All" checkbox
+document.getElementById('selectAll').addEventListener('change', function () {
+    const isChecked = this.checked;
+    const checkboxes = document.querySelectorAll('.select-checkbox');
+
+    checkboxes.forEach((checkbox) => {
+        checkbox.checked = isChecked;
+        const row = checkbox.parentElement.parentElement;
+        toggleSelection(row, checkbox);
+    });
+});
+
+// Event listener for individual row checkboxes
+document.querySelectorAll('.select-checkbox').forEach((checkbox) => {
+    checkbox.addEventListener('change', function () {
+        const row = checkbox.parentElement.parentElement;
+        toggleSelection(row, checkbox);
+
+        // Update "Select All" checkbox state based on individual selections
+        const allChecked = [...document.querySelectorAll('.select-checkbox')].every(cb => cb.checked);
+        document.getElementById('selectAll').checked = allChecked;
+    });
+});
+
+// Function to handle selected data submission
+function sendSelectedData() {
+    console.log("Selected Data for Request:", selectedData);
+    // Here you could send selectedData via a fetch or AJAX request
+    // e.g., fetch('/your-endpoint', { method: 'POST', body: JSON.stringify(selectedData) })
+}

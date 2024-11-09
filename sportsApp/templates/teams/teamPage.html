@@ -8,7 +8,12 @@
 
     <div class="filter_box">
         <a href="{% url 'create-team' %}">Create New Team</a>
-        <input type="search" placeholder="Search"/>
+        <div class="search">
+           <input type="search" placeholder="Search"/>
+           <button class="global_btn"><span class="material-symbols-outlined">
+            search
+            </span></button>
+        </div>
     </div>
    <div class="team_container">
 
@@ -31,6 +36,7 @@
       <tbody>
         <thead>
           <tr>
+            <!-- <th><input type="checkbox" class="" id="selectAll"></th> -->
             <th>SN</th>
             <th>Name</th>
             <th>Logo</th>
@@ -43,10 +49,11 @@
 
 
         <tbody>
-          {% for team in teams %}
+          {% for team in page_obj %}
 
               <tr>
-                <td>1</td>
+                <!-- <td><input type="checkbox" class="select-checkbox"></td> -->
+                <td>{{ forloop.counter|add:start_index }}</td>
                 <td>{{team.name}}</td>
                 <td class="td_image">
                   {% if team.logo %}
@@ -60,7 +67,7 @@
                   <div class="checkbox_wrapper">
                     <input type="checkbox" id="team_checkbox{{ team.id }}" 
        {% if team.is_verified %} checked {% endif %} 
-       onchange="handleChangeTeamCheckbox('{{ team.id }}')" />
+       onchange="handleChangeTeamCheckbox('{{ team.id }}','{{team.name}}')" />
                   </div>
                   
                 </td>
@@ -86,7 +93,49 @@
       </tbody>
     </table>
   </form>
+
+  <!-- <button onclick="sendSelectedData()">asdf</button> -->
+  <div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}" class="prev">
+          <span class="material-symbols-outlined">
+            arrow_back_ios
+            </span>
+        </a>
+    {% else %}
+        <span class="disabled">
+          <span class="material-symbols-outlined">
+            arrow_back_ios
+            </span>
+        </span>
+    {% endif %}
+  
+    <!-- Page Number Links -->
+    {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+            <span class="active">{{ num }}</span>
+        {% else %}
+            <a href="?page={{ num }}" class="page-number">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+  
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="next">
+          <span class="material-symbols-outlined">
+            arrow_forward_ios
+            </span>
+        </a>
+    {% else %}
+        <span class="disabled">
+          <span class="material-symbols-outlined">
+            arrow_forward_ios
+            </span>
+        </span>
+    {% endif %}
+  </div>
 </div>
+
+
 
 
 {% endblock %}

@@ -13,6 +13,7 @@ import hashlib
 import json
 import base64
 from django.conf import settings
+from django.core.paginator import Paginator
 
 
 
@@ -270,8 +271,21 @@ def join_now(request):
 
 class TeamView(View):
     def get(self, request, *args, **kwargs):
-        verified_teams = Team.objects.all()
-        return render(request,'./teams/teamPage.html',{'teams':verified_teams})
+        teams_per_page = 5  # Define how many teams to display per page
+        all_teams = Team.objects.all()  # Retrieve all teams
+
+        # Set up paginator
+        paginator = Paginator(all_teams, teams_per_page)
+        page_number = request.GET.get('page', 1)  # Get the page number from the request, default to 1
+        page_obj = paginator.get_page(page_number)  # Get the items for the current page
+
+        # Calculate the starting index for the current page
+        start_index = (page_obj.number - 1) * teams_per_page
+
+        return render(request, './teams/teamPage.html', {
+            'page_obj': page_obj,       # The page object with paginated items
+            'start_index': start_index,  # Starting index for the current page
+        })
 
     def post(self, request, *args,**kwargs):
         pk = kwargs.get('team_id')
