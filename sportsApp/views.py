@@ -1,10 +1,12 @@
 from django.shortcuts import render,get_object_or_404
 from django.shortcuts import HttpResponse,render,redirect
 from django.core.exceptions import ValidationError
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseBadRequest,JsonResponse
+from django.views.decorators.http import require_POST
 from django.db import IntegrityError
 from .models import Payment,Transaction,Event,Match
 from django.contrib.auth.models import User
+from django.views import View
 import uuid
 import hmac
 import hashlib
@@ -41,68 +43,9 @@ def latest_news_page(request, news_id):
     return render(request, './news/newsView.html', {'data': data})
 
 
-def teams(request):
-    verified_teams = Team.objects.all()
-    return render(request,'./teams/teamPage.html',{'teams':verified_teams})
 
 
 
-# view for requesting the team
-
-# def submit_team_request(request):
-#     if request.method == 'POST':
-#         name = request.POST.get('name')
-#         total_players = request.POST.get('total_players')
-#         sports_genere = request.POST.get('sports_genere')
-#         email = request.POST.get('email')
-#         address = request.POST.get('address')
-
-#         # Perform validation
-#         errors = []
-#         if not name:
-#             errors.append("Name is required.")
-#         if not total_players or not total_players.isdigit() or int(total_players) < 1:
-#             errors.append("Total players must be a positive integer.")
-#         if sports_genere not in dict(TeamRequest.SPORT_TYPES).keys():
-#             errors.append("Invalid sports genre.")
-#         if email and TeamRequest.objects.filter(email=email).exists():
-#             errors.append("Email must be unique.")
-        
-#         if errors:
-#             return render(request, './teams/create_team.html', {
-#                 'errors': errors,
-#                 'name': name,
-#                 'total_players': total_players,
-#                 'sports_genere': sports_genere,
-#                 'email': email,
-#                 'address': address
-#             })
-
-#         try:
-#             # Save the data
-#             team_request = TeamRequest(
-#                 name=name,
-#                 total_players=int(total_players),
-#                 sports_genere=sports_genere,
-#                 email=email,
-#                 address=address
-#             )
-#             team_request.full_clean()  # Validates the model instance
-#             team_request.save()
-#             return redirect('success_state')  # Redirect to the success page
-
-#         except ValidationError as e:
-#             errors.extend(e.messages)  # Add model validation errors to the errors list
-#             return render(request, './teams/create_team.html', {
-#                 'errors': errors,
-#                 'name': name,
-#                 'total_players': total_players,
-#                 'sports_genere': sports_genere,
-#                 'email': email,
-#                 'address': address
-#             })
-
-    
 
 def success_state(request):
     return render(request,"./teams/successRequest.html")
@@ -150,6 +93,7 @@ def create_team(request):
             team_request = Team(
                 name=name,
                 address=address,
+                email= email,
                 user=request.user,
                 is_organizers_team = True,
                 short_name=short_name,
@@ -159,8 +103,7 @@ def create_team(request):
             )
             team_request.full_clean()  # Validates the model instance
             team_request.save()
-
-            return redirect('success_state')  # Redirect to the success page
+            return redirect('team')
 
         except ValidationError as e:
             errors.extend(e.messages)  # Add model validation errors to the errors list
@@ -321,3 +264,26 @@ def esewa_response(request):
 
 def join_now(request):
     return render(request, './auth/auth_options.html')
+
+
+
+
+class TeamView(View):
+    def get(self, request, *args, **kwargs):
+        verified_teams = Team.objects.all()
+        return render(request,'./teams/teamPage.html',{'teams':verified_teams})
+
+    def post(self, request, *args,**kwargs):
+        pk = kwargs.get('team_id')
+        item = get_object_or_404(Team, pk=pk)
+        item.delete()
+        return JsonResponse({'message': 'Item deleted successfully', 'item_id': pk}, status=200)
+
+@require_POST   
+def changeTeamStatus(request, team_id):
+    item = get_object_or_404(Team, pk=team_id)
+    item.is_verified = not item.is_verified  # Toggle the is_verified status
+    item.save()  # Save the updated item
+
+
+    return JsonResponse({'message': 'Team Verified Successfully', 'item_id': team_id}, status=200)

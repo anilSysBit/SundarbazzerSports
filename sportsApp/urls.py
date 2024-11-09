@@ -9,8 +9,13 @@ urlpatterns = [
     path('leaderboard/',views.leaderboard,name='leaderboard'),
     path("events/",views.events, name='events'),
     path("news/<int:news_id>/",views.latest_news_page,name='news_detail'),
-    path("teams/",views.teams,name="team"),
-    path("teams/<int:team_id>",views.team_profile,name="team_profile"),
+
+
+# Team url admin panel
+    path("teams/",views.TeamView.as_view(),name="team"),
+    path("teams/<int:team_id>/",views.team_profile,name="team_profile"),
+    path("team-delete/<int:team_id>/",views.TeamView.as_view(),name="delete_team"),
+    path('change-team-status/<int:team_id>/',views.changeTeamStatus,name='change-team-status'),
     # path("create-team/",views.submit_team_request,name='submit_team_request'),
     path("success_state/",views.success_state,name="success_state"),
     path('create-team/', views.create_team, name='create-team'),

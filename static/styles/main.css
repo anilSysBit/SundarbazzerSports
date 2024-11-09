@@ -1547,6 +1547,11 @@ nav .part3 {
   -moz-column-gap: 30px;
        column-gap: 30px;
 }
+.custom_alert_box .size_manager .button_box .global_btn {
+  min-width: 100px;
+  border-radius: 20px;
+}
+
 .dialog_box {
   position: fixed;
   left: 50%;
