@@ -1,74 +1,54 @@
-{% extends 'index.html' %} {% load static %} {% block content %}
+{% extends 'event/event_index.html' %} {% load static %} {% block content %}
 <div class="user_profile seller_profile_container">
   <div class="seller_profile_sm">
     <div class="banner_container">
       <div
         class="img_container"
-        style="background-image: url('{% if team.banner %}{{ team.banner.url }}{% else %}https://th.bing.com/th/id/R.20b2903e7f5697435978ec47d7dcce40?rik=lubGBk%2fDDTVv6g&pid=ImgRaw&r=0{% endif %}');"
+        style="background-image: url('{% if team.banner %}{{ team.banner.url }}{% else %}https://th.bing.com/th/id/OIP.M24CMUk9pgKAZgXZofFr4gHaCH?rs=1&pid=ImgDetMain{% endif %}');"
       ></div>
       <div class="profile_picture">
         <div class="img_box">
+          {% if team.logo %}
           <img src="{{ team.logo.url }}" alt="" />
+
+          {% else %}
+
+          <img src="https://th.bing.com/th/id/OIG1.egQEJxg7JTBbpWL.xSuQ?pid=ImgGn" alt="">
+          {% endif %}
         </div>
         <div class="details">
-          <h2>{{ team.name }}</h2>
+          <h2>{{ team.name }} <span class="verification verified">verified</span></h2>
           <p>{{ team.email }}</p>
+      <button class="global_btn">Edit Profile</button>
+
         </div>
       </div>
     </div>
+    
+
+
+
+
     <div class="coach_info">
-        {% if coach.image.url %}
-        <img src="{{ coach.image.url }}" alt="">
-        {% endif %}
-        <p class="mt-5">Coach - {{coach.name}}</p>
-    </div>
-    <!-- player formation -->
+      <div class="box_sm">
+        <div class="img_box">
+          <img src="https://img.freepik.com/free-photo/3d-illustration-cartoon-business-character-with-round-frame-gray-background_1142-51766.jpg?t=st=1731216684~exp=1731220284~hmac=3910133e285d433f4ea8107dedd61d364bfe89c5338bbceb88da96dfed27d132&w=826" alt="">
+          </div>
+          <div class="detail_box">
+            <h3>COACH ANIL WAGLE</h3>
 
-    <div class="player_listing recent_events">
-        <div class="recent_event_container">
-            <h2>Players</h2>
-            <table style="overflow-x: auto;">
-                <thead>
-                    <tr class="tr_head">
-                        <th>Image</th>
-                        <th>Player Name</th>
-                        <th>Posision</th>
-                        <th>Is Active</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- test code -->
-                    
-                    {% for player in players %}
-                    <tr>
-                        <td><div class="td_image"><img src="https://picsum.photos/100?random=1" alt=""></div></td>
-                        <td>{{player.name}}</td>
-                        <td class="td_event">{{player.position}}...</td>
-                        <td>OOP</td>
-                        <!-- <td><a href="#"><button class="learn-more-bth">View Detail</button></a></td> -->
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-    
+            <p class="mt-10">anil.wagle808@gmail.com</p>
+            <p class="mt-5">Age : 50 Years</p>
 
-    <h2 class="formation_header">Formation</h2>
-   <div class="form_container">
-    <div class="formation">
-      {% for player in players %}
-      <div class="player {{player.position}}">
-          <!-- <img src="https://picsum.photos/200/300?random=1" alt="Goalkeeper"> -->
-          <p class="place">{{player.name}}</p>
-          <p style="font-size: 0.8rem;">{{player.position}}</p>
+            <p class="mt-10">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Beatae, doloremque.</p>
+
+            <button class="global_btn">Edit Coach</button>
+          </div>
       </div>
-      {% endfor %}
-  </div>
-   </div>
-    
+    </div>
 
-
+    {% include 'teams/player_table.html' %}
+    <p></p>
     
   </div>
   {% endblock %}

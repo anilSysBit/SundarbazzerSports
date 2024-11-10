@@ -108,12 +108,6 @@ class Player(models.Model):
     created_at = models.DateTimeField(auto_now_add=True,blank=True,null=True)
     updated_at = models.DateTimeField(auto_now=True,blank=True,null=True)
 
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['team', 'jersey_no'], name='unique_jersey_no_per_team')
-        ]
-
     def __str__(self):
         return f"{self.name} ({self.jersey_no}) - {self.team}"
 

@@ -1,0 +1,46 @@
+<div class="players_table">
+    <h3>Players</h3>
+    <table class="responsive-table">
+      <thead>
+        <tr>
+          <th>SN</th>
+          <th>Name</th>
+          <th>Jersey No</th>
+          <th>Designation</th>
+          <th>Active Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for player in players %}
+        <tr>
+          <td>{{ forloop.counter|add:0 }}</td>
+          <td>{{player.name}}</td>
+          <td>{{player.jersey_no}}</td>
+          <td>{{player.designation}}</td>
+          <td>
+            <div class="checkbox_wrapper">
+              <input type="checkbox" 
+ {% if player.is_active %} checked {% endif %} />
+            </div>
+          </td>
+          <td>
+            <div class="td_actions">
+                <button class="global_btn outline" type="button" onclick="handleOpenAlert('{{team.id}}','Do you want to delete this team {{team.name}}?','You make lose the team data if you delete.')">
+                  <span class="icon material-symbols-outlined">
+                    visibility
+                    </span>
+                </button>
+                <button class="global_btn" type="button" onclick="handleOpenAlert('{{team.id}}','Do you want to delete this team {{team.name}}?','You make lose the team data if you delete.')">
+                    <span class="icon material-symbols-outlined">
+                      edit
+                      </span>
+                  </button>
+              </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>

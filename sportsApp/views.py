@@ -17,7 +17,7 @@ from django.core.paginator import Paginator
 
 
 
-from .models import PointTable,TieSheet,RecentEvents,LatestNews,Team,TeamRequest,Coach
+from .models import PointTable,TieSheet,RecentEvents,LatestNews,Team,TeamRequest,Coach,Player
 
 # Create your views here.
 def index(request):
@@ -55,21 +55,10 @@ def success_state(request):
 def team_profile(request,team_id):
     
     team = get_object_or_404(Team,id=team_id)
-    coach = get_object_or_404(Coach,team_id=team_id)
-    players = [
-        {'name': 'Player 1', 'position': 'goalkeeper', 'image': 'https://via.placeholder.com/100'},
-        {'name': 'Player 2', 'position': 'right-back', 'image': 'https://via.placeholder.com/100'},
-        {'name': 'Player 3', 'position': 'center-back-1', 'image': 'https://via.placeholder.com/100'},
-        {'name': 'Player 4', 'position': 'center-back-2', 'image': 'https://via.placeholder.com/100'},
-        {'name': 'Player 5', 'position': 'left-back', 'image': 'https://via.placeholder.com/100'},
-        # {'name': 'Player 6', 'position': 'defensive-midfielder', 'image': 'https://via.placeholder.com/100'},
-        {'name': 'Player 7', 'position': 'right-midfielder', 'image': 'https://via.placeholder.com/100'},
-        {'name': 'Player 8', 'position': 'central-midfielder', 'image': 'https://via.placeholder.com/100'},
-        {'name': 'Player 9', 'position': 'left-midfielder', 'image': 'https://via.placeholder.com/100'},
-        {'name': 'Player 10', 'position': 'right-winger', 'image': 'https://via.placeholder.com/100'},
-        {'name': 'Player 11', 'position': 'left-winger', 'image': 'https://via.placeholder.com/100'},
-        {'name': 'Player 12', 'position': 'forward', 'image': 'https://via.placeholder.com/100'}
-    ]
+    # coach = get_object_or_404(Coach,team_id=team_id)
+    coach = None
+      
+    players = Player.objects.filter(team=team)
     return render(request,'./teams/teamProfile.html',{'team':team,'coach':coach,'players':players})
 
 

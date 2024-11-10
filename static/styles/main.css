@@ -38,6 +38,10 @@ body {
   margin-top: 5px;
 }
 
+.verified_color {
+  color: green;
+}
+
 .mt-10 {
   margin-top: 10px;
 }
@@ -892,15 +896,13 @@ nav .part3 {
   margin-top: 10px;
 }
 
-.user_profile {
-  padding: 0px 100px;
-}
 .user_profile .seller_profile_sm .banner_container {
   overflow: hidden;
   padding: 0;
   position: relative;
-  min-height: 400px;
+  min-height: 300px;
   height: 200px;
+  border-radius: 10px;
   display: block;
 }
 .user_profile .seller_profile_sm .banner_container .img_container {
@@ -947,10 +949,14 @@ nav .part3 {
   height: 300px;
 }
 .user_profile .seller_profile_sm .banner_container .profile_picture {
-  height: 40%;
+  height: 150px;
+  background-color: var(--box-color);
+  border-radius: 10px;
+  box-shadow: 1px 1px 10px black;
+  min-width: 400px;
   position: absolute;
   left: 50px;
-  bottom: 80px;
+  bottom: 10px;
   display: flex;
   padding: 10px;
   color: white;
@@ -958,8 +964,8 @@ nav .part3 {
        column-gap: 20px;
 }
 .user_profile .seller_profile_sm .banner_container .profile_picture .img_box {
-  height: 150px;
-  width: 150px;
+  height: 100px;
+  width: 100px;
   background-color: white;
   box-shadow: 1px 1px 10px white;
   border-radius: 5px;
@@ -976,113 +982,62 @@ nav .part3 {
   margin-top: 10px;
 }
 .user_profile .seller_profile_sm .banner_container .profile_picture .details h2 {
-  font-size: 2.2rem;
+  font-size: 1.5rem;
   font-weight: 500;
-  mix-blend-mode: difference;
+}
+.user_profile .seller_profile_sm .banner_container .profile_picture .details h2 .verification {
+  font-size: 0.7rem;
+  padding: 3px;
+  border-radius: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+  background-color: green;
+}
+.user_profile .seller_profile_sm .banner_container .profile_picture .details h2 .verification.verified {
+  background-color: green;
+}
+.user_profile .seller_profile_sm .banner_container .profile_picture .details h2 .verification.unverified {
+  background-color: red;
 }
 .user_profile .seller_profile_sm .banner_container .profile_picture .details p {
-  mix-blend-mode: difference;
+  font-size: 0.9rem;
 }
 .user_profile .seller_profile_sm .coach_info {
   display: flex;
+  min-height: 300px;
+  margin-top: 20px;
+}
+.user_profile .seller_profile_sm .coach_info .box_sm {
+  border-radius: 10px;
+  margin: auto;
+  height: 100%;
+  width: 50%;
+  display: flex;
   place-content: center;
   place-items: center;
-  flex-direction: column;
+  justify-content: space-between;
+  padding: 15px;
+  background-color: var(--box-color);
 }
-.user_profile .seller_profile_sm .coach_info img {
-  max-height: 100px;
-  border-radius: 8px;
-  box-shadow: 1px 1px 5px white;
+.user_profile .seller_profile_sm .coach_info .box_sm .detail_box {
+  padding: 5px;
+  width: 50%;
 }
-
-.formation_header {
-  margin-top: 50px;
-  text-align: center;
+.user_profile .seller_profile_sm .coach_info .box_sm .detail_box p {
+  font-size: 0.8rem;
 }
-
-.form_container {
+.user_profile .seller_profile_sm .coach_info .img_box {
+  width: 50%;
+  height: 100%;
   display: flex;
 }
-
-.formation {
+.user_profile .seller_profile_sm .coach_info .img_box img {
   margin: auto;
-  display: grid;
-  grid-template-rows: repeat(7, 1fr);
-  grid-template-columns: repeat(5, 1fr);
-  gap: 10px;
-  width: 70%;
-  border: 1px solid white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  /* Positioning players */
+  max-height: 250px;
+  border-radius: 8px;
 }
-.formation .player {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 1px 1px 5px white;
-  width: 100px;
-  margin-left: 30px;
-  color: #FFF;
-  font-weight: bold;
-  border-radius: 5px;
-  padding: 10px;
-  text-align: center;
-  flex-direction: column;
-}
-.formation .player img {
-  max-height: 100px;
-  border-radius: 5px;
-  box-shadow: 1px 1px 5px white;
-}
-.formation .goalkeeper {
-  grid-row: 7/8;
-  grid-column: 3/4;
-}
-.formation .right-back {
-  grid-row: 6/7;
-  grid-column: 5/6;
-}
-.formation .center-back-1 {
-  grid-row: 6/7;
-  grid-column: 2/3;
-}
-.formation .center-back-2 {
-  grid-row: 6/7;
-  grid-column: 4/5;
-}
-.formation .left-back {
-  grid-row: 6/7;
-  grid-column: 1/2;
-}
-.formation .defensive-midfielder {
-  grid-row: 5/6;
-  grid-column: 3/4;
-}
-.formation .right-midfielder {
-  grid-row: 4/5;
-  grid-column: 5/6;
-}
-.formation .central-midfielder {
-  grid-row: 4/5;
-  grid-column: 3/4;
-}
-.formation .left-midfielder {
-  grid-row: 4/5;
-  grid-column: 1/2;
-}
-.formation .right-winger {
-  grid-row: 2/3;
-  grid-column: 5/6;
-}
-.formation .left-winger {
-  grid-row: 2/3;
-  grid-column: 1/2;
-}
-.formation .forward {
-  grid-row: 1/2;
-  grid-column: 3/4;
+.user_profile .seller_profile_sm .players_table {
+  margin-top: 20px;
 }
 
 .td_image img {
@@ -1327,6 +1282,9 @@ nav .part3 {
 }
 .responsive-table .td_actions button .icon {
   font-size: 15px;
+}
+.responsive-table .td_detail p {
+  font-size: 0.9rem;
 }
 
 .pagination {
