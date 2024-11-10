@@ -5,13 +5,13 @@
   margin: 0;
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
-  color: rgb(224, 224, 224);
 }
 
 :root {
   --global_blue:rgb(84, 84, 255);
   --primary-color:#65558f;
   --box-color:#353535;
+  --error-red:rgb(254, 93, 93);
 }
 
 h1 {
@@ -842,6 +842,7 @@ nav .part3 {
   min-height: 70vh;
   display: flex;
   margin-top: 10px;
+  color: white;
 }
 .main_team_request_container .main_form_container {
   display: flex;
@@ -1064,30 +1065,17 @@ nav .part3 {
   width: 45%;
   min-width: 300px;
 }
-.create_team .button-wrap {
-  border: 1px dotted white;
-  border-radius: 8px;
-  position: relative;
-  height: 100px;
-  border-radius: 5px;
-  position: relative;
-  display: flex;
-  place-content: center;
-  place-items: center;
-}
-.create_team .button-wrap input {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  opacity: 0;
-  z-index: 10;
-}
-.create_team .button-wrap::after {
-  content: "Select a file";
-}
 
 .mt-5 {
   margin-top: 5px;
+}
+
+.red {
+  color: red;
+}
+
+.sm_text {
+  font-size: 0.8rem;
 }
 
 .mt-7 {
@@ -1108,6 +1096,86 @@ nav .part3 {
 
 .bold_span {
   font-weight: bold;
+}
+
+/* Snack Bar Styling */
+#snackbar {
+  visibility: hidden;
+  width: 300px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 4px;
+  padding: 16px;
+  position: fixed;
+  bottom: 20px;
+  left: 3%;
+  font-size: 17px;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.5s ease, top 0.5s ease;
+  box-shadow: 1px 1px 10px gray;
+  /* Close Button */
+  /* Bouncy Effect Animation */
+}
+#snackbar #close-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  cursor: pointer;
+}
+#snackbar.show {
+  visibility: visible;
+  opacity: 1;
+  animation: bounceIn 0.6s ease-out forwards;
+}
+#snackbar.success {
+  background-color: rgb(1, 108, 1);
+}
+#snackbar.hide {
+  animation: bounceOut 0.6s ease-in forwards;
+}
+
+/* Bounce-in Animation */
+@keyframes bounceIn {
+  0% {
+    transform: translateX(-50%);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(-10%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-10%);
+  }
+}
+/* Bounce-out Animation */
+@keyframes bounceOut {
+  0% {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(-50%) translateY(-10px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-50%) translateY(30px);
+    opacity: 0;
+  }
+}
+.error-messages .correct_error {
+  border: 1px solid var(--error-red);
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  color: var(--error-red);
 }
 
 .event_list_container {
@@ -1233,6 +1301,17 @@ nav .part3 {
   font-weight: bold;
 }
 
+h1, h2, h3, h4 {
+  color: white;
+}
+
+p {
+  color: white;
+}
+
+.responsive-table-box {
+  color: white;
+}
 .responsive-table-box .filter_box {
   padding: 10px 0px;
   display: flex;
@@ -1278,6 +1357,78 @@ nav .part3 {
   outline: none;
 }
 
+.white {
+  color: white;
+}
+
+.basic-form {
+  color: white;
+}
+.basic-form form {
+  color: white;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+}
+.basic-form form .form-control {
+  width: 45%;
+  min-width: 300px;
+}
+.basic-form form .form-control input[type=text],
+.basic-form form .form-control input[type=number],
+.basic-form form .form-control input[type=email],
+.basic-form form .form-control select {
+  color: white;
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  background-color: transparent;
+  border: none;
+  border: 1px solid rgb(87, 87, 87);
+  border-radius: 5px;
+}
+.basic-form form .form-control option {
+  color: black;
+}
+.basic-form form .form-control textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  background-color: transparent;
+  border: none;
+  border: 1px solid rgb(87, 87, 87);
+  border-radius: 5px;
+}
+.basic-form .custom-error {
+  color: var(--error-red);
+  font-size: 0.8rem;
+}
+.basic-form .button-wrap {
+  border: 1px dotted white;
+  border-radius: 8px;
+  position: relative;
+  height: 100px;
+  border-radius: 5px;
+  position: relative;
+  display: flex;
+  place-content: center;
+  place-items: center;
+}
+.basic-form .button-wrap input {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  z-index: 10;
+}
+.basic-form .button-wrap::after {
+  content: "Select a file";
+}
+
 .item-center {
   display: flex;
   place-content: center;
@@ -1290,6 +1441,7 @@ nav .part3 {
   margin: 20px 0;
   font-size: 18px;
   overflow: hidden;
+  color: white;
 }
 .responsive-table .selected {
   background-color: gray;
@@ -1553,6 +1705,14 @@ nav .part3 {
 
 .content.collapsed {
   margin-left: 0;
+}
+
+.create_player_container {
+  min-height: 100vh;
+}
+.create_player_container h2 {
+  text-align: center;
+  padding: 10px;
 }
 
 @media screen and (max-width: 800px) {

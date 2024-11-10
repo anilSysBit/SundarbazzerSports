@@ -98,10 +98,10 @@ class Player(models.Model):
     age = models.PositiveIntegerField()
     email = models.EmailField(max_length=100,blank=True,null=True)
     phone = models.CharField(max_length=10,blank=True,null=True)
-    weight = models.PositiveIntegerField()
+    weight = models.PositiveIntegerField(blank=True,null=True)
     is_active = models.BooleanField(default=False)
     profile_image = models.ImageField(upload_to='images/teams/', blank=True, null=True)
-    height = models.PositiveIntegerField()
+    height = models.PositiveIntegerField(blank=True,null=True)
     blood_group = models.CharField(max_length=25, choices=constants.BLOOD_GROUPS.choices)
     address = models.TextField(blank=True,null=True)
     designation = models.CharField(max_length=100, choices=constants.PLAYER_POSITION.choices, blank=True, null=True)
@@ -111,6 +111,14 @@ class Player(models.Model):
     def __str__(self):
         return f"{self.name} ({self.jersey_no}) - {self.team}"
 
+    def clean(self):
+        # Check if another player in the same team has the same jersey number
+        if Player.objects.filter(team=self.team, jersey_no=self.jersey_no).exclude(pk=self.pk).exists():
+            raise ValidationError({'jersey_no':f"A player with jersey number {self.jersey_no} already exists in team {self.team}."})
+
+    def save(self, *args, **kwargs):
+            self.clean()  # Call the clean method to enforce validation
+            super().save(*args, **kwargs)
 # Model for the event
 
 class EventOrganizer(models.Model):

@@ -9,7 +9,7 @@
         <!-- <div class="image_container">
             <img src="https://th.bing.com/th/id/R.f310137ff80cddb1010ecd94f844ac76?rik=S8Kvren8U7hMYQ&pid=ImgRaw&r=0" alt="">
         </div> -->
-        <div class="form-container">
+        <div class="form-container basic-form">
             <h2>Create a Team</h2>
             <form action="" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -95,15 +95,5 @@
 {% endif %}
 <!-- <p style="margin-top: 50px;text-align: center;">Note: After Submitting this form you will receive an email with username and password by which you can login to our site and manage your team and everything about you</p> -->
 
-<script>
-    function previewImage(event, previewId) {
-        var reader = new FileReader();
-        reader.onload = function(){
-            var output = document.getElementById(previewId);
-            output.src = reader.result;
-            output.style.display = 'block';
-        };
-        reader.readAsDataURL(event.target.files[0]);
-    }
-</script>
+
 {% endblock content %}

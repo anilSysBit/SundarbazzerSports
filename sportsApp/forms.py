@@ -1,5 +1,5 @@
 from django import forms
-from .models import Team,Payment
+from .models import Team,Payment,Player
 from django.core.mail import send_mail
 from django.conf import settings
 from django.utils.crypto import get_random_string
@@ -58,3 +58,16 @@ class TeamForm(forms.ModelForm):
 
 
 
+class PlayerForm(forms.ModelForm):
+    class Meta:
+        model = Player
+        fields = [
+            'team', 'name', 'jersey_no', 'age', 'email', 'phone', 'weight',
+            'is_active', 'profile_image', 'height', 'blood_group', 'address',
+            'designation'
+        ]
+        widgets = {
+            'address': forms.Textarea(attrs={'rows': 3}),
+            'designation': forms.Select(),
+            'blood_group': forms.Select(),
+        }

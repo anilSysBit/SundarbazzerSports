@@ -249,3 +249,32 @@ function toggleSidebar() {
   const sidebar = document.getElementById('sidebar');
   sidebar.classList.toggle('collapsed');
 }
+
+
+function previewImage(event, previewId) {
+  var reader = new FileReader();
+  reader.onload = function(){
+      var output = document.getElementById(previewId);
+      output.src = reader.result;
+      output.style.display = 'block';
+  };
+  reader.readAsDataURL(event.target.files[0]);
+}
+
+
+// function for snack bar
+
+function showSnackBar() {
+  const snackBar = document.getElementById("snackbar");
+  snackBar.classList.add("show");
+
+  // Hide the snackbar after 3 seconds
+  setTimeout(() => {
+    snackBar.classList.remove("show");
+  }, 8000);
+}
+
+function closeSnackBar() {
+  const snackBar = document.getElementById("snackbar");
+  snackBar.classList.remove("show");
+}

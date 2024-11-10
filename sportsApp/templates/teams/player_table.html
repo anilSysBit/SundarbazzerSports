@@ -1,9 +1,14 @@
+{% extends 'teams/teamProfile.html' %}
+
+
+{% block teamcontent %}
+
 <div class="responsive-table-box players_table">
-    <h2>Players</h2>
+    <h2 >Players</h2>
 
     <div class="filter_box">
         <div class="filter_box">
-            <a href="{% url 'create-team' %}">Create New Player</a>
+            <a href="{% url 'create-player' team_id=team.id %}">Create New Player</a>
             <div class="search">
                <input type="search" placeholder="Search"/>
                <button class="global_btn"><span class="material-symbols-outlined">
@@ -41,7 +46,7 @@
             <div class="td_actions">
                 <button class="global_btn outline" type="button" onclick="handleOpenAlert('{{team.id}}','Do you want to delete this team {{team.name}}?','You make lose the team data if you delete.')">
                   <span class="icon material-symbols-outlined">
-                    visibility
+                    delete
                     </span>
                 </button>
                 <button class="global_btn" type="button" onclick="handleOpenAlert('{{team.id}}','Do you want to delete this team {{team.name}}?','You make lose the team data if you delete.')">
@@ -56,3 +61,4 @@
       </tbody>
     </table>
   </div>
+{% endblock teamcontent %}

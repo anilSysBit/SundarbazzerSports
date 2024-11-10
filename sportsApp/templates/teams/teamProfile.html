@@ -1,4 +1,22 @@
 {% extends 'event/event_index.html' %} {% load static %} {% block content %}
+
+{% if messages %}
+  <div id="snackbar" class="snackbar show"></div>  <!-- Snackbar element -->
+  {% for message in messages %}
+    <script>
+      // Check if the message is a success message
+      if ("{{ message.tags }}" === "success") {
+        var snackbar = document.getElementById("snackbar");
+        snackbar.textContent = "{{ message }}"; // Set message content
+        snackbar.className = "show success"; // Show the snackbar
+        setTimeout(function(){ snackbar.className = snackbar.className.replace("show", ""); }, 7000); // Hide after 3 seconds
+      }
+    </script>
+  {% endfor %}
+{% endif %}
+
+<button onclick="showSnackBar()">show snack</button>
+
 <div class="user_profile seller_profile_container">
   <div class="seller_profile_sm">
     <div class="banner_container">
@@ -26,43 +44,17 @@
     </div>
     
 
+  {% if basic_detail %}
+  {% include 'teams/basic_detail.html' %}
+  {% endif %}
 
 
 
-    {% if not player_status %}
-    <div class="coach_info">
-      <div class="box_sm">
-        <div class="img_box">
-          <img src="https://img.freepik.com/free-photo/3d-illustration-cartoon-business-character-with-round-frame-gray-background_1142-51766.jpg?t=st=1731216684~exp=1731220284~hmac=3910133e285d433f4ea8107dedd61d364bfe89c5338bbceb88da96dfed27d132&w=826" alt="">
-          </div>
-          <div class="detail_box">
-            <h3>COACH ANIL WAGLE</h3>
 
-            <p class="mt-10">anil.wagle808@gmail.com</p>
-            <p class="mt-5">Age : 50 Years</p>
+{% block teamcontent %}
 
-            <p class="mt-10">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Beatae, doloremque.</p>
+{% endblock teamcontent %}
 
-            <button class="global_btn">Edit Coach</button>
-          </div>
-      </div>
-    </div>
-
-
-
-    <div class="item-center">
-      <a href="players">
-      <button class="global_btn">View Players</button>
-      </a>
-    </div>
-
-    {% endif %}
-
-
-
-    {% if player_status %}
-      {% include 'teams/player_table.html' %}
-    {% endif %}
 
 
     

@@ -35,7 +35,7 @@ class TeamOwnerInline(admin.StackedInline):
 
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
-    inlines = [TeamOwnerInline,TeamDesignInline,CoachInline,PlayerInline]
+    inlines = [TeamOwnerInline,TeamDesignInline,CoachInline]
     list_display = ('id','name','logo_preview','email' ,'total_players','sports_genere','is_verified','created_at')
     readonly_fields = ('user',)
     def logo_preview(self,obj):

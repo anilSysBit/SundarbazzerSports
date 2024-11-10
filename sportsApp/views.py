@@ -14,6 +14,8 @@ import json
 import base64
 from django.conf import settings
 from django.core.paginator import Paginator
+from .forms import PlayerForm
+from django.contrib import messages
 
 
 
@@ -59,13 +61,34 @@ def team_profile(request,team_id):
     coach = None
       
     players = Player.objects.filter(team=team)
-    return render(request,'./teams/teamProfile.html',{'team':team,'coach':coach})
+    return render(request,'./teams/teamProfile.html',{'team':team,'coach':coach,'basic_detail':True,})
 
 
 def view_players(request,team_id):
     team = get_object_or_404(Team,id=team_id)
     players = Player.objects.filter(team=team)
-    return render(request,'./teams/teamProfile.html',{'team':team,'players':players,'player_status':True,})
+    return render(request,'./teams/player_table.html',{'team':team,'players':players})
+
+
+def create_player(request,team_id):
+    team = get_object_or_404(Team,id=team_id)
+    form = PlayerForm(request.POST or None, request.FILES or None)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Player created successfully!")
+            return redirect('team-players',team.id)
+        else:
+            return render(request,'./teams/create_player.html',{'team':team,'form':form},status=400)
+
+            
+    return render(request,'./teams/create_player.html',{'team':team,'form':form})
+
+
+
+# function to delete the player
+    
 
 
 def create_team(request):
