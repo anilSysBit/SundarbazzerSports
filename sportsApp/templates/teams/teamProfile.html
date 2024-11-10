@@ -17,7 +17,7 @@
           {% endif %}
         </div>
         <div class="details">
-          <h2>{{ team.name }} <span class="verification verified">verified</span></h2>
+          <h2>{{ team.name }} <span class="verification {% if team.is_verified %}verified{% else %}unverified{% endif %}">{% if team.is_verified %}verified{% else %}unverified{% endif %}</span></h2>
           <p>{{ team.email }}</p>
       <button class="global_btn">Edit Profile</button>
 
@@ -29,6 +29,7 @@
 
 
 
+    {% if not player_status %}
     <div class="coach_info">
       <div class="box_sm">
         <div class="img_box">
@@ -47,7 +48,24 @@
       </div>
     </div>
 
-    {% include 'teams/player_table.html' %}
+
+
+    <div class="item-center">
+      <a href="players">
+      <button class="global_btn">View Players</button>
+      </a>
+    </div>
+
+    {% endif %}
+
+
+
+    {% if player_status %}
+      {% include 'teams/player_table.html' %}
+    {% endif %}
+
+
+    
     <p></p>
     
   </div>

@@ -896,6 +896,9 @@ nav .part3 {
   margin-top: 10px;
 }
 
+.user_profile {
+  padding: 0px 20px;
+}
 .user_profile .seller_profile_sm .banner_container {
   overflow: hidden;
   padding: 0;
@@ -1230,6 +1233,57 @@ nav .part3 {
   font-weight: bold;
 }
 
+.responsive-table-box .filter_box {
+  padding: 10px 0px;
+  display: flex;
+  justify-content: right;
+  margin-bottom: 10px;
+  -moz-column-gap: 20px;
+       column-gap: 20px;
+  place-items: center;
+}
+.responsive-table-box .filter_box .search {
+  display: flex;
+  place-content: center;
+  place-items: center;
+}
+.responsive-table-box .filter_box .search .global_btn {
+  min-width: 25px;
+  width: 30px;
+  display: flex;
+  place-content: center;
+  place-items: center;
+  margin: 0;
+  margin-left: 2px;
+  border-radius: 10px;
+}
+.responsive-table-box .filter_box a {
+  background-color: white;
+  color: black;
+  padding: 10px;
+  display: flex;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+.responsive-table-box .filter_box input {
+  height: 40px;
+  min-width: 200px;
+  background-color: transparent;
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 10px;
+  color: white;
+}
+.responsive-table-box .filter_box input:focus {
+  outline: none;
+}
+
+.item-center {
+  display: flex;
+  place-content: center;
+  place-items: center;
+}
+
 .responsive-table {
   width: 100%;
   border-collapse: collapse;
@@ -1249,6 +1303,10 @@ nav .part3 {
   padding: 12px 15px;
   font-size: 0.9rem;
   text-align: left;
+}
+.responsive-table th a, .responsive-table td a {
+  color: white;
+  font-size: 0.9rem;
 }
 .responsive-table thead th {
   color: #ffffff;
@@ -1631,38 +1689,5 @@ nav .part3 {
   }
   .accordin_container .size_manager {
     padding: 0;
-  }
-  .point_table_container .size_manager {
-    padding: 0px;
-  }
-  .point_table_container .size_manager .team_table {
-    margin-top: 20px;
-  }
-  .point_table_container .size_manager .team_table table {
-    text-align: center;
-  }
-  .point_table_container .size_manager .team_table table td, .point_table_container .size_manager .team_table table th {
-    padding: 7px;
-    text-align: center;
-    padding-top: 25px;
-    padding-bottom: 25px;
-  }
-  .tie_sheet_container .size_manager {
-    padding: 0;
-  }
-  .tie_sheet_container .size_manager .match_container {
-    padding: 0;
-  }
-  .tie_sheet_container .size_manager .match_container .matches {
-    padding: 0;
-  }
-  .tie_sheet_container .size_manager .match_container .matches .team_display .team {
-    flex-direction: column;
-    text-align: center;
-  }
-  .tie_sheet_container .size_manager .match_container .matches .team_display .vs_img {
-    height: 50px;
-    width: 50px;
-    transform: translate(-50%, 10%);
   }
 }/*# sourceMappingURL=main.css.map */

@@ -13,7 +13,8 @@ urlpatterns = [
 
 # Team url admin panel
     path("teams/",views.TeamView.as_view(),name="team"),
-    path("teams/<int:team_id>/",views.team_profile,name="team_profile"),
+    path("teams/<int:team_id>/",views.team_profile,name="team-profile"),
+    path("teams/<int:team_id>/players/",views.view_players,name="team-players"),
     path("team-delete/<int:team_id>/",views.TeamView.as_view(),name="delete_team"),
     path('change-team-status/<int:team_id>/',views.changeTeamStatus,name='change-team-status'),
     # path("create-team/",views.submit_team_request,name='submit_team_request'),

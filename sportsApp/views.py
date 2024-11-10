@@ -59,7 +59,13 @@ def team_profile(request,team_id):
     coach = None
       
     players = Player.objects.filter(team=team)
-    return render(request,'./teams/teamProfile.html',{'team':team,'coach':coach,'players':players})
+    return render(request,'./teams/teamProfile.html',{'team':team,'coach':coach})
+
+
+def view_players(request,team_id):
+    team = get_object_or_404(Team,id=team_id)
+    players = Player.objects.filter(team=team)
+    return render(request,'./teams/teamProfile.html',{'team':team,'players':players,'player_status':True,})
 
 
 def create_team(request):

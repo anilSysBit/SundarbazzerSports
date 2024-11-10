@@ -1,5 +1,17 @@
-<div class="players_table">
-    <h3>Players</h3>
+<div class="responsive-table-box players_table">
+    <h2>Players</h2>
+
+    <div class="filter_box">
+        <div class="filter_box">
+            <a href="{% url 'create-team' %}">Create New Player</a>
+            <div class="search">
+               <input type="search" placeholder="Search"/>
+               <button class="global_btn"><span class="material-symbols-outlined">
+                search
+                </span></button>
+            </div>
+        </div>
+    </div>
     <table class="responsive-table">
       <thead>
         <tr>

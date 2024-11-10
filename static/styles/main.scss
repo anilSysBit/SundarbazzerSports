@@ -1049,7 +1049,7 @@ nav {
 
 
 .user_profile {
-  // padding: 0px 100px;
+  padding: 0px 20px;
   .seller_profile_sm {
     .banner_container {
       overflow: hidden;
@@ -1433,6 +1433,60 @@ nav {
   }
 }
 
+.responsive-table-box{
+  // border: 1px solid white;
+  .filter_box{
+    padding: 10px 0px;
+    display: flex;
+    justify-content: right;
+    margin-bottom: 10px;
+    column-gap: 20px;
+    place-items: center;
+    .search{
+      display: flex;
+      place-content: center;
+      
+      place-items: center;
+      .global_btn{
+        min-width: 25px;
+        width: 30px;
+        display: flex;
+        place-content: center;
+        place-items: center;
+        margin: 0;
+        margin-left: 2px;
+        border-radius: 10px;
+      }
+    }
+    
+    a{
+      background-color: white;
+      color: black;
+      padding: 10px;
+      display: flex;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+    input{
+      height: 40px;
+      min-width: 200px;
+      background-color: transparent;
+      border: 1px solid gray;
+      border-radius: 5px;
+      padding: 10px;
+      color: white;
+      &:focus{
+        outline: none;
+      }
+    }
+  }
+}
+
+.item-center{
+  display: flex;
+  place-content: center;
+  place-items: center;
+}
 .responsive-table{
   width: 100%;
   // border: 1px solid white;
@@ -1456,6 +1510,10 @@ nav {
           padding: 12px 15px;
           font-size: 0.9rem;
           text-align: left;
+          a{
+            color: white;
+            font-size: 0.9rem;
+          }
       }
 
       thead th {
@@ -1942,50 +2000,5 @@ nav {
   }
 }
 
-.point_table_container{
-  .size_manager{
-    padding: 0px;
 
-    .team_table{
-      margin-top: 20px;
-      table{
-        text-align: center;
-        td,th{
-          padding: 7px;
-          text-align: center;
-          padding-top: 25px;
-          padding-bottom: 25px;
-        }
-      }
-    }
-  }
-}
-
-.tie_sheet_container{
-  .size_manager{
-    padding: 0;
-    .match_container{
-      padding: 0;
-      .matches{
-        padding: 0;
-        .team_display{
-          // padding: 0;
-
-          .team{
-            // padding: 0;
-            // display: block;
-            flex-direction: column;
-            text-align: center;
-          }
-          .vs_img{
-            height: 50px;
-            width: 50px;
-            transform: translate(-50%,10%);
-
-          }
-        }
-      }
-    }
-  }
-}
 }
