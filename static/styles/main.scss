@@ -1291,7 +1291,7 @@ nav {
 
 
 /* Snack Bar Styling */
-#snackbar {
+.snackbar {
   visibility: hidden;
   width: 300px;
   background-color: #333;
@@ -1335,8 +1335,13 @@ nav {
     // border: 3px solid green;
     background-color: rgb(1, 108, 1);
   }
+  &.error{
+    background-color: var(--error-red);
+  }
 
   &.hide {
+    visibility: visible;
+    opacity: 1;
     animation: bounceOut 0.6s ease-in forwards;
   }
 }
@@ -1361,15 +1366,15 @@ nav {
 /* Bounce-out Animation */
 @keyframes bounceOut {
   0% {
-    transform: translateX(-50%) translateY(0);
+    transform: translateX(-10%);
     opacity: 1;
   }
   50% {
-    transform: translateX(-50%) translateY(-10px);
+    transform: translateX(-10%);
     opacity: 1;
   }
   100% {
-    transform: translateX(-50%) translateY(30px);
+    transform: translateX(-20%);
     opacity: 0;
   }
 }
@@ -1523,12 +1528,22 @@ nav {
   }
 }
 
+
+.avatar{
+  img{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+  }
+}
 h1,h2,h3,h4{
   color: white;
 }
 p{
   color: white;
 }
+
+
 
 .responsive-table-box{
   // border: 1px solid white;
@@ -1578,6 +1593,22 @@ p{
       }
     }
   }
+
+  .match_vs_tag{
+    display: flex;
+    column-gap: 10px;
+    // place-content: center;
+    place-items: center;
+    .team{
+      display: flex;
+      place-content: center;
+      place-items: center;
+      column-gap: 10px;
+      p{
+        font-size: 0.9rem;
+      }
+    }
+  }
 }
 
 .white{
@@ -1600,6 +1631,8 @@ p{
       input[type="text"],
       input[type="number"],
       input[type="email"],
+      input[type="date"],
+      input[type="time"],
       select {
         color: white;
         width: 100%;
@@ -1617,10 +1650,16 @@ p{
       option{
         color: black;
       }
+
+      input[type="checkbox"]{
+        height: 20px;
+        width: 20px;
+      }
       textarea{
         width: 100%;
         padding: 8px;
         margin-bottom: 10px;
+        color: white;
         // border: 1px solid #ccc;
         border-radius: 4px;
         background-color: transparent;
@@ -1955,7 +1994,7 @@ $font-family: Arial, sans-serif;
   background-color: $sidebar-bg-color;
   color: $text-color;
   transition: transform 0.3s ease-in-out;
-  padding :10px;
+  padding: 10px;
 
   .sidebar-header {
     padding: 0 20px;
@@ -1969,7 +2008,6 @@ $font-family: Arial, sans-serif;
 
   .sidebar-list {
     list-style: none;
-    // padding-left: 20px;
 
     .sidebar-item {
       display: block;
@@ -1979,11 +2017,46 @@ $font-family: Arial, sans-serif;
       margin-bottom: 5px;
       border-radius: 5px;
       transition: background-color 0.3s ease;
-      
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      &:hover {
+        background-color: $sidebar-hover-color;
+      }
+
+      .material-symbols-outlined {
+        font-size: 18px;
+        transition: transform 0.3s ease;
+      }
+    }
+  }
+
+  .dropdown {
+    display: none; // Hidden by default
+    list-style: none;
+    // padding-left: 20px;
+    padding: 10px;
+    background-color: var(--box-color);
+
+    .dropdown-item {
+      padding: 10px;
+      color: $text-color;
+      text-decoration: none;
+      display: block;
+      border-radius: 5px;
+      a{
+        font-size: 0.9rem;
+        color: white;
+      }
       &:hover {
         background-color: $sidebar-hover-color;
       }
     }
+  }
+
+  .show {
+    display: block; // Show the dropdown when 'show' class is added
   }
 }
 
@@ -1991,7 +2064,6 @@ $font-family: Arial, sans-serif;
 .content {
   flex: 1;
   padding: 20px;
-  // background-color: #fff;
   color: #333;
 
   h2 {
@@ -2007,7 +2079,7 @@ $font-family: Arial, sans-serif;
     border-radius: 5px;
     cursor: pointer;
     margin-bottom: 20px;
-    
+
     &:hover {
       background-color: $btn-hover-color;
     }
@@ -2026,7 +2098,6 @@ $font-family: Arial, sans-serif;
 .content.collapsed {
   margin-left: 0;
 }
-
 
 
 .create_player_container{

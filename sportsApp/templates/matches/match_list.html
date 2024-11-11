@@ -3,11 +3,11 @@
 {% load static %}
 {% block content %}
 
-<div class="page_container">
+<div class="responsive-table-box">
 
-  <h2>Teams</h2>
+  <h2>Matches</h2>
     <div class="filter_box">
-        <a href="{% url 'create-team' %}">Create New Team</a>
+        <a href="{% url 'create-match' %}">Add a new Match</a>
         <div class="search">
            <input type="search" placeholder="Search"/>
            <button class="global_btn"><span class="material-symbols-outlined">
@@ -38,40 +38,42 @@
           <tr>
             <!-- <th><input type="checkbox" class="" id="selectAll"></th> -->
             <th>SN</th>
-            <th>Name</th>
-            <th>Logo</th>
-            <th>Total Players</th>
-            <th>Is Verified</th>
-            <th>User</th>
+            <th>Teams</th>
+            <th>Event</th>
+            <th>Match Date</th>
+            <th>Match Time</th>
             <th>Actions</th>
           </tr>
         </thead>
 
 
         <tbody>
-          {% for team in page_obj %}
+          {% for match in matches %}
 
               <tr>
                 <!-- <td><input type="checkbox" class="select-checkbox"></td> -->
-                <td>{{ forloop.counter|add:start_index }}</td>
-                <td><a href="{% url 'team-profile' team_id=team.id %}">{{team.name}}</a></td>
-                <td class="td_image">
-                  {% if team.logo %}
-                  <img src="{{ team.logo.url }}" alt="Team Logo">
-                  {% else %}
-                      <img src="https://th.bing.com/th/id/OIP.uLJFR9Vm_r14XQ5dJnSljQHaHa?rs=1&pid=ImgDetMain" alt="Default Team Logo">
-                  {% endif %}
-                </td>
-                <td>{{team.total_players}} </td>
+                <td>{{ forloop.counter|add:0 }}</td>
                 <td>
-                  <div class="checkbox_wrapper">
-                    <input type="checkbox" id="team_checkbox{{ team.id }}" 
-       {% if team.is_verified %} checked {% endif %} 
-       onchange="handleChangeTeamCheckbox('{{ team.id }}','{{team.name}}')" />
-                  </div>
-                  
+                    <div class="match_vs_tag">
+                        <div class="team team1">
+                            <div class="avatar">
+                                <img src="https://th.bing.com/th/id/OIP.dR0CzoqfuNucL5swbCLvaAHaHa?rs=1&pid=ImgDetMain" alt="">
+                            </div>
+                            <p>{{match.team1.team.name}}</p>
+                            
+                        </div>
+                        <p>Vs</p>
+                        <div class="team team2">
+                            <div class="avatar">
+                                <img src="https://th.bing.com/th/id/OIP.YOV0CA84ZoZyuvmcZR1u5AHaHa?w=2000&h=2000&rs=1&pid=ImgDetMain" alt="">
+                            </div>
+                            <p>{{match.team2.team.name}}</p>
+                        </div>
+                    </div>
                 </td>
-                <td>{{team.user}}</td>
+                <td>{{match.event}}</td>
+                <td>{{match.match_date}}</td>
+                <td>{{match.match_time}}</td>
                 <td>
                   <div class="td_actions">
                     <a href="{{team.id}}">

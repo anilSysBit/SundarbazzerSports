@@ -14,7 +14,7 @@ import json
 import base64
 from django.conf import settings
 from django.core.paginator import Paginator
-from .forms import PlayerForm
+from .forms import PlayerForm,MatchForm
 from django.contrib import messages
 
 
@@ -54,15 +54,14 @@ def success_state(request):
     return render(request,"./teams/successRequest.html")
 
 
-def team_profile(request,team_id):
-    
-    team = get_object_or_404(Team,id=team_id)
-    # coach = get_object_or_404(Coach,team_id=team_id)
-    coach = None
-      
-    players = Player.objects.filter(team=team)
-    return render(request,'./teams/teamProfile.html',{'team':team,'coach':coach,'basic_detail':True,})
 
+
+
+
+
+"""
+    Player  Views
+"""
 
 def view_players(request,team_id):
     team = get_object_or_404(Team,id=team_id)
@@ -70,6 +69,7 @@ def view_players(request,team_id):
     return render(request,'./teams/player_table.html',{'team':team,'players':players})
 
 
+# creating player function
 def create_player(request,team_id):
     team = get_object_or_404(Team,id=team_id)
     form = PlayerForm(request.POST or None, request.FILES or None)
@@ -86,11 +86,63 @@ def create_player(request,team_id):
     return render(request,'./teams/create_player.html',{'team':team,'form':form})
 
 
+# updating player function
+def update_player(request, player_id):
+    player = get_object_or_404(Player, id=player_id)  # Fetch the player to update
+    team = get_object_or_404(Team, id=player.team.id)
+    form = PlayerForm(request.POST or None, request.FILES or None, instance=player)  # Pass the player instance to the form
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Player updated successfully!")
+            return redirect('team-players', team.id)
+        else:
+            return render(request, './teams/create_player.html', {'team': team, 'form': form, 'player': player}, status=400)
+
+    return render(request, './teams/create_player.html', {'team': team, 'form': form, 'player': player})
+
 
 # function to delete the player
+@require_POST
+def delete_player(request,player_id):
+
+    item = get_object_or_404(Player, pk=player_id)
+    item.delete()
+    messages.success(request,'Player Deleted Successfully')
+
+    return JsonResponse({'message': 'Item deleted successfully', 'item_id': player_id}, status=200)
+            
+
+
+# changingthe player status
+@require_POST
+def change_player_status(request,player_id):
+    item = get_object_or_404(Player, pk=player_id)
+    item.is_active = not item.is_active  # Toggle the is_verified status
+    messages.success(request,f"{'Activated' if item.is_active else 'Deactivated'} player {item.name}")
+    item.save()  # Save the updated item
+
+
+    return JsonResponse({'message': 'Team Verified Successfully', 'player_id': player_id}, status=200)
+
+
     
+"""
+        End of player views
+"""
 
 
+
+
+
+
+
+
+
+""" 
+    Team Views
+"""
 def create_team(request):
     if request.method == 'POST':
         name = request.POST.get("name")
@@ -139,6 +191,57 @@ def create_team(request):
 
     
     return render(request, './teams/create_team.html')
+
+def team_profile(request,team_id):
+    
+    team = get_object_or_404(Team,id=team_id)
+    # coach = get_object_or_404(Coach,team_id=team_id)
+    coach = None
+      
+    players = Player.objects.filter(team=team)
+    return render(request,'./teams/teamProfile.html',{'team':team,'coach':coach,'basic_detail':True,})
+
+
+class TeamView(View):
+    def get(self, request, *args, **kwargs):
+        teams_per_page = 5  # Define how many teams to display per page
+        all_teams = Team.objects.all()  # Retrieve all teams
+
+        # Set up paginator
+        paginator = Paginator(all_teams, teams_per_page)
+        page_number = request.GET.get('page', 1)  # Get the page number from the request, default to 1
+        page_obj = paginator.get_page(page_number)  # Get the items for the current page
+
+        # Calculate the starting index for the current page
+        start_index = (page_obj.number - 1) * teams_per_page
+
+        return render(request, './teams/teamPage.html', {
+            'page_obj': page_obj,       # The page object with paginated items
+            'start_index': start_index,  # Starting index for the current page
+        })
+
+    def post(self, request, *args,**kwargs):
+        pk = kwargs.get('team_id')
+        item = get_object_or_404(Team, pk=pk)
+        item.delete()
+        return JsonResponse({'message': 'Item deleted successfully', 'item_id': pk}, status=200)
+
+@require_POST   
+def changeTeamStatus(request, team_id):
+    item = get_object_or_404(Team, pk=team_id)
+    item.is_verified = not item.is_verified  # Toggle the is_verified status
+    item.save()  # Save the updated item
+    messages.success(request,f"{'Verified' if item.is_verified else 'Unverified'} team {item.name}")
+
+    return JsonResponse({'message': 'Team Verified Successfully', 'item_id': team_id}, status=200)
+
+
+
+
+"""
+
+    End of Team View
+"""
 
 
 
@@ -287,35 +390,38 @@ def join_now(request):
 
 
 
-class TeamView(View):
-    def get(self, request, *args, **kwargs):
-        teams_per_page = 5  # Define how many teams to display per page
-        all_teams = Team.objects.all()  # Retrieve all teams
-
-        # Set up paginator
-        paginator = Paginator(all_teams, teams_per_page)
-        page_number = request.GET.get('page', 1)  # Get the page number from the request, default to 1
-        page_obj = paginator.get_page(page_number)  # Get the items for the current page
-
-        # Calculate the starting index for the current page
-        start_index = (page_obj.number - 1) * teams_per_page
-
-        return render(request, './teams/teamPage.html', {
-            'page_obj': page_obj,       # The page object with paginated items
-            'start_index': start_index,  # Starting index for the current page
-        })
-
-    def post(self, request, *args,**kwargs):
-        pk = kwargs.get('team_id')
-        item = get_object_or_404(Team, pk=pk)
-        item.delete()
-        return JsonResponse({'message': 'Item deleted successfully', 'item_id': pk}, status=200)
-
-@require_POST   
-def changeTeamStatus(request, team_id):
-    item = get_object_or_404(Team, pk=team_id)
-    item.is_verified = not item.is_verified  # Toggle the is_verified status
-    item.save()  # Save the updated item
 
 
-    return JsonResponse({'message': 'Team Verified Successfully', 'item_id': team_id}, status=200)
+"""
+    Match Views 
+"""
+
+def match_view(request):
+    matches = Match.objects.all()
+
+    print(Match.objects.count())
+    return render(request,'matches/match_list.html',{'matches':matches})
+
+
+
+def create_match_view(request):
+    form = MatchForm(request.POST or None)
+
+    print("Just going to the function")
+    
+    if request.method == 'POST':
+        if form.is_valid():
+            print('going validation')
+            form.save()
+            messages.success(request, "New Match created successfully!")
+            return redirect('match')
+        else:
+            print('going on the error')
+            return render(request,'matches/create_match.html',{'form':form},status=400)
+    return render(request,'matches/create_match.html',{'form':form})
+"""
+    End of Match viewsets
+"""
+
+
+

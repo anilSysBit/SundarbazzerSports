@@ -1099,7 +1099,7 @@ nav .part3 {
 }
 
 /* Snack Bar Styling */
-#snackbar {
+.snackbar {
   visibility: hidden;
   width: 300px;
   background-color: #333;
@@ -1118,7 +1118,7 @@ nav .part3 {
   /* Close Button */
   /* Bouncy Effect Animation */
 }
-#snackbar #close-btn {
+.snackbar #close-btn {
   background: none;
   border: none;
   color: #fff;
@@ -1129,15 +1129,20 @@ nav .part3 {
   right: 10px;
   cursor: pointer;
 }
-#snackbar.show {
+.snackbar.show {
   visibility: visible;
   opacity: 1;
   animation: bounceIn 0.6s ease-out forwards;
 }
-#snackbar.success {
+.snackbar.success {
   background-color: rgb(1, 108, 1);
 }
-#snackbar.hide {
+.snackbar.error {
+  background-color: var(--error-red);
+}
+.snackbar.hide {
+  visibility: visible;
+  opacity: 1;
   animation: bounceOut 0.6s ease-in forwards;
 }
 
@@ -1158,15 +1163,15 @@ nav .part3 {
 /* Bounce-out Animation */
 @keyframes bounceOut {
   0% {
-    transform: translateX(-50%) translateY(0);
+    transform: translateX(-10%);
     opacity: 1;
   }
   50% {
-    transform: translateX(-50%) translateY(-10px);
+    transform: translateX(-10%);
     opacity: 1;
   }
   100% {
-    transform: translateX(-50%) translateY(30px);
+    transform: translateX(-20%);
     opacity: 0;
   }
 }
@@ -1301,6 +1306,12 @@ nav .part3 {
   font-weight: bold;
 }
 
+.avatar img {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}
+
 h1, h2, h3, h4 {
   color: white;
 }
@@ -1356,6 +1367,22 @@ p {
 .responsive-table-box .filter_box input:focus {
   outline: none;
 }
+.responsive-table-box .match_vs_tag {
+  display: flex;
+  -moz-column-gap: 10px;
+       column-gap: 10px;
+  place-items: center;
+}
+.responsive-table-box .match_vs_tag .team {
+  display: flex;
+  place-content: center;
+  place-items: center;
+  -moz-column-gap: 10px;
+       column-gap: 10px;
+}
+.responsive-table-box .match_vs_tag .team p {
+  font-size: 0.9rem;
+}
 
 .white {
   color: white;
@@ -1379,6 +1406,8 @@ p {
 .basic-form form .form-control input[type=text],
 .basic-form form .form-control input[type=number],
 .basic-form form .form-control input[type=email],
+.basic-form form .form-control input[type=date],
+.basic-form form .form-control input[type=time],
 .basic-form form .form-control select {
   color: white;
   width: 100%;
@@ -1393,10 +1422,15 @@ p {
 .basic-form form .form-control option {
   color: black;
 }
+.basic-form form .form-control input[type=checkbox] {
+  height: 20px;
+  width: 20px;
+}
 .basic-form form .form-control textarea {
   width: 100%;
   padding: 8px;
   margin-bottom: 10px;
+  color: white;
   border-radius: 4px;
   background-color: transparent;
   border: none;
@@ -1668,9 +1702,39 @@ p {
   margin-bottom: 5px;
   border-radius: 5px;
   transition: background-color 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .sidebar .sidebar-list .sidebar-item:hover {
   background-color: #34495e;
+}
+.sidebar .sidebar-list .sidebar-item .material-symbols-outlined {
+  font-size: 18px;
+  transition: transform 0.3s ease;
+}
+.sidebar .dropdown {
+  display: none;
+  list-style: none;
+  padding: 10px;
+  background-color: var(--box-color);
+}
+.sidebar .dropdown .dropdown-item {
+  padding: 10px;
+  color: #fff;
+  text-decoration: none;
+  display: block;
+  border-radius: 5px;
+}
+.sidebar .dropdown .dropdown-item a {
+  font-size: 0.9rem;
+  color: white;
+}
+.sidebar .dropdown .dropdown-item:hover {
+  background-color: #34495e;
+}
+.sidebar .show {
+  display: block;
 }
 
 .content {

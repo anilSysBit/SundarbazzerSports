@@ -1,19 +1,6 @@
 {% extends 'event/event_index.html' %} {% load static %} {% block content %}
 
-{% if messages %}
-  <div id="snackbar" class="snackbar show"></div>  <!-- Snackbar element -->
-  {% for message in messages %}
-    <script>
-      // Check if the message is a success message
-      if ("{{ message.tags }}" === "success") {
-        var snackbar = document.getElementById("snackbar");
-        snackbar.textContent = "{{ message }}"; // Set message content
-        snackbar.className = "show success"; // Show the snackbar
-        setTimeout(function(){ snackbar.className = snackbar.className.replace("show", ""); }, 7000); // Hide after 3 seconds
-      }
-    </script>
-  {% endfor %}
-{% endif %}
+
 
 <button onclick="showSnackBar()">show snack</button>
 

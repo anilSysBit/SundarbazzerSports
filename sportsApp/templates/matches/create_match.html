@@ -1,0 +1,88 @@
+{% extends 'event\event_index.html' %}
+
+{% load static %}
+{% block content %}
+
+<div class="create_player_container">
+    <h2 class="mt-10 white">{% if player %} Update Match {% else %} Create Match{% endif %}</h2>
+
+
+    {% if form.errors %}
+    <div class="error-messages">
+        <p class="correct_error">Please correct the following errors:</p>
+        <ul>
+            {% for field, errors in form.errors.items %}
+                <li class="white"><strong>{{ field }}:</strong> {{ errors|join:", " }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+    
+<div class="basic-form create_player">
+    <form method="post" class="mt-10">
+        {% csrf_token %}
+        
+                <!-- Name field -->
+       <div class="form-control">
+        <label for="team1">Event</label>
+        {{form.event}}
+       </div>
+    
+        <!-- Name field -->
+       <div class="form-control">
+        <label for="team1">Team 2</label>
+        {{form.team1}}
+       </div>
+
+       <div class="form-control">
+        <label for="team2">Team 2</label>
+        {{form.team2}}
+       </div>
+        <!-- Age field -->
+        
+        <div class="form-control">
+            <label for="address">Address</label>
+            {{form.place}}
+        </div>
+        <!-- Match Date -->
+        <div class="form-control">
+            <label for="match_time">Match Date</label>
+            {{form.match_date}}
+    
+        </div>
+
+
+        <!-- match Time -->
+        <div class="form-control">
+            <label for="match_time">Match Date</label>
+            {{form.match_time}}
+    
+        </div>
+        <!-- match Time -->
+        <div class="form-control">
+            {{form.is_address_default}}
+            <label for="id_is_address_default">Tick of Game address is of event address</label>
+    
+        </div>
+    
+
+        <!-- Address field -->
+        <div class="form-control">
+            <label for="address">Description</label>
+            {{form.notes}}
+        </div>
+
+
+
+    
+      
+        <!-- Submit button -->
+         <div class="form-control">
+        <button type="submit" class="global_btn">{% if player %} Update {% else %} Create{% endif %}</button>
+
+         </div>
+    </form>
+</div>
+
+</div>
+{% endblock content %}

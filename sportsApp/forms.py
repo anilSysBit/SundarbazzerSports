@@ -1,5 +1,5 @@
 from django import forms
-from .models import Team,Payment,Player
+from .models import Team,Payment,Player,Match
 from django.core.mail import send_mail
 from django.conf import settings
 from django.utils.crypto import get_random_string
@@ -70,4 +70,23 @@ class PlayerForm(forms.ModelForm):
             'address': forms.Textarea(attrs={'rows': 3}),
             'designation': forms.Select(),
             'blood_group': forms.Select(),
+        }
+
+
+
+"""
+
+Match form 
+
+"""
+
+
+class MatchForm(forms.ModelForm):
+    class Meta:
+        model = Match
+        fields = ['event', 'team1', 'team2', 'is_address_default', 'match_date', 'match_time', 'place', 'match_complete', 'notes']
+        widgets = {
+            'match_date': forms.DateInput(attrs={'type': 'date'}),
+            'match_time': forms.TimeInput(attrs={'type': 'time'}),
+            'notes': forms.Textarea(attrs={'rows': 4, 'cols': 50}),
         }

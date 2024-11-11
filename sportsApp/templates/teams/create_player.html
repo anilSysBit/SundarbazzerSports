@@ -4,7 +4,7 @@
 {% block teamcontent %}
 
 <div class="create_player_container">
-    <h2 class="mt-10 white">Create a Player</h2>
+    <h2 class="mt-10 white">{% if player %} Update Player {% else %} Create a Player{% endif %}</h2>
 
 
     {% if form.errors %}
@@ -67,10 +67,16 @@
         <div class="form-control">
             <label for="profile_image">Profile Image</label>
             <div class="button-wrap">
-        <input type="file" name="profile_image" id="profile_image" onchange="previewImage(event, 'bannerPreview')">
+        <input type="file" accept="image/*" name="profile_image" id="profile_image" onchange="previewImage(event, 'bannerPreview')">
         
     </div>
-    <img id="bannerPreview" src="#" alt="Banner Preview" style="display:none; max-width: 300px; max-height: 100px;">
+    <!-- <p>{{player.profile_image}}</p> -->
+    {% if player.profile_image %}
+    
+    <img id="bannerPreview" src="{{player.profile_image.url}}"  alt="Banner Preview" style=" max-width: 300px; max-height: 100px;">
+    {% else%}
+    <img id="bannerPreview" src="#"  alt="Banner Preview" style="display:none; max-width:300px; max-height: 100px;">
+    {% endif %}
         </div>
         <!-- Height field -->
         <div class="form-control">
@@ -102,7 +108,7 @@
     
       
         <!-- Submit button -->
-        <button type="submit" class="global_btn">Create Player</button>
+        <button type="submit" class="global_btn">{% if player %} Update {% else %} Create{% endif %}</button>
     </form>
 </div>
 
