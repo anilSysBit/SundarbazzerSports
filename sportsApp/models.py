@@ -144,12 +144,13 @@ class Event(models.Model):
     title = models.CharField(max_length=255)
     event_type = models.CharField(max_length=20,choices=EVENT_TYPE,blank=True,null=True)
     banner = models.ImageField(upload_to='images/events/',blank=True,null=True)
+    logo = models.ImageField(upload_to='images/events/',blank=True,null=True)
     event_organizer = models.ForeignKey(EventOrganizer,on_delete=models.CASCADE,blank=True,null=True,related_name='events')
     event_age_limit = models.PositiveIntegerField()
     is_verified = models.BooleanField(default=False)
     entry_fee = models.DecimalField(max_digits=10000,decimal_places=3)
     registration_start_date = models.DateField()
-    resistration_end_date = models.DateField()
+    registration_end_date = models.DateField()
     event_start_date = models.DateField(blank=True,null=True)
     event_end_date = models.DateField(blank=True,null=True)
     match_duration = models.DurationField(blank=True,null=True)
@@ -190,19 +191,9 @@ class Match(models.Model):
 
     def clean(self) -> None:
         super().clean()
-
         if self.team1 == self.team2:
             raise ValidationError("Team 1 and Team2 Cannot be the same")
         
-        if not self.team1.event == self.event:
-            raise ValidationError("Team1 Should be of the Same Event")
-        if not self.team2.event == self.event:
-            raise ValidationError("Team2 Should be of the Same Event")
-    
-    def save(self, *args, **kwargs):
-        # Ensure clean is called when saving
-        self.clean()
-        super().save(*args, **kwargs)
     
     def __str__(self):
         return f"{self.team1} vs {self.team2} on {self.match_date}"

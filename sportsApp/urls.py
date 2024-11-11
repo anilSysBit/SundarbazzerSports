@@ -7,7 +7,7 @@ from sportsApp.view2 import EventView
 urlpatterns = [
     path('',EventView.index , name='home'),
     path('leaderboard/',views.leaderboard,name='leaderboard'),
-    path("events/",views.events, name='events'),
+    # path("events/",views.events, name='events'),
     path("news/<int:news_id>/",views.latest_news_page,name='news_detail'),
 
 
@@ -31,6 +31,11 @@ urlpatterns = [
 
     path('matches/',views.match_view,name='match'),
     path('create-match/',views.create_match_view,name='create-match'),
+
+    # events
+
+    path('events/',views.event_list_view,name='events'),
+    path('event/<int:event_id>/',views.event_profile_view,name='event-profile'),
     # path("create-team/",views.submit_team_request,name='submit_team_request'),
     path("success_state/",views.success_state,name="success_state"),
     path('payment/',views.esewa_payment,name='payment'),

@@ -13,6 +13,12 @@
         <ul>
             {% for field, errors in form.errors.items %}
                 <li class="white"><strong>{{ field }}:</strong> {{ errors|join:", " }}</li>
+
+                <script>
+                    document.addEventListener("DOMContentLoaded",function(){
+                        showSnackBar(' {{ errors|join:", " }}','error')
+                    })
+                </script>
             {% endfor %}
         </ul>
     </div>
@@ -48,7 +54,8 @@
         <div class="form-control">
             <label for="match_time">Match Date</label>
             {{form.match_date}}
-    
+
+            <span class="custom-error">{{form.match_date.errors}}</span>
         </div>
 
 

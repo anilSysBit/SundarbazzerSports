@@ -1594,7 +1594,7 @@ p{
     }
   }
 
-  .match_vs_tag{
+  .table_avatar_box{
     display: flex;
     column-gap: 10px;
     // place-content: center;
@@ -1673,6 +1673,12 @@ p{
   .custom-error{
     color: var(--error-red);
     font-size: 0.8rem;
+    ul{
+      li{
+        color: var(--error-red);
+        font-size: 0.8rem;
+      }
+    }
   }
 
   .button-wrap {
@@ -2108,6 +2114,37 @@ $font-family: Arial, sans-serif;
   }
 }
 
+
+.event_profile{
+  .event_detail_box{
+    transform: translateY(-30%);
+  }
+
+  .event_detail{
+    text-align: center;
+    .registration{
+      border: 1px solid white;
+    }
+  }
+}
+
+.timer_box{
+  display: flex;
+  column-gap: 10px;
+  .time_box{
+    // border: 1px solid white;
+    padding: 2px;
+    border-radius: 5px;
+    height: 50px;
+    width: 50px;
+    display: flex;
+    place-content: center;
+    place-items: center;
+    background-color: rgb(222, 145, 3);
+    font-weight: bold;
+
+  }
+}
 @media screen and (max-width: 800px) {
   p{
       font-size: 18px;

@@ -5,7 +5,7 @@
 
 <div class="responsive-table-box">
 
-  <h2>Matches</h2>
+  <h2>Events</h2>
     <div class="filter_box">
         <a href="{% url 'create-match' %}">Add a new Match</a>
         <div class="search">
@@ -38,17 +38,19 @@
           <tr>
             <!-- <th><input type="checkbox" class="" id="selectAll"></th> -->
             <th>SN</th>
-            <th>Teams</th>
             <th>Event</th>
-            <th>Match Date</th>
-            <th>Match Time</th>
+            <th>Entry Fee</th>
+            <th>Registration</th>
+            <th>Type</th>
+            <th>Age Limit</th>
+            <th>Event Start Date</th>
             <th>Actions</th>
           </tr>
         </thead>
 
 
         <tbody>
-          {% for match in matches %}
+          {% for event in events %}
 
               <tr>
                 <!-- <td><input type="checkbox" class="select-checkbox"></td> -->
@@ -59,24 +61,19 @@
                             <div class="avatar">
                                 <img src="https://th.bing.com/th/id/OIP.dR0CzoqfuNucL5swbCLvaAHaHa?rs=1&pid=ImgDetMain" alt="">
                             </div>
-                            <p>{{match.team1.team.name}}</p>
+                            <p>{{event.title}}</p>
                             
-                        </div>
-                        <p>Vs</p>
-                        <div class="team team2">
-                            <div class="avatar">
-                                <img src="https://th.bing.com/th/id/OIP.YOV0CA84ZoZyuvmcZR1u5AHaHa?w=2000&h=2000&rs=1&pid=ImgDetMain" alt="">
-                            </div>
-                            <p>{{match.team2.team.name}}</p>
                         </div>
                     </div>
                 </td>
-                <td>{{match.event}}</td>
-                <td>{{match.match_date}}</td>
-                <td>{{match.match_time}}</td>
+                <td>{{event.entry_fee}}</td>
+                <td>{{event.registration_start_date}} to {{event.registration_end_date}}</td>
+                <td>{{event.event_type}}</td>
+                <td>{{event.event_age_limit}}</td>
+                <td>{{event.event_start_date}} </td>
                 <td>
                   <div class="td_actions">
-                    <a href="{{team.id}}">
+                    <a href="{% url 'event-profile' event.id %}">
                     <button class="global_btn" type="button">
                       <span class="icon material-symbols-outlined">
                         visibility

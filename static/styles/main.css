@@ -1367,20 +1367,20 @@ p {
 .responsive-table-box .filter_box input:focus {
   outline: none;
 }
-.responsive-table-box .match_vs_tag {
+.responsive-table-box .table_avatar_box {
   display: flex;
   -moz-column-gap: 10px;
        column-gap: 10px;
   place-items: center;
 }
-.responsive-table-box .match_vs_tag .team {
+.responsive-table-box .table_avatar_box .team {
   display: flex;
   place-content: center;
   place-items: center;
   -moz-column-gap: 10px;
        column-gap: 10px;
 }
-.responsive-table-box .match_vs_tag .team p {
+.responsive-table-box .table_avatar_box .team p {
   font-size: 0.9rem;
 }
 
@@ -1438,6 +1438,10 @@ p {
   border-radius: 5px;
 }
 .basic-form .custom-error {
+  color: var(--error-red);
+  font-size: 0.8rem;
+}
+.basic-form .custom-error ul li {
   color: var(--error-red);
   font-size: 0.8rem;
 }
@@ -1777,6 +1781,33 @@ p {
 .create_player_container h2 {
   text-align: center;
   padding: 10px;
+}
+
+.event_profile .event_detail_box {
+  transform: translateY(-30%);
+}
+.event_profile .event_detail {
+  text-align: center;
+}
+.event_profile .event_detail .registration {
+  border: 1px solid white;
+}
+
+.timer_box {
+  display: flex;
+  -moz-column-gap: 10px;
+       column-gap: 10px;
+}
+.timer_box .time_box {
+  padding: 2px;
+  border-radius: 5px;
+  height: 50px;
+  width: 50px;
+  display: flex;
+  place-content: center;
+  place-items: center;
+  background-color: rgb(222, 145, 3);
+  font-weight: bold;
 }
 
 @media screen and (max-width: 800px) {

@@ -130,7 +130,7 @@ class TeamStatusAdmin(admin.ModelAdmin):
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('id','title', 'event_age_limit', 'is_verified', 'entry_fee', 'registration_start_date', 'resistration_end_date', 'event_start_date', 'event_end_date', 'created_at', 'updated_at')
+    list_display = ('id','title', 'event_age_limit', 'is_verified', 'entry_fee', 'registration_start_date', 'registration_end_date', 'event_start_date', 'event_end_date', 'created_at', 'updated_at')
     search_fields = ('title',)
     # list_filter = ('is_verified', 'registration_start_date', 'resistration_end_date', 'event_start_date', 'event_end_date', 'created_at', 'updated_at')
 
