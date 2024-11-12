@@ -1,13 +1,9 @@
-{% extends 'event\event_index.html' %}
-
-{% load static %}
-{% block content %}
 
 <div class="responsive-table-box">
 
   <h2>Matches</h2>
     <div class="filter_box">
-        <a href="{% url 'create-match' %}">Add a new Match</a>
+        <a href="{% url 'create-match-admin' event.id %}">Add a new Match</a>
         <div class="search">
            <input type="search" placeholder="Search"/>
            <button class="global_btn"><span class="material-symbols-outlined">
@@ -141,5 +137,3 @@
 
 
 
-
-{% endblock %}

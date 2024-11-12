@@ -1783,14 +1783,76 @@ p {
   padding: 10px;
 }
 
+.event_profile .seller_profile_sm .banner_container {
+  height: auto;
+  min-height: 100px;
+}
+.event_profile .seller_profile_sm .banner_container.open {
+  height: 450px;
+}
 .event_profile .event_detail_box {
-  transform: translateY(-30%);
+  display: flex;
+  min-height: 200px;
+  width: 30%;
+}
+.event_profile .event_detail_box.on_banner {
+  transform: translate(10%, -60%);
+  height: auto;
+}
+.event_profile .event_detail_box .box_sm {
+  background-color: var(--box-color);
+  border-radius: 10px;
+  width: 100%;
+  display: flex;
+  place-content: center;
+  place-items: center;
+  justify-content: space-around;
+}
+.event_profile .event_detail_box .box_sm .img_box {
+  height: 100%;
+  width: 40%;
+  display: flex;
+  place-content: center;
+  place-items: center;
+}
+.event_profile .event_detail_box .box_sm .img_box img {
+  height: 150px;
+  border-radius: 10px;
+}
+.event_profile .event_detail_box .box_sm .detail_box {
+  padding: 10px;
+  width: 60%;
+  height: 90%;
+}
+.event_profile .event_detail_box .box_sm .detail_box p {
+  font-size: 0.9rem;
 }
 .event_profile .event_detail {
   text-align: center;
 }
 .event_profile .event_detail .registration {
-  border: 1px solid white;
+  display: flex;
+  place-content: center;
+  place-items: center;
+  justify-content: space-between;
+  background-color: var(--box-color);
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+}
+.event_profile .event_detail .registration .text {
+  font-size: 0.9rem;
+}
+
+.event_status {
+  padding: 2px;
+  box-shadow: 1px 1px 10px black;
+  border-radius: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.event_status.Initiated {
+  background-color: rgb(48, 48, 246);
 }
 
 .timer_box {
@@ -1798,12 +1860,16 @@ p {
   -moz-column-gap: 10px;
        column-gap: 10px;
 }
+.timer_box.bg-green .time_box {
+  background-color: green;
+}
 .timer_box .time_box {
   padding: 2px;
   border-radius: 5px;
   height: 50px;
   width: 50px;
   display: flex;
+  font-size: 0.9rem;
   place-content: center;
   place-items: center;
   background-color: rgb(222, 145, 3);

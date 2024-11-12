@@ -7,7 +7,7 @@
 
   <h2>Events</h2>
     <div class="filter_box">
-        <a href="{% url 'create-match' %}">Add a new Match</a>
+        <a href="#">Add a new Match</a>
         <div class="search">
            <input type="search" placeholder="Search"/>
            <button class="global_btn"><span class="material-symbols-outlined">
@@ -40,8 +40,8 @@
             <th>SN</th>
             <th>Event</th>
             <th>Entry Fee</th>
-            <th>Registration</th>
             <th>Type</th>
+            <th>Stauts</th>
             <th>Age Limit</th>
             <th>Event Start Date</th>
             <th>Actions</th>
@@ -67,8 +67,10 @@
                     </div>
                 </td>
                 <td>{{event.entry_fee}}</td>
-                <td>{{event.registration_start_date}} to {{event.registration_end_date}}</td>
                 <td>{{event.event_type}}</td>
+                <td>
+                  <span class="event_status {{event.status}}">{{event.status}}</span>
+                </td>
                 <td>{{event.event_age_limit}}</td>
                 <td>{{event.event_start_date}} </td>
                 <td>

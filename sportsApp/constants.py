@@ -48,3 +48,20 @@ class BLOOD_GROUPS(models.TextChoices):
     AB_NEGATIVE = 'AB-'
     O_POSITIVE = 'O+'
     O_NEGATIVE = 'O-'
+
+
+class EventStatus(models.TextChoices):
+    INITIATED = 'Initiated'
+    REGISTRATION = 'Registration'
+    RUNNING = 'Running'
+    INTERRUPTED = 'Interrupted'
+    CANCELLED = 'Cancelled'
+    COMPLETED = 'Completed'
+
+
+class MatchStatus(models.TextChoices):
+    INITIATED = 'Initiated'
+    RUNNING = 'Running'
+    INTERRUPTED = 'Interrupted'
+    CANCELLED = 'Cancelled'
+    COMPLETED = 'Completed'

@@ -396,16 +396,26 @@ def join_now(request):
     Match Views 
 """
 
-def match_view(request):
+def match_view(request,event_id):
+    event = get_object_or_404(Event,pk=event_id)
+    matches = Match.objects.filter(event = event)
+
+    print(Match.objects.count())
+    return render(request,'matches/event_match.html',{'event':event,'matches':matches})
+
+
+def match_list_view(request):
+    
     matches = Match.objects.all()
 
     print(Match.objects.count())
-    return render(request,'matches/match_list.html',{'matches':matches})
+    return render(request,'matches/all_match.html',{'matches':matches})
 
 
 
-def create_match_view(request):
-    form = MatchForm(request.POST or None)
+def create_match_view(request,event_id):
+    event = get_object_or_404(Event,pk=event_id)
+    form = MatchForm(request.POST or None,event=event)
 
     print("Just going to the function")
     
@@ -417,8 +427,8 @@ def create_match_view(request):
             return redirect('match')
         else:
             print('going on the error')
-            return render(request,'matches/create_match.html',{'form':form},status=400)
-    return render(request,'matches/create_match.html',{'form':form})
+            return render(request,'matches/create_match.html',{'event':event,'form':form},status=400)
+    return render(request,'matches/create_match.html',{'event':event,'form':form})
 """
     End of Match viewsets
 """
@@ -438,4 +448,4 @@ def event_list_view(request):
 
 def event_profile_view(request,event_id):
     event = get_object_or_404(Event,pk=event_id)
-    return render(request,"event/event_profile.html",{'event':event})
+    return render(request,"event/event_profile.html",{'event':event,'show_description':True})

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Team,Payment,Player,Match
+from .models import Team,Payment,Player,Match,EventTeam
 from django.core.mail import send_mail
 from django.conf import settings
 from django.utils.crypto import get_random_string
@@ -93,6 +93,19 @@ class MatchForm(forms.ModelForm):
             'match_time': forms.TimeInput(attrs={'type': 'time'}),
             'notes': forms.Textarea(attrs={'rows': 4, 'cols': 50}),
         }
+    def __init__(self, *args, **kwargs):
+            # Capture the selected event if passed as an argument
+            event = kwargs.pop('event', None)
+            super().__init__(*args, **kwargs)
+            
+            # If an event is specified, filter teams to those related to that event
+            if event:
+                self.fields['team1'].queryset = EventTeam.objects.filter(event=event)
+                self.fields['team2'].queryset = EventTeam.objects.filter(event=event)
+            else:
+                # Default to an empty queryset if no event is provided
+                self.fields['team1'].queryset = EventTeam.objects.none()
+                self.fields['team2'].queryset = EventTeam.objects.none()
 
 
     def clean(self):

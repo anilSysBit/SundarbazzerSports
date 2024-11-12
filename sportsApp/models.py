@@ -143,6 +143,7 @@ class Event(models.Model):
 
     title = models.CharField(max_length=255)
     event_type = models.CharField(max_length=20,choices=EVENT_TYPE,blank=True,null=True)
+    status = models.CharField(max_length=20,choices=constants.EventStatus.choices,default=constants.EventStatus.INITIATED)
     banner = models.ImageField(upload_to='images/events/',blank=True,null=True)
     logo = models.ImageField(upload_to='images/events/',blank=True,null=True)
     event_organizer = models.ForeignKey(EventOrganizer,on_delete=models.CASCADE,blank=True,null=True,related_name='events')
@@ -176,6 +177,7 @@ class Match(models.Model):
     team1 = models.ForeignKey(EventTeam, on_delete=models.CASCADE, related_name='match_team1')
     team2 = models.ForeignKey(EventTeam, on_delete=models.CASCADE, related_name='match_team2')
     is_address_default = models.BooleanField(default=False)
+    status = models.CharField(max_length=20,choices=constants.MatchStatus.choices,default=constants.MatchStatus.INITIATED)
     match_date = models.DateField()
     match_time = models.TimeField(blank=True,null=True)
     place = models.CharField(max_length=255,blank=True,null=True)

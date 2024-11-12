@@ -1,7 +1,7 @@
-{% extends 'event\event_index.html' %}
+{% extends 'event\event_profile.html' %}
 
 {% load static %}
-{% block content %}
+{% block teamcontent %}
 
 <div class="create_player_container">
     <h2 class="mt-10 white">{% if player %} Update Match {% else %} Create Match{% endif %}</h2>
@@ -29,10 +29,7 @@
         {% csrf_token %}
         
                 <!-- Name field -->
-       <div class="form-control">
-        <label for="team1">Event</label>
-        {{form.event}}
-       </div>
+       <input type="hidden" name="event" value="{{event.id}}">
     
         <!-- Name field -->
        <div class="form-control">
@@ -68,8 +65,7 @@
         <!-- match Time -->
         <div class="form-control">
             {{form.is_address_default}}
-            <label for="id_is_address_default">Tick of Game address is of event address</label>
-    
+            <label for="id_is_address_default">Game address is default ( {{event.default_address}})</label>
         </div>
     
 
@@ -92,4 +88,4 @@
 </div>
 
 </div>
-{% endblock content %}
+{% endblock %}

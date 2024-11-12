@@ -29,13 +29,14 @@ urlpatterns = [
 
     # matches
 
-    path('matches/',views.match_view,name='match'),
-    path('create-match/',views.create_match_view,name='create-match'),
+    path('matches/',views.match_list_view,name='match'),
 
     # events
 
-    path('events/',views.event_list_view,name='events'),
+    path('events/',views.event_list_view,name='event'),
     path('event/<int:event_id>/',views.event_profile_view,name='event-profile'),
+    path('event/<int:event_id>/matches/',views.match_view,name='event-matches'),
+    path('event/<int:event_id>/create-match/',views.create_match_view,name='create-match-admin'),
     # path("create-team/",views.submit_team_request,name='submit_team_request'),
     path("success_state/",views.success_state,name="success_state"),
     path('payment/',views.esewa_payment,name='payment'),
