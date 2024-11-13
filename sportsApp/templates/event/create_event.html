@@ -1,0 +1,147 @@
+{% extends 'event/event_index.html' %}
+
+
+{% block content %}
+
+{% load static %}
+<div class="main_team_request_container create_event mt-10">
+    <div class="basic-form">
+        <!-- <div class="image_container">
+            <img src="https://th.bing.com/th/id/R.f310137ff80cddb1010ecd94f844ac76?rik=S8Kvren8U7hMYQ&pid=ImgRaw&r=0" alt="">
+        </div> -->
+        <div class="form-container">
+            <h2>{% if update %}Update {% else%} Create{% endif %} a Event</h2>
+
+            
+
+            {% if form.errors %}
+            <div class="error-messages">
+                <p class="correct_error">Please correct the following errors:</p>
+                <ul>
+                    {% for field, errors in form.errors.items %}
+                        <li class="white"><strong>{{ field }}:</strong> {{ errors|join:", " }}</li>
+        
+                        <script>
+                            document.addEventListener("DOMContentLoaded",function(){
+                                showSnackBar(' {{ errors|join:", " }}','error')
+                            })
+                        </script>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <!-- Display errors if any -->
+
+                <!-- <input type="hidden" name="res_num" value="{{res_data.registration_number}}"> -->
+                <!-- Name -->
+                <h3>Basic Event Detail</h3>
+                <div class="form-seperation-box mt-10 flex basic_data">
+                    <div class="form-control">
+                        <label for="name">Title</label>
+                        {{form.title}}
+                    </div>
+    
+                    <div class="form-control">
+                        <label for="event_type">Event Type</label>
+                        {{form.event_type}}    
+                    </div>
+        
+                    <!-- Email -->
+                    <div class="form-control">
+                        <label for="status">Status</label>
+                        {{form.status}}    
+                    </div>
+                    <!-- Address -->
+                    <div class="form-control">
+                        <label for="address">Age Limit</label>
+                        {{form.event_age_limit}}
+                    </div>
+    
+                    <div class="form-control">
+                        <label for="address">Entry Fee</label>
+                        {{form.entry_fee}}
+                    </div>
+    
+                    <div class="form-control">
+                        <label for="address">Match Duration ( Time) </label>
+                        {{form.match_duration}}
+                    </div>
+                </div>
+                <h3>Add Images</h3>
+                <div class="form-seperation-box mt-10 flex image_box">
+                    <div class="form-control">
+                        <label for="logo">Logo</label>
+                    <div class="button-wrap">
+                    <input type="file" id="logo" name="logo" accept="image/*" onchange="previewImage(event, 'logoPreview')">
+                    </div>
+                    <img id="logoPreview" src="#" alt="Logo Preview" style="display:none; max-width: 100px; max-height: 100px;">
+    
+                    </div>
+                    <div class="form-control">
+                        <label for="banner">Banner</label>
+                    <div class="button-wrap">
+                        <!-- Banner -->
+                    <input type="file" id="banner" name="banner" accept="image/*" onchange="previewImage(event, 'bannerPreview')">
+                    </div>
+                    <img id="bannerPreview" src="#" alt="Banner Preview" style="display:none; max-width: 300px; max-height: 100px;">
+    
+                    </div>
+                </div>
+                <h3>Add Dates</h3>
+                <div class="form-seperation-box mt-10 flex add_dates">
+                    <div class="form-control">
+                        <label for="address">Registration Start Date</label>
+                        {{form.registration_start_date}}
+                    </div>
+                    <div class="form-control">
+                        <label for="address">Registration End Date</label>
+                        {{form.registration_end_date}}
+                    </div>
+                    <div class="form-control">
+                        <label for="address">Event Start Date</label>
+                        {{form.event_start_date}}
+                    </div>
+                    <div class="form-control">
+                        <label for="address">Event End Date</label>
+                        {{form.event_end_date}}
+                    </div>
+    
+                </div>
+
+
+                <h3>Add Address</h3>
+                <div class="form-seperation-box flex mt-10 address_box">
+                    <div class="form-control">
+                        <label for="province">Province</label>
+                        {{form.province}}
+                    </div>
+                    <div class="form-control">
+                        <label for="province">District</label>
+    
+                        {{form.district}}
+                    </div>
+                    <div class="form-control">
+                        <label for="province">Municipality</label>
+    
+                        {{form.municipality}}
+                    </div>
+                    <div class="form-control">
+                        <label for="province">Area</label>
+                        {{form.area}}
+                    </div>
+                </div>
+    
+                <!-- Submit Button -->
+                 <div class="form-control">
+                <button type="submit" class="global_btn">{% if update %}Update {% else%} Create{% endif %}</button>
+
+                 </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/address.js' %}"></script>
+{% endblock content %}

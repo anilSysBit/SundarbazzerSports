@@ -1,5 +1,5 @@
 from django import forms
-from .models import Team,Payment,Player,Match,EventTeam
+from .models import Team,Payment,Player,Match,EventTeam,Event
 from django.core.mail import send_mail
 from django.conf import settings
 from django.utils.crypto import get_random_string
@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
 from datetime import date
-
+from address.models import Province,District,Municipality,Area
 today = date.today()
 
 
@@ -145,7 +145,7 @@ class MatchForm(forms.ModelForm):
                       # Compare match_date with event_start_date
             if match_date < today:
                 raise ValidationError({'match_date': f"Invalid Date Selected , Select the time ahead of now"})
-                
+                retu
             event_start_date_only = event.event_start_date.date()
              # Compare match_date with event_start_date
             if match_date < event_start_date_only:
@@ -153,3 +153,62 @@ class MatchForm(forms.ModelForm):
             
   
             # Compare today's date with event_start_date
+
+
+
+""" Event form"""
+class EventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = [
+            'title', 'event_type', 'status', 'banner', 'logo', 'event_organizer', 
+            'event_age_limit', 'is_verified', 'entry_fee', 'registration_start_date', 
+            'registration_end_date', 'event_start_date', 'event_end_date', 
+            'match_duration','province','district','municipality','area',
+        ]
+        widgets = {
+            'registration_start_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'registration_end_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'event_start_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'event_end_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'match_duration': forms.TextInput(attrs={'placeholder': 'HH:MM:SS'}),
+        }
+
+    province = forms.ModelChoiceField(queryset=Province.objects.all(), empty_label="Select Province")
+    district = forms.ModelChoiceField(queryset=District.objects.none(), empty_label="Select District")
+    municipality = forms.ModelChoiceField(queryset=Municipality.objects.none(), empty_label="Select Municipality")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Prepopulate dependent fields if it's an edit (if the form instance already exists)
+        if self.instance and self.instance.pk:
+            # Prepopulate the district, municipality, and area based on the current Event instance
+            self.fields['district'].queryset = District.objects.filter(province=self.instance.province)
+            self.fields['municipality'].queryset = Municipality.objects.filter(district=self.instance.district)
+
+            # Set initial values to ensure they are selected in the form (during update)
+            self.initial['district'] = self.instance.district
+            self.initial['municipality'] = self.instance.municipality
+
+        # Dynamically update queryset based on previously selected values during form submission
+        if 'province' in self.data:
+            province_id = self.data.get('province')
+            if province_id:
+                self.fields['district'].queryset = District.objects.filter(province_id=province_id)
+            else:
+                self.fields['district'].queryset = District.objects.none()
+
+        if 'district' in self.data:
+            district_id = self.data.get('district')
+            if district_id:
+                self.fields['municipality'].queryset = Municipality.objects.filter(district_id=district_id)
+            else:
+                self.fields['municipality'].queryset = Municipality.objects.none()
+
+    # Optional: You can add custom validation if needed
+    def clean_entry_fee(self):
+        fee = self.cleaned_data.get('entry_fee')
+        if fee < 0:
+            raise forms.ValidationError(_('Entry fee must be positive.'))
+        return fee

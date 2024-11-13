@@ -1,104 +1,78 @@
-{% extends 'event/event_index.html' %} {% load static %} {% block content %}
-{% load tz %}
+{% extends 'event/event_index.html' %}
+{% load static %}
+{% block content %}
+  {% load tz %}
 
-{% now "Y-m-d H:i:s" as today %}
+  {% now "Y-m-d H:i:s" as today %}
 
-<div class="user_profile event_profile" id="event-profile">
-  <div class="seller_profile_sm">
-    <div class="banner_container {% if show_description %}open{% endif%}">
-      {% if show_description %}
-      <div
-        class="img_container"
-        style="background-image: url('{% if team.banner %}{{ team.banner.url }}{% else %}https://th.bing.com/th/id/OIP.M24CMUk9pgKAZgXZofFr4gHaCH?rs=1&pid=ImgDetMain{% endif %}');"
-      ></div>
-      {% endif %}
-      <div class="event_detail_box {% if show_description %}on_banner{% endif%}">
-        <div class="box_sm">
-          <div class="img_box">
-            <img src="https://img.freepik.com/free-photo/3d-illustration-cartoon-business-character-with-round-frame-gray-background_1142-51766.jpg?t=st=1731216684~exp=1731220284~hmac=3910133e285d433f4ea8107dedd61d364bfe89c5338bbceb88da96dfed27d132&w=826" alt="">
+  <div class="user_profile event_profile" id="event-profile">
+    <div class="seller_profile_sm">
+      <div class="banner_container {% if show_description %}open{% endif %}">
+        {% if show_description %}
+          <div class="img_container" style="background-image: url('{% if team.banner %}{{ team.banner.url }}{% else %}https://th.bing.com/th/id/OIP.M24CMUk9pgKAZgXZofFr4gHaCH?rs=1&pid=ImgDetMain{% endif %}');">
+          </div>
+        {% endif %}
+        <div class="event_detail_box {% if show_description %}on_banner{% endif %}">
+          <div class="box_sm">
+            <div class="img_box">
+              <img src="https://img.freepik.com/free-photo/3d-illustration-cartoon-business-character-with-round-frame-gray-background_1142-51766.jpg?t=st=1731216684~exp=1731220284~hmac=3910133e285d433f4ea8107dedd61d364bfe89c5338bbceb88da96dfed27d132&w=826" alt="">
             </div>
             <div class="detail_box">
-              <h3>{{event.title}}</h3>
-
-              
-                <p class="mt-5">Status - <span class="event_status {{event.status}}">{{event.status}}</span></p>
-
+              <h3>{{ event.title }}</h3>
+              <p class="mt-5">Status - <span class="event_status {{ event.status }}">{{ event.status }}</span></p>
               <!-- <p class="mt-10">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Beatae, doloremque.</p> -->
-      
               <button class="global_btn">Edit Details</button>
             </div>
+          </div>
         </div>
       </div>
-    </div>
-    
 
+      {% if show_description %}
+        <div class="event_detail">
+            <div class="registration">
+              <p class="mt-5 text">
+                <strong>Registration</strong> Date {{ event.registration_start_date }} - {{ event.registration_end_date }}
+              </p>
 
-
-      {%  if show_description %}
-      <div class="event_detail">
-        
-        {% if event.status == 'Initiated' %}
-        <div class="registration" >
-            <p class="mt-5 text">
-                <strong>Registration</strong> Date {{event.registration_start_date}} - {{event.registration_end_date}}
-            </p>
-            
-            {% if today < event.registration_start_date|date:"Y-m-d H:i:s" %}
-              <div>
+              {% if today < event.registration_start_date|date:"Y-m-d H:i:s" %}
+                <div>
                   <p class="text">Registration starts after:</p>
                   <div id="timer2" class="timer_box timer">{{ event.registration_start_date|date:"Y-m-d H:i:s" }}</div>
-              </div>
-
-          {% elif today > event.registration_end_date|date:"Y-m-d H:i:s" %}
-              <p class="text event_status Expired">Registration Expired</p>
-          {% elif today >= event.registration_start_date|date:"Y-m-d H:i:s" and today <= event.registration_end_date|date:"Y-m-d H:i:s" %}
-              <p class="text">Register Now before the event start date!</p>
-          {% else %}
-              <p class="text">Registration expired.</p>
-          {% endif %}
-
-
-            
-          </div>
-          {% endif %}
-          <div class="registration mt-10">
-            <p class="text"><strong>Event</strong> Date {{event.event_start_date}}</p>
-            {% if today < event.event_start_date|date:'Y-m-d' %}
-            <div>
-              Event Start After
-            <div id="timer" class="timer_box timer bg-green">{{event.event_start_date|date:"Y-m-d H:i:s"}}</div>
+                </div>
+              {% elif today > event.registration_end_date|date:"Y-m-d H:i:s" %}
+                <p class="text event_status Expired">Registration Expired</p>
+              {% elif today >= event.registration_start_date|date:"Y-m-d H:i:s" and today <= event.registration_end_date|date:"Y-m-d H:i:s" %}
+                <p class="text">Register Now before the event start date!</p>
+              {% else %}
+                <p class="text">Registration expired.</p>
+              {% endif %}
             </div>
 
+          <div class="registration mt-10">
+            <p class="text"><strong>Event</strong> Date {{ event.event_start_date }}</p>
+            {% if today < event.event_start_date|date:'Y-m-d' %}
+              <div>
+                Event Start After
+                <div id="timer" class="timer_box timer bg-green">{{ event.event_start_date|date:"Y-m-d H:i:s" }}</div>
+              </div>
             {% elif today > event.event_end_date|date:"Y-m-d" %}
-            <p>Event Already Over</p>
-
+              <p>Event Already Over</p>
             {% else %}
-            <p class="text event_status Running">Event is Running</p>
-
+              <p class="text event_status Running">Event is Running</p>
             {% endif %}
+          </div>
+
         </div>
 
-      </div>
-      
-      
-      
-      <div class="item-center">
-        <a href="matches">
-        <button class="global_btn">View / Create Matchs</button>
-        </a>
-      </div>
+        <div class="item-center">
+          <a href="matches">
+            <button class="global_btn">View / Create Matches</button>
+          </a>
+        </div>
       {% endif %}
-
-
-{% block teamcontent %}
-
-{% endblock teamcontent %}
-
-
-
-    
-    <p></p>
-    
+    </div>
   </div>
-  {% endblock %}
-</div>
+
+  {% block teamcontent %}
+  {% endblock teamcontent %}
+{% endblock %}

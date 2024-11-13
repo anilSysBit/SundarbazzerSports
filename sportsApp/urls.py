@@ -39,7 +39,8 @@ urlpatterns = [
     path('event/<int:event_id>/matches/',views.match_view,name='event-matches'),
     path('edit-match/<int:match_id>/',views.edit_match_view,name='edit-match-admin'),
     path('event/<int:event_id>/create-match/',views.create_match_view,name='create-match-admin'),
-
+    path('create-event/',views.create_event_view,name='create-event'),
+    path('edit-event/<int:event_id>/',views.edit_event_view,name='edit-event'),
     
     # path("create-team/",views.submit_team_request,name='submit_team_request'),
     path("success_state/",views.success_state,name="success_state"),

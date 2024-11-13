@@ -18,9 +18,13 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
+from address import views as address_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('sportsApp.urls')),
-    path("api/",include('api.urls'))
+    path("api/",include('api.urls')),
+    path('ajax/load_districts/', address_view.load_districts, name='load_districts'),
+    path('ajax/load_municipalities/', address_view.load_municipalities, name='load_municipalities'),
+    path('ajax/load_areas/', address_view.load_areas, name='load_areas'),
 ] + static(settings.MEDIA_URL , document_root = settings.MEDIA_ROOT)

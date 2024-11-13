@@ -1390,25 +1390,39 @@ p {
 
 .basic-form {
   color: white;
-}
-.basic-form form {
-  color: white;
   width: 100%;
+}
+.basic-form .form-container {
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  min-width: 500px;
+}
+.basic-form .form-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.basic-form .form-container label {
+  display: block;
+  margin: 10px 0 5px;
+}
+.basic-form .form-container.flex {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   justify-content: space-between;
 }
-.basic-form form .form-control {
+.basic-form .form-container .form-control {
   width: 45%;
   min-width: 300px;
 }
-.basic-form form .form-control input[type=text],
-.basic-form form .form-control input[type=number],
-.basic-form form .form-control input[type=email],
-.basic-form form .form-control input[type=date],
-.basic-form form .form-control input[type=time],
-.basic-form form .form-control select {
+.basic-form .form-container .form-control input[type=text],
+.basic-form .form-container .form-control input[type=number],
+.basic-form .form-container .form-control input[type=email],
+.basic-form .form-container .form-control input[type=date],
+.basic-form .form-container .form-control input[type=datetime-local],
+.basic-form .form-container .form-control input[type=time],
+.basic-form .form-container .form-control select {
   color: white;
   width: 100%;
   padding: 8px;
@@ -1417,16 +1431,18 @@ p {
   background-color: transparent;
   border: none;
   border: 1px solid rgb(87, 87, 87);
+  height: 50px;
+  width: 100%;
   border-radius: 5px;
 }
-.basic-form form .form-control option {
+.basic-form .form-container .form-control option {
   color: black;
 }
-.basic-form form .form-control input[type=checkbox] {
+.basic-form .form-container .form-control input[type=checkbox] {
   height: 20px;
   width: 20px;
 }
-.basic-form form .form-control textarea {
+.basic-form .form-container .form-control textarea {
   width: 100%;
   padding: 8px;
   margin-bottom: 10px;
@@ -1436,6 +1452,18 @@ p {
   border: none;
   border: 1px solid rgb(87, 87, 87);
   border-radius: 5px;
+}
+.basic-form .form-seperation-box {
+  border: 1px solid gray;
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+.basic-form .form-seperation-box.flex {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 .basic-form .custom-error {
   color: var(--error-red);
@@ -1880,6 +1908,10 @@ p {
   place-items: center;
   background-color: rgb(222, 145, 3);
   font-weight: bold;
+}
+
+.create_event {
+  padding: 0px 50px;
 }
 
 @media screen and (max-width: 800px) {

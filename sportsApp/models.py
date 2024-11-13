@@ -5,6 +5,7 @@ from django.utils.crypto import get_random_string
 from django.core.mail import send_mail
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from address.models import Province,District,Municipality
 import uuid
 from . import constants
 # Create your models here.
@@ -135,14 +136,9 @@ class EventOrganizer(models.Model):
         return self.name
 
 class Event(models.Model):
-    EVENT_TYPE = (
-        ('LEAGUE','League'),
-        ('KNOCKOUT','Knockout'),
-        ('FRIENDLY','Friendly')
-    )
-
+    
     title = models.CharField(max_length=255)
-    event_type = models.CharField(max_length=20,choices=EVENT_TYPE,blank=True,null=True)
+    event_type = models.CharField(max_length=20,choices=constants.EVENT_TYPE.choices,default=constants.EVENT_TYPE.KNOCKOUT)
     status = models.CharField(max_length=20,choices=constants.EventStatus.choices,default=constants.EventStatus.INITIATED)
     banner = models.ImageField(upload_to='images/events/',blank=True,null=True)
     logo = models.ImageField(upload_to='images/events/',blank=True,null=True)
@@ -155,7 +151,14 @@ class Event(models.Model):
     event_start_date = models.DateTimeField(blank=True,null=True)
     event_end_date = models.DateTimeField(blank=True,null=True)
     match_duration = models.DurationField(blank=True,null=True)
-    default_address = models.CharField(max_length=255,blank=True,null=True)
+    
+    # address
+
+    province = models.ForeignKey(Province, on_delete=models.SET_NULL,null=True)
+    district = models.ForeignKey(District, on_delete=models.SET_NULL,null=True)
+    municipality = models.ForeignKey(Municipality, on_delete=models.SET_NULL,null=True)
+    area = models.CharField(max_length=255)
+
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
     
@@ -601,3 +604,4 @@ class Transaction(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     
+

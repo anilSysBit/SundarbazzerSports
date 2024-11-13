@@ -65,3 +65,8 @@ class MatchStatus(models.TextChoices):
     INTERRUPTED = 'Interrupted'
     CANCELLED = 'Cancelled'
     COMPLETED = 'Completed'
+
+class EVENT_TYPE (models.TextChoices):
+        LEAGUE='League'
+        KNOCKOUT='Knockout'
+        FRIENDLY='Friendly'

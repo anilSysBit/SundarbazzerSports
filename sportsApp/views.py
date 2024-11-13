@@ -14,7 +14,7 @@ import json
 import base64
 from django.conf import settings
 from django.core.paginator import Paginator
-from .forms import PlayerForm,MatchForm
+from .forms import PlayerForm,MatchForm,EventForm
 from django.contrib import messages
 
 
@@ -464,7 +464,7 @@ def delete_match_view(request,match_id):
 
 
 """
-Event Vies
+Event Views
 
 
 """
@@ -477,3 +477,40 @@ def event_list_view(request):
 def event_profile_view(request,event_id):
     event = get_object_or_404(Event,pk=event_id)
     return render(request,"event/event_profile.html",{'event':event,'show_description':True})
+
+
+
+def create_event_view(request):
+    
+    if request.method == 'POST':
+        form = EventForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('event')  # or any other page after saving
+    else:
+        form = EventForm()
+    
+    return render(request, 'event/create_event.html', {'form': form})
+
+
+def edit_event_view(request, event_id):
+    # Fetch the existing event or return 404 if not found
+    event = get_object_or_404(Event, id=event_id)
+
+    if request.method == 'POST':
+        form = EventForm(request.POST, request.FILES, instance=event)
+        if form.is_valid():
+            form.save()  # Save the updated event
+            messages.success(request,"Event Updated successfully")
+            return redirect('event')  # Redirect to the event list or any other page after saving
+        else:
+            messages.error(request,'Event Not Updated updated')
+    else:
+        form = EventForm(instance=event)  # Prepopulate form with the existing event data
+
+    return render(request, 'event/create_event.html', {'form': form,'update':True})
+
+
+"""
+    End of Event View
+"""
