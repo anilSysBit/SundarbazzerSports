@@ -278,3 +278,29 @@ const handleChangePlayerStatus =async(event)=>{
     }
 }
 
+
+
+
+const handleDeleteMatch =async(event)=>{
+  event.preventDefault();
+
+  const form = document.getElementById('alert-box-delete-team')
+  const formData = new FormData(form)
+
+  const data = Object.fromEntries(formData.entries());
+
+  try{
+    const response = await fetch(`/delete-match/${globalState.value}/`,{
+      method:"post",
+      headers:{
+        'X-CSRFToken':data.csrfmiddlewaretoken
+      }
+    })
+    // console.log('response',await response.json())
+    window.location.reload()
+
+    
+  }catch(error){
+    console.log('error',error)
+  }
+}

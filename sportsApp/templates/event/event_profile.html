@@ -1,5 +1,7 @@
 {% extends 'event/event_index.html' %} {% load static %} {% block content %}
+{% load tz %}
 
+{% now "Y-m-d H:i:s" as today %}
 
 <div class="user_profile event_profile" id="event-profile">
   <div class="seller_profile_sm">
@@ -38,15 +40,42 @@
         {% if event.status == 'Initiated' %}
         <div class="registration" >
             <p class="mt-5 text">
-                <strong>Registration</strong> from {{event.registration_start_date}} - {{event.registration_end_date}}
+                <strong>Registration</strong> Date {{event.registration_start_date}} - {{event.registration_end_date}}
             </p>
+            
+            {% if today < event.registration_start_date|date:"Y-m-d H:i:s" %}
+              <div>
+                  <p class="text">Registration starts after:</p>
+                  <div id="timer2" class="timer_box timer">{{ event.registration_start_date|date:"Y-m-d H:i:s" }}</div>
+              </div>
 
-            <div id="timer2" class="timer_box timer"></div>
+          {% elif today > event.registration_end_date|date:"Y-m-d H:i:s" %}
+              <p class="text event_status Expired">Registration Expired</p>
+          {% elif today >= event.registration_start_date|date:"Y-m-d H:i:s" and today <= event.registration_end_date|date:"Y-m-d H:i:s" %}
+              <p class="text">Register Now before the event start date!</p>
+          {% else %}
+              <p class="text">Registration expired.</p>
+          {% endif %}
+
+
+            
           </div>
           {% endif %}
           <div class="registration mt-10">
-            <p class="text"><strong>Event</strong> Starts after {{event.event_start_date}}</p>
-            <div id="timer" class="timer_box timer bg-green"></div>
+            <p class="text"><strong>Event</strong> Date {{event.event_start_date}}</p>
+            {% if today < event.event_start_date|date:'Y-m-d' %}
+            <div>
+              Event Start After
+            <div id="timer" class="timer_box timer bg-green">{{event.event_start_date|date:"Y-m-d H:i:s"}}</div>
+            </div>
+
+            {% elif today > event.event_end_date|date:"Y-m-d" %}
+            <p>Event Already Over</p>
+
+            {% else %}
+            <p class="text event_status Running">Event is Running</p>
+
+            {% endif %}
         </div>
 
       </div>
@@ -59,10 +88,6 @@
         </a>
       </div>
       {% endif %}
-      
-      
-
-
 
 
 {% block teamcontent %}

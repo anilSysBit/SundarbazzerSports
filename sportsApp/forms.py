@@ -6,6 +6,10 @@ from django.utils.crypto import get_random_string
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
+from datetime import date
+
+today = date.today()
+
 
 
 class TeamForm(forms.ModelForm):
@@ -134,11 +138,18 @@ class MatchForm(forms.ModelForm):
                 raise ValidationError("A match between these teams already exists at the same date and time.")
 
         # 2. Check if match_date is after event_start_date
+     
+        # Check if both event and match_date are provided
         if event and match_date:
-
-            print('Event Start date',event.event_start_date,match_date)
-            if match_date < event.event_start_date:
-                raise ValidationError({'match_date':f"Match date cannot be before the event start date ({event.event_start_date})."})
-
-
-        
+            print('Event Start date:', event.event_start_date, 'Match date:', match_date)
+                      # Compare match_date with event_start_date
+            if match_date < today:
+                raise ValidationError({'match_date': f"Invalid Date Selected , Select the time ahead of now"})
+                
+            event_start_date_only = event.event_start_date.date()
+             # Compare match_date with event_start_date
+            if match_date < event_start_date_only:
+                raise ValidationError({'match_date': f"Match date cannot be before the event start date ({event_start_date_only})."})
+            
+  
+            # Compare today's date with event_start_date

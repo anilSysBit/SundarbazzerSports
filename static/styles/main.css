@@ -1851,8 +1851,14 @@ p {
   padding-left: 10px;
   padding-right: 10px;
 }
-.event_status.Initiated {
+.event_status.Initiated, .event_status.initiated {
   background-color: rgb(48, 48, 246);
+}
+.event_status.Running, .event_status.running {
+  background-color: green;
+}
+.event_status.Error, .event_status.Expired, .event_status.expired, .event_status.error {
+  background-color: var(--error-red);
 }
 
 .timer_box {

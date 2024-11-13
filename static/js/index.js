@@ -137,9 +137,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-function startCountdown(id,targetDate) {
+
+function startCountdown(id) {
   const timerElement = document.getElementById(id);
-  
+  const targetDate = new Date(timerElement.textContent)
+
+  console.log('targetDate',timerElement.textContent)
+
   function updateTimer() {
     const now = new Date().getTime();
     const timeDifference = targetDate.getTime() - now;
@@ -170,8 +174,10 @@ function startCountdown(id,targetDate) {
 }
 
 
-const targetDate = new Date("2024-12-31T23:59:59"); // Replace with your desired date
-startCountdown("timer",targetDate);
+startCountdown("timer");
 
-startCountdown("timer2",targetDate)
+
+startCountdown("timer2")
+
+// startCountdown1("timer3")
 

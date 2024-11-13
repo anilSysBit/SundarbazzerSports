@@ -2198,9 +2198,16 @@ $font-family: Arial, sans-serif;
   padding-left: 10px;
   padding-right: 10px;
   
-  &.Initiated{
+  &.Initiated,&.initiated{
     background-color: rgb(48, 48, 246);
   }
+  &.Running,&.running{
+    background-color: green;
+  }
+  &.Error,&.Expired,&.expired,&.error{
+    background-color: var(--error-red);
+  }
+  
 }
 
 .timer_box{

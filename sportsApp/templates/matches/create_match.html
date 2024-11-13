@@ -4,7 +4,7 @@
 {% block teamcontent %}
 
 <div class="create_player_container">
-    <h2 class="mt-10 white">{% if player %} Update Match {% else %} Create Match{% endif %}</h2>
+    <h2 class="mt-10 white">{% if update %} Update Match {% else %} Create Match{% endif %}</h2>
 
 
     {% if form.errors %}
@@ -51,7 +51,6 @@
         <div class="form-control">
             <label for="match_time">Match Date</label>
             {{form.match_date}}
-
             <span class="custom-error">{{form.match_date.errors}}</span>
         </div>
 
@@ -60,7 +59,6 @@
         <div class="form-control">
             <label for="match_time">Match Date</label>
             {{form.match_time}}
-    
         </div>
         <!-- match Time -->
         <div class="form-control">
@@ -81,7 +79,7 @@
       
         <!-- Submit button -->
          <div class="form-control">
-        <button type="submit" class="global_btn">{% if player %} Update {% else %} Create{% endif %}</button>
+        <button type="submit" class="global_btn">{% if update %} Update {% else %} Create{% endif %}</button>
 
          </div>
     </form>

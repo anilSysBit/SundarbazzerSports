@@ -429,6 +429,34 @@ def create_match_view(request,event_id):
             print('going on the error')
             return render(request,'matches/create_match.html',{'event':event,'form':form},status=400)
     return render(request,'matches/create_match.html',{'event':event,'form':form})
+
+def edit_match_view(request, match_id):
+    match = get_object_or_404(Match, pk=match_id)
+    event = get_object_or_404(Event, pk=match.event.id)
+    form = MatchForm(request.POST or None, instance=match, event=event)
+
+    print("Just going to the edit function")
+    
+    if request.method == 'POST':
+        if form.is_valid():
+            print('going to validation')
+            form.save()
+            messages.success(request, "Match updated successfully!")
+            return redirect('match')  # Adjust 'match' to your actual match list view or redirect destination
+        else:
+            print('error in form submission')
+            return render(request, 'matches/create_match.html', {'event': event, 'form': form,'update':True}, status=400)
+
+    return render(request, 'matches/create_match.html', {'event': event, 'form': form,'update':True,})
+
+
+
+def delete_match_view(request,match_id):
+    item = get_object_or_404(Match, pk=match_id)
+    item.delete()
+    messages.success(request,"Successfully Deleted the match")
+    return JsonResponse({'message': 'Match deleted successfully', 'item_id': match_id}, status=200)
+
 """
     End of Match viewsets
 """
