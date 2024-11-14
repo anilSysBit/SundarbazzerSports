@@ -3,7 +3,7 @@
 {% load static %}
 {% block teamcontent %}
 
-<div class="create_player_container">
+<div class="create_player_container basic-form">
     <h2 class="mt-10 white">{% if update %} Update Match {% else %} Create Match{% endif %}</h2>
 
 
@@ -24,7 +24,7 @@
     </div>
 {% endif %}
     
-<div class="basic-form create_player">
+<div class="form-container create_player">
     <form method="post" class="mt-10">
         {% csrf_token %}
         
@@ -32,48 +32,56 @@
        <input type="hidden" name="event" value="{{event.id}}">
     
         <!-- Name field -->
-       <div class="form-control">
-        <label for="team1">Team 2</label>
-        {{form.team1}}
-       </div>
-
-       <div class="form-control">
-        <label for="team2">Team 2</label>
-        {{form.team2}}
-       </div>
-        <!-- Age field -->
-        
+       <div class="form-seperation-box flex">
         <div class="form-control">
-            <label for="address">Address</label>
-            {{form.place}}
-        </div>
-        <!-- Match Date -->
-        <div class="form-control">
-            <label for="match_time">Match Date</label>
-            {{form.match_date}}
-            <span class="custom-error">{{form.match_date.errors}}</span>
-        </div>
-
-
-        <!-- match Time -->
-        <div class="form-control">
-            <label for="match_time">Match Date</label>
-            {{form.match_time}}
-        </div>
-        <!-- match Time -->
-        <div class="form-control">
-            {{form.is_address_default}}
-            <label for="id_is_address_default">Game address is default ( {{event.default_address}})</label>
-        </div>
+            <label for="team1">Team 2</label>
+            {{form.team1}}
+           </div>
     
-
-        <!-- Address field -->
-        <div class="form-control">
-            <label for="address">Description</label>
-            {{form.notes}}
-        </div>
+           <div class="form-control">
+            <label for="team2">Team 2</label>
+            {{form.team2}}
+           </div>
 
 
+           <div class="form-control">
+            <label for="team2">Match Status</label>
+            {{form.status}}
+           </div>
+            <!-- Age field -->
+            
+            <div class="form-control">
+                <label for="address">Address</label>
+                {{form.place}}
+            </div>
+            <!-- Match Date -->
+            <div class="form-control">
+                <label for="match_time">Match Date</label>
+                {{form.match_date}}
+                <span class="custom-error">{{form.match_date.errors}}</span>
+            </div>
+    
+    
+            <!-- match Time -->
+            <div class="form-control">
+                <label for="match_time">Match Date</label>
+                {{form.match_time}}
+            </div>
+            <!-- match Time -->
+            <div class="form-control">
+                {{form.is_address_default}}
+                <label for="id_is_address_default">Game address is default ( {{event.province}},{{event.district.name}},{{event.municipality.name}},{{event.area}})</label>
+            </div>
+        
+    
+            <!-- Address field -->
+            <div class="form-control">
+                <label for="address">Description</label>
+                {{form.notes}}
+            </div>
+    
+    
+       </div>
 
     
       

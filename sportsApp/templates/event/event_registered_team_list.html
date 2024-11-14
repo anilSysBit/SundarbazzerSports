@@ -1,0 +1,107 @@
+
+
+<div class="page_container">
+
+  <h3>Registered teams <button class="global_btn">Register New Teams</button></h3>
+   <div class="team_container">
+
+   </div>
+
+   <form class="team_listing" id="team-form" method="post">
+    {% csrf_token %}
+
+    <table class="responsive-table">
+      <tbody>
+        <thead>
+          <tr>
+            <!-- <th><input type="checkbox" class="" id="selectAll"></th> -->
+            <th>SN</th>
+            <th>Tag Name</th>
+            <th>Name</th>
+            <th>Verification</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+
+        <tbody>
+          {% for team in event_teams %}
+
+              <tr>
+                <!-- <td><input type="checkbox" class="select-checkbox"></td> -->
+                <td>{{ forloop.counter|add:0 }}</td>
+                <td>{{team.team.short_name}}</td>
+                <td>
+                    <div class="table_avatar_box">
+                        <div class="avatar">
+                            {% if team.team.logo %}
+                            <img src="{{ team.team.logo.url }}" alt="Team Logo">
+                            {% else %}
+                                <img src="https://th.bing.com/th/id/OIP.uLJFR9Vm_r14XQ5dJnSljQHaHa?rs=1&pid=ImgDetMain" alt="Default Team Logo">
+                            {% endif %}
+                            </div>
+                        <a href="{% url 'team-profile' team_id=team.id %}">{{team.team.name}}</a>
+                        </div>
+                    </td>
+
+                <td>{{team.is_verified}}</td>
+                <td>
+                  <div class="td_actions">
+                    <a href="{% url 'team-profile' team.team.id %}">
+                    <button class="global_btn" type="button">
+                      <span class="icon material-symbols-outlined">
+                        visibility
+                        </span>
+                    </button>
+                  </a>
+                  </div>
+                  
+                </td>
+              </tr>
+            {% endfor %}
+        </tbody>
+      </tbody>
+    </table>
+  </form>
+
+  <!-- <button onclick="sendSelectedData()">asdf</button> -->
+  <div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}" class="prev">
+          <span class="material-symbols-outlined">
+            arrow_back_ios
+            </span>
+        </a>
+    {% else %}
+        <span class="disabled">
+          <span class="material-symbols-outlined">
+            arrow_back_ios
+            </span>
+        </span>
+    {% endif %}
+  
+    <!-- Page Number Links -->
+    {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+            <span class="active">{{ num }}</span>
+        {% else %}
+            <a href="?page={{ num }}" class="page-number">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+  
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="next">
+          <span class="material-symbols-outlined">
+            arrow_forward_ios
+            </span>
+        </a>
+    {% else %}
+        <span class="disabled">
+          <span class="material-symbols-outlined">
+            arrow_forward_ios
+            </span>
+        </span>
+    {% endif %}
+  </div>
+</div>
+

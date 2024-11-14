@@ -32,6 +32,7 @@
             <th>SN</th>
             <th>Teams</th>
             <th>Event</th>
+            <th>Status</th>
             <th>Match Date</th>
             <th>Match Time</th>
             <th>Actions</th>
@@ -64,6 +65,7 @@
                     </div>
                 </td>
                 <td>{{match.event}}</td>
+                <td><span class="event_status {{match.status}}">{{match.status}}</span></td>
                 <td>{{match.match_date}}</td>
                 <td>{{match.match_time}}</td>
                 <td>

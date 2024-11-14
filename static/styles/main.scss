@@ -1599,6 +1599,7 @@ p{
     column-gap: 10px;
     // place-content: center;
     place-items: center;
+    
     .team{
       display: flex;
       place-content: center;
@@ -1623,6 +1624,7 @@ p{
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     min-width: 500px;
+    
   
   h2 {
     text-align: center;
@@ -2243,6 +2245,9 @@ $font-family: Arial, sans-serif;
     background-color: green;
   }
   &.Error,&.Expired,&.expired,&.error{
+    background-color: orange;
+  }
+  &.Cancelled,&.cancelled{
     background-color: var(--error-red);
   }
   

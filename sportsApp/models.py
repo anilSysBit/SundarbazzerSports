@@ -40,11 +40,18 @@ class Team(models.Model):
     is_organizers_team = models.BooleanField(default=False)
     email = models.EmailField(max_length=100,blank=True,null=True)
     address = models.CharField(max_length=255,blank=True,null=True)
+
+    # address
+
+    province = models.ForeignKey(Province, on_delete=models.SET_NULL,null=True)
+    district = models.ForeignKey(District, on_delete=models.SET_NULL,null=True)
+    municipality = models.ForeignKey(Municipality, on_delete=models.SET_NULL,null=True)
+
     is_verified = models.BooleanField(default=False)
     user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True,related_name='team')
     logo = models.ImageField(upload_to="images/teams/",blank=True,null=True)
     banner = models.ImageField(upload_to='images/banner/',blank=True,null=True)
-    gender = models.CharField(max_length=25,choices=constants.GENDER_OPTIONS.CHOICES,blank=True,null=True)
+    gender = models.CharField(max_length=25,choices=constants.GENDER_OPTIONS.CHOICES,default=constants.GENDER_OPTIONS.MALE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -168,6 +175,7 @@ class Event(models.Model):
 class EventTeam(models.Model):
     event = models.ForeignKey(Event,on_delete=models.CASCADE)
     team = models.ForeignKey(Team,on_delete=models.CASCADE)
+    is_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

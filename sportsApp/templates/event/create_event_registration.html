@@ -1,0 +1,66 @@
+{% extends 'event/event_profile.html' %}
+
+
+{% block teamcontent %}
+
+<div class="main_team_request_container create_event mt-10">
+    <div class="basic-form">
+        <!-- <div class="image_container">
+            <img src="https://th.bing.com/th/id/R.f310137ff80cddb1010ecd94f844ac76?rik=S8Kvren8U7hMYQ&pid=ImgRaw&r=0" alt="">
+        </div> -->
+        <div class="form-container">
+            <h2>Register Team to Event</h2>
+
+            
+
+            {% if form.errors %}
+            <div class="error-messages">
+                <p class="correct_error">Please correct the following errors:</p>
+                <ul>
+                    {% for field, errors in form.errors.items %}
+                        <li class="white"><strong>{{ field }}:</strong> {{ errors|join:", " }}</li>
+        
+                        <script>
+                            document.addEventListener("DOMContentLoaded",function(){
+                                showSnackBar(' {{ errors|join:", " }}','error')
+                            })
+                        </script>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <!-- Display errors if any -->
+
+                <!-- <input type="hidden" name="res_num" value="{{res_data.registration_number}}"> -->
+                <!-- Name -->
+                <h3>Basic Event Detail</h3>
+                <div class="form-seperation-box mt-10 flex basic_data">
+
+                    <input type="hidden" name="event" value="{{event.id}}">
+                    <div class="form-control">
+                        <label for="event_type">Team</label>
+                        {{form.team}}    
+                    </div>
+        
+                    <!-- Email -->
+                    <div class="form-control">
+                        <label for="status">Verification</label>
+                        {{form.is_verified}}    
+                    </div>
+                    <!-- Address -->
+                </div>
+
+    
+                <!-- Submit Button -->
+                 <div class="form-control">
+                <button type="submit" class="global_btn">{% if update %}Update {% else%} Create{% endif %}</button>
+
+                 </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock teamcontent %}

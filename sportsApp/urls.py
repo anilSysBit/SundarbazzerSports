@@ -12,13 +12,14 @@ urlpatterns = [
 
 
     # Team url admin panel
-    path('create-team/', views.create_team, name='create-team'),
+path('create-team/', views.create_team_view, name='create-team'),
     path("teams/",views.TeamView.as_view(),name="team"),
     path("teams/<int:team_id>/",views.team_profile,name="team-profile"),
     path("teams/<int:team_id>/players/",views.view_players,name="team-players"),
     path("teams/<int:team_id>/create-player/",views.create_player,name="create-player"),
     path("team-delete/<int:team_id>/",views.TeamView.as_view(),name="delete_team"),
     path('change-team-status/<int:team_id>/',views.changeTeamStatus,name='change-team-status'),
+    path('edit-team/<int:team_id>/',views.edit_team_view,name='edit-team'),
 
     # player
     path("change-player-status/<int:player_id>/",views.change_player_status,name="change-player-status"),
@@ -41,6 +42,7 @@ urlpatterns = [
     path('event/<int:event_id>/create-match/',views.create_match_view,name='create-match-admin'),
     path('create-event/',views.create_event_view,name='create-event'),
     path('edit-event/<int:event_id>/',views.edit_event_view,name='edit-event'),
+    path('register-team-event/<int:event_id>/',views.create_event_team,name='register-team-event'),
     
     # path("create-team/",views.submit_team_request,name='submit_team_request'),
     path("success_state/",views.success_state,name="success_state"),

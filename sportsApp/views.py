@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.http import HttpResponseBadRequest,JsonResponse
 from django.views.decorators.http import require_POST
 from django.db import IntegrityError
-from .models import Payment,Transaction,Event,Match
+from .models import Payment,Transaction,Event,Match,EventTeam
 from django.contrib.auth.models import User
 from django.views import View
 import uuid
@@ -14,7 +14,7 @@ import json
 import base64
 from django.conf import settings
 from django.core.paginator import Paginator
-from .forms import PlayerForm,MatchForm,EventForm
+from .forms import PlayerForm,MatchForm,EventForm,TeamForm,EventTeamForm
 from django.contrib import messages
 
 
@@ -143,54 +143,39 @@ def change_player_status(request,player_id):
 """ 
     Team Views
 """
-def create_team(request):
+def create_team_view(request):
     if request.method == 'POST':
-        name = request.POST.get("name")
-        short_name = request.POST.get("short_name")
-        email = request.POST.get("email")
-        address = request.POST.get('address')
-        logo = request.FILES.get('logo')
-        banner = request.FILES.get('banner')
-        gender = request.POST.get('gender')
-        # registration_number = request.POST.get('res_num')
+        form = TeamForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Team created successfully.")
+            return redirect('team')  # Adjust 'team_list' to the actual name of your redirect view
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = TeamForm()
+
+    return render(request, 'teams/create_team.html', {'form': form})
 
 
-        print('email',email)
-        errors = []
 
-        
-        try:
-            # Save the data
-            team_request = Team(
-                name=name,
-                address=address,
-                email= email,
-                user=request.user,
-                is_organizers_team = True,
-                short_name=short_name,
-                logo=logo,
-                banner = banner,
-                gender = gender
-            )
-            team_request.full_clean()  # Validates the model instance
-            team_request.save()
-            return redirect('team')
+def edit_team_view(request, team_id):
+    team = get_object_or_404(Team, id=team_id)
 
-        except ValidationError as e:
-            errors.extend(e.messages)  # Add model validation errors to the errors list
-            return render(request, './teams/create_team.html', {'res_data':{
-                'errors': errors,
-                'name': name,
-                'short_name':short_name,
-                'email': email,
-                'address': address,
-                'banner':banner,
-                'logo':logo,
-                'gender':gender
-            }})
+    if request.method == 'POST':
+        form = TeamForm(request.POST, request.FILES, instance=team)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Team updated successfully.")
+            return redirect('team')  # Adjust 'team_detail' to your team detail or list view name
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = TeamForm(instance=team)
 
-    
-    return render(request, './teams/create_team.html')
+    return render(request, 'teams/create_team.html', {'form': form, 'team': team})
+
+
 
 def team_profile(request,team_id):
     
@@ -476,7 +461,8 @@ def event_list_view(request):
 
 def event_profile_view(request,event_id):
     event = get_object_or_404(Event,pk=event_id)
-    return render(request,"event/event_profile.html",{'event':event,'show_description':True})
+    event_teams = EventTeam.objects.filter(event=event)
+    return render(request,"event/event_profile.html",{'event':event,'event_teams':event_teams,'show_description':True})
 
 
 
@@ -514,3 +500,28 @@ def edit_event_view(request, event_id):
 """
     End of Event View
 """
+
+
+
+
+"""
+    Team Event Registration
+
+    
+"""
+
+def create_event_team(request,event_id):
+    event = get_object_or_404(Event,pk=event_id)
+
+    if request.method == 'POST':
+        form = EventTeamForm(request.POST or None)
+        if form.is_valid():
+            form.save()
+            messages.success(request,f'Successfully Registered team to the {event.title}')
+            return redirect('event-profile',event_id)
+        else:
+            messages.error(request,"Please Corrent the Error Below")
+    else:
+        form = EventTeamForm()
+    return render(request,'event/create_event_registration.html',{'event':event,'form':form})
+
