@@ -522,6 +522,25 @@ def create_event_team(request,event_id):
         else:
             messages.error(request,"Please Corrent the Error Below")
     else:
-        form = EventTeamForm()
+        form = EventTeamForm(event=event)
     return render(request,'event/create_event_registration.html',{'event':event,'form':form})
 
+
+""" 
+    End of Event Team
+"""
+
+
+def match_view(request,match_id):
+    match = get_object_or_404(Match,pk=match_id)
+    event = get_object_or_404(Event,pk=match.event.id)
+    players1 = Player.objects.filter(team=match.team1.team).order_by('-is_active')
+    players2 = Player.objects.filter(team=match.team2.team).order_by('-is_active')
+
+    details = {}
+    if match.status == 'Running':
+        details['match_status'] = 'Match is Running'
+    elif match.status == 'Initiated':
+        details['match_status'] = 'Match Has Not Started'
+    
+    return render(request,'matches/match_view.html',{'event':event,'match':match,'player1':players1,'player2':players2})

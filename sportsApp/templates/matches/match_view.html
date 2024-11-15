@@ -1,0 +1,108 @@
+{% extends 'event/event_index.html' %}
+
+
+{%block content%}
+
+    <div class="main_page_container match_page">
+        
+        <div class="event_description">
+            <h2  class="txt-center">{{event.title}}</h2>
+        </div>
+
+        <div class="match_vs_box">
+            <div class="vs_box">
+                <p class="vs_text">VS</p>
+            </div>
+            <div class="team team1">
+                <div class="detail">
+                    <div class="avatar">
+                        <img src="https://picsum.photos/100" alt="">
+                        
+                    </div>
+                    <p>{{match.team1.team.name}}</p>
+                </div>
+                <div class="score">0</div>
+            </div>
+            <div class="team team2">
+                <div class="score right">0</div>
+                <div class="detail">
+                    <p>{{match.team2.team.name}}</p>
+                <div class="avatar">
+                    <img src="https://picsum.photos/101" alt="">
+
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="match_details">
+            <p>
+            Match Status - <span class="event_status {{match.status}}">{{match.status}}</span>
+            </p>
+            <a href="{% url 'edit-match-admin' match.id %}"><button class="global_btn">Schedule / Edit Match Details</button></a>
+        </div>
+
+        <div class="player_details">
+            <div class="team">
+                <button class="global_btn">View / Edit Player Details</button>
+                <table class="responsive-table">
+                    <thead>
+                        <tr>
+                            <th>SN</th>
+                            <th>NAME</th>
+                            <th>DESIGNATION</th>
+                            <th>Active Players</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for player in player1 %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{player.name}} - {{player.jersey_no}}</td>
+
+                            <td>{{player.designation}}</td>
+                            <td style="text-align: center;">
+                                <span class="verification {% if player.is_active %}verified{% endif %} material-symbols-outlined">
+                                    check_circle
+                                    </span>
+                            </td>
+
+                        </tr>
+
+                        {% endfor%}
+                    </tbody>
+                </table>
+            </div>
+            <div class="team">
+                <button class="global_btn">View / Edit Player Details</button>
+
+                <table class="responsive-table">
+                    <thead>
+                        <tr>
+                            <th>SN</th>
+                            <th>NAME</th>
+                            <th>DESIGNATION</th>
+                            <th>Active Players</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for player in player2 %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{player.name}} - {{player.jersey_no}}</td>
+                            <td>{{player.designation}}</td>
+                            <td style="text-align: center;">
+                                <span class="verification {% if player.is_active %}verified{% endif %} material-symbols-outlined">
+                                    check_circle
+                                    </span>
+                            </td>
+                        </tr>
+
+                        {% endfor%}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

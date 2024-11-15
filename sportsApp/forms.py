@@ -200,6 +200,19 @@ class EventTeamForm(forms.ModelForm):
             'is_verified': forms.CheckboxInput(),
         }
 
+    def __init__(self, *args, **kwargs):
+            # Capture the selected event if passed as an argument
+            event = kwargs.pop('event', None)
+            super().__init__(*args, **kwargs)
+            
+            # Filter out teams already registered for the selected event
+            if event:
+                registered_teams = EventTeam.objects.filter(event=event).values_list('team', flat=True)
+                self.fields['team'].queryset = Team.objects.exclude(id__in=registered_teams)
+            else:
+                # Default to an empty queryset if no event is provided
+                self.fields['team'].queryset = Team.objects.none()
+
     def clean(self):
         cleaned_data = super().clean()
         event = cleaned_data.get("event")

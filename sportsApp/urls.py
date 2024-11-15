@@ -44,6 +44,9 @@ path('create-team/', views.create_team_view, name='create-team'),
     path('edit-event/<int:event_id>/',views.edit_event_view,name='edit-event'),
     path('register-team-event/<int:event_id>/',views.create_event_team,name='register-team-event'),
     
+    # Matches
+
+    path("match/<int:match_id>/",views.match_view,name='match-profile'),
     # path("create-team/",views.submit_team_request,name='submit_team_request'),
     path("success_state/",views.success_state,name="success_state"),
     path('payment/',views.esewa_payment,name='payment'),
