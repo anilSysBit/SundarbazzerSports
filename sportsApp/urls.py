@@ -57,6 +57,10 @@ path('create-team/', views.create_team_view, name='create-team'),
     # for event
     # path("organizer/",EventView.index , name='organizer')
 
+
+    # game simulator
+
+    path('game-simulation/<int:match_id>/',views.match_simulator_view,name='match-simulate'),
 ]
 
 if settings.DEBUG:

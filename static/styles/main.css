@@ -324,6 +324,19 @@ nav .part3 {
 .leaderboard_button.success, .global_btn.success {
   background-color: green;
 }
+.leaderboard_button.secondary, .global_btn.secondary {
+  background-color: rgb(44, 44, 252);
+}
+.leaderboard_button.error, .global_btn.error {
+  background-color: rgb(253, 41, 41);
+}
+.leaderboard_button.warning, .global_btn.warning {
+  background-color: rgb(125, 125, 2);
+}
+.leaderboard_button.plain, .global_btn.plain {
+  background-color: white;
+  color: black;
+}
 .leaderboard_button:hover, .global_btn:hover {
   background-color: #010c2a;
   box-shadow: 0px 0px 10px gray;
@@ -2035,6 +2048,46 @@ p {
   border: 1px solid white;
   padding: 10px;
   border-radius: 10px;
+}
+
+.simulation .match_vs_box {
+  height: 60px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  box-shadow: none;
+}
+.simulation .match_vs_box .avatar {
+  height: 30px;
+  width: 30px;
+}
+.simulation .match_vs_box .vs_box {
+  height: 50px;
+  width: 50px;
+}
+.simulation .match_details {
+  margin-top: 0px;
+  border-top-right-radius: 0px;
+  border-top-left-radius: 0px;
+}
+.simulation .player_details {
+  margin-top: 10px;
+}
+.simulation .goal_btn {
+  height: 50px;
+  width: 150px;
+  font-weight: bold;
+  font-weight: 1.2rem;
+}
+.simulation .holder {
+  margin: 0;
+}
+.simulation .holder button {
+  margin: 0;
+}
+.simulation .holder.center {
+  display: flex;
+  place-content: center;
+  place-items: center;
 }
 
 .switch {

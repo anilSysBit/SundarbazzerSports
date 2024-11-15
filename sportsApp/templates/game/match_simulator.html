@@ -1,0 +1,156 @@
+{% extends 'index.html' %}
+
+
+{% block content %}
+
+<div class="main_page_container match_page simulation">
+        
+
+    <div class="match_vs_box">
+        <div class="vs_box">
+            <p class="vs_text">Vs</p>
+        </div>
+        <div class="team team1">
+            <div class="detail">
+                <div class="avatar">
+                    <img src="https://picsum.photos/100" alt="">
+                    
+                </div>
+                <p>{{match.team1.team.name}}</p>
+            </div>
+            <div class="score">0</div>
+        </div>
+        <div class="team team2">
+            <div class="score right">0</div>
+            <div class="detail">
+                <p>{{match.team2.team.name}}</p>
+            <div class="avatar">
+                <img src="https://picsum.photos/101" alt="">
+
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="match_details">
+        <div class="holder center">
+            <h2>45 : 00</h2>
+        </div>
+        <div class="holder center">
+            <a href=""><button class="global_btn outline">Stop Match</button></a>
+            <a href=""><button class="global_btn plain">Pause Match</button></a>
+        </div>
+
+        <div class="holder center">
+            <a href=""><button class="global_btn error">Add Fall</button></a>
+            <a href=""><button class="global_btn">Add Freekick</button></a>
+            <a href=""><button class="global_btn warning">Add Penalty</button></a>
+            <a href=""><button class="global_btn">Add Corner</button></a>
+            <a href=""><button class="global_btn secondary">Substitution</button></a>
+        </div>
+
+        <div class="holder center">
+            <a href=""><button class="global_btn success goal_btn">Add Goal</button></a>
+
+        </div>
+    </div>
+
+    <div class="player_details">
+        <div class="team">
+            <p>Active Players ({{count.team1.active}})</p>
+            <table class="responsive-table">
+                <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th>JERSEY</th>
+                        <th>NAME</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for player in player1.active_players %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{player.jersey_no}}</td>
+
+                        <td>{{player.designation}} - {{player.name}}</td>
+
+                    </tr>
+
+                    {% endfor%}
+                </tbody>
+            </table>
+
+            <p>Extra Players ({{count.team1.extra}})</p>
+            <!-- extra_players -->
+            <table class="responsive-table">
+                <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th>JERSEY</th>
+                        <th>NAME</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for player in player1.extra_players %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{player.jersey_no}}</td>
+
+                        <td>{{player.designation}} - {{player.name}}</td>
+
+                    </tr>
+
+                    {% endfor%}
+                </tbody>
+            </table>
+
+        </div>
+        <div class="team">
+
+            <table class="responsive-table">
+                <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th>JERSEY</th>
+                        <th>NAME</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for player in player2.active_players %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{player.jersey_no}}</td>
+                        <td>{{player.designation}} - {{player.name}}</td>
+                    </tr>
+
+                    {% endfor%}
+                </tbody>
+            </table>
+            <p>Extra Players</p>
+
+            <table class="responsive-table">
+                <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th>JERSEY</th>
+                        <th>NAME</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for player in player2.extra_players %}
+                    <tr>
+                        
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{player.jersey_no}}</td>
+                        <td>{{player.designation}} - {{player.name}}</td>
+                    </tr>
+
+                    {% endfor%}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+{% endblock content %}

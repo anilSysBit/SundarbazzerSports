@@ -372,6 +372,20 @@ nav {
   &.success{
     background-color: green;
   }
+  &.secondary{
+    background-color: rgb(44, 44, 252);
+  }
+  &.error{
+    background-color: rgb(253, 41, 41);
+  }
+  &.warning{
+    background-color: rgb(125, 125, 2);
+  }
+  &.plain{
+    background-color: white;
+    color: black;
+  }
+  
   &:hover{
     background-color:#010c2a;
     box-shadow: 0px 0px 10px gray;
@@ -2290,6 +2304,9 @@ $font-family: Arial, sans-serif;
 
 // match View / Profie css
 
+
+
+
 .match_page{
   padding: 0px 40px;
   .match_vs_box{
@@ -2426,6 +2443,50 @@ $font-family: Arial, sans-serif;
   }
 }
 
+.simulation{
+  .match_vs_box{
+    // height: 50px;
+    height: 60px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    box-shadow: none;
+    .avatar{
+      height: 30px;
+      width: 30px;
+    }
+    // border: 1px solid white;
+    .vs_box{
+      height: 50px;
+      width: 50px;
+    }
+  }
+  .match_details{
+    margin-top: 0px;
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
+  }
+  .player_details{
+    margin-top: 10px;
+  }
+  .goal_btn{
+    height: 50px;
+    width: 150px;
+    font-weight: bold;
+    font-weight: 1.2rem;
+  }
+  .holder{
+    margin: 0;
+    // border: 1px solid white;
+    button{
+      margin: 0;
+    }
+    &.center{
+      display: flex;
+      place-content: center;
+      place-items: center;
+    }
+  }
+}
 
 .switch {
   position: relative;

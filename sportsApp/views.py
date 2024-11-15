@@ -544,3 +544,51 @@ def match_view(request,match_id):
         details['match_status'] = 'Match Has Not Started'
     
     return render(request,'matches/match_view.html',{'event':event,'match':match,'player1':players1,'player2':players2})
+
+
+# Match Simulator
+
+"""Running the match Page"""
+
+def match_simulator_view(request,match_id):
+    match = get_object_or_404(Match,pk=match_id)
+    event = get_object_or_404(Event,pk=match.event.id)
+    players1 = Player.objects.filter(team=match.team1.team,is_active=True).order_by('-is_active')
+    players1_count = players1.count()
+
+    players2 = Player.objects.filter(team=match.team2.team,is_active=True).order_by('-is_active')
+    players2_count = players2.count()
+
+
+    extra_players1 = Player.objects.filter(team=match.team1.team,is_active=False).order_by('-is_active')
+    extra_players1_count = extra_players1.count()
+    
+    extra_players2 = Player.objects.filter(team=match.team2.team,is_active=False).order_by('-is_active')
+    extra_players2_count = extra_players2.count()
+
+    # Total players for each team
+    total_players_team1 = Player.objects.filter(team=match.team1.team).count()
+    total_players_team2 = Player.objects.filter(team=match.team2.team).count()
+
+    count = {
+        'team1':{
+            'total':total_players_team1,
+            'active':players1_count,
+            'extra':extra_players1_count
+        },
+            'team2':{
+            'total':total_players_team2,
+            'active':players2_count,
+            'extra':extra_players2_count
+        }
+    }
+    context = {
+       'match':match,
+       'event':event,
+       'count':count,
+       'player1':{'active_players':players1,'extra_players':extra_players1},
+       'player2':{'active_players':players2,'extra_players':extra_players2},
+
+    }
+
+    return render(request,'game/match_simulator.html',context=context)
