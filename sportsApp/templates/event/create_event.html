@@ -65,7 +65,7 @@
                     </div>
     
                     <div class="form-control">
-                        <label for="address">Match Duration ( Time) </label>
+                        <label for="address">Match Duration ( Time MM:SS) </label>
                         {{form.match_duration}}
                     </div>
                 </div>
@@ -144,4 +144,16 @@
 </div>
 
 <script src="{% static 'js/address.js' %}"></script>
+<script>
+    // Get query parameter from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const focusField = urlParams.get('focus');
+    
+    if (focusField) {
+        const field = document.getElementById(focusField);
+        if (field) {
+            field.focus();
+        }
+    }
+</script>
 {% endblock content %}

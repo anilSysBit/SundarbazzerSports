@@ -77,7 +77,7 @@
             </div>
 
             <a href="{% url 'edit-match-admin' match.id %}"><button class="global_btn">Schedule / Edit Match Details</button></a>
-            <button class="global_btn">Edit Match Duration</button>
+            <a href="{% url 'edit-event' event.id %}?focus=id_match_duration"><button class="global_btn">Edit Match Duration</button></a>
             <button class="global_btn success">Run this Match</button>
         </div>
 
@@ -85,7 +85,7 @@
 
         <div class="player_details">
             <div class="team">
-                <button class="global_btn">View / Edit Player Details</button>
+                <a href="{% url 'team-players' match.team1.team.id %}"><button class="global_btn">View / Edit Player Details</button></a>
                 <table class="responsive-table">
                     <thead>
                         <tr>
@@ -116,7 +116,7 @@
                 </table>
             </div>
             <div class="team">
-                <button class="global_btn">View / Edit Player Details</button>
+                <a href="{% url 'team-players' match.team2.team.id %}"><button class="global_btn">View / Edit Player Details</button></a>
 
                 <table class="responsive-table">
                     <thead>
