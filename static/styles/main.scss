@@ -369,6 +369,9 @@ nav {
     background-color: transparent;
     border: 1px solid white;
   }
+  &.success{
+    background-color: green;
+  }
   &:hover{
     background-color:#010c2a;
     box-shadow: 0px 0px 10px gray;
@@ -2292,7 +2295,7 @@ $font-family: Arial, sans-serif;
   .match_vs_box{
     // border: 1px solid white;
 
-    height: 150px;
+    height: 120px;
     width: 100%;
     border-radius: 10px;
     position: relative;
@@ -2312,10 +2315,11 @@ $font-family: Arial, sans-serif;
       column-gap: 20px;
       // border: 1px solid white;
       justify-content: space-around;
+
       .score{
         // border: 1px solid white;
         font-size: 2.5rem;
-        font-weight: bold;
+        // font-weight: bold;
         color: white;
         width: 20%;
         &.right{
@@ -2328,14 +2332,17 @@ $font-family: Arial, sans-serif;
         place-content: center;
         place-items: center;
         column-gap: 20px;
+        p{
+          font-size: 1rem;
+        }
       }
       .avatar{
         display: flex;
         flex-direction: column;
         place-items: center;
         gap: 10px;
-        height: 60px;
-        width: 60px;
+        // height: 60px;
+        // width: 60px;
         img{
           height: 100%;
           width: 100%;
@@ -2345,8 +2352,8 @@ $font-family: Arial, sans-serif;
     }
     .vs_box{
       // border: 1px solid white;
-      height: 150px;
-      width: 150px;
+      height: 120px;
+      width: 120px;
       position: absolute;
       border-radius: 10px;
       right: 50%;
@@ -2357,18 +2364,43 @@ $font-family: Arial, sans-serif;
     place-items: center;
     .vs_text{
       transform: rotate(-45deg);
-      font-size: 1.5rem;
-      font-weight: bold;
+      font-size: 2rem;
+      // font-weight: bold;
     }
 
     }
 
   }
   .match_details{
-    margin-top: 30px;
-    p{
-      text-align: center;
+    margin-top: 50px;
+    // border: 1px solid white;
+    padding: 20px;
+    // width: 50%;
+    border-radius: 10px;
+    background-color: var(--box-color);
+    .holder{
+      display: flex;
+      place-items: center;
+      column-gap: 30px;
+      margin-bottom: 10px;
+      p{
+        font-size: 0.9rem;
+      }
+      .icon{
+        color: white;
+      }
     }
+    p{
+      // text-align: center;
+    }
+  }
+  .timer-container{
+    display: flex;
+    place-content: center;
+    place-items: center;
+    flex-direction: column;
+    column-gap: 10px;
+    margin-top: 20px;
   }
   .player_details{
     margin-top: 40px;
@@ -2386,7 +2418,7 @@ $font-family: Arial, sans-serif;
     }
     .team{
 
-      width: 45%;
+      width: 48%;
       border: 1px solid white;
       padding: 10px;
       border-radius: 10px;

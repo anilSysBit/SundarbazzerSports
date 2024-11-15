@@ -6,12 +6,12 @@
     <div class="main_page_container match_page">
         
         <div class="event_description">
-            <h2  class="txt-center">{{event.title}}</h2>
+            <h2  class="txt-center">Event - {{event.title}}</h2>
         </div>
 
         <div class="match_vs_box">
             <div class="vs_box">
-                <p class="vs_text">VS</p>
+                <p class="vs_text">Vs</p>
             </div>
             <div class="team team1">
                 <div class="detail">
@@ -35,12 +35,53 @@
             </div>
         </div>
 
-        <div class="match_details">
-            <p>
-            Match Status - <span class="event_status {{match.status}}">{{match.status}}</span>
-            </p>
-            <a href="{% url 'edit-match-admin' match.id %}"><button class="global_btn">Schedule / Edit Match Details</button></a>
+        {% if match.schedule %}
+        <div class="timer-container">
+            <p>Match Start After</p>
+            <div id="timer" class="timer_box timer">{{ match.match_date|date:"Y-m-d" }} {{match.match_time|date:"H:i:s"}}</div>
         </div>
+        {% endif %}
+
+        <div class="match_details">
+            <div class="holder">
+                <p>
+                    Match Status - <span class="event_status {{match.status}}">{{match.status}}</span>
+                    </p>
+            </div>
+            <div class="holder">
+                <span class="icon material-symbols-outlined">
+                    calendar_month
+                    </span>
+                    <p>Match on {{match.match_date}} at {{match.match_time}}</p>
+            </div>
+
+            <div class="holder">
+                <span class="icon material-symbols-outlined">
+                    location_on
+                    </span>
+                <p>{{event.province.name}}, {{event.district.name}} , {{event.municipality.name}} {{event.area}} {{match.address}}                 {% if match.is_address_default %}
+                    <p>Match Location is {{event.area}}</p>
+        
+                    {% else %}
+                    <p>Match area - {{match.place}}</p>
+                    {% endif %}</p>
+
+            </div>
+
+
+            <div class="holder">
+                <span class="icon material-symbols-outlined">
+                    schedule
+                    </span>
+                    <p>Match Duration : {{event.match_duration}} </p>
+            </div>
+
+            <a href="{% url 'edit-match-admin' match.id %}"><button class="global_btn">Schedule / Edit Match Details</button></a>
+            <button class="global_btn">Edit Match Duration</button>
+            <button class="global_btn success">Run this Match</button>
+        </div>
+
+
 
         <div class="player_details">
             <div class="team">
@@ -50,8 +91,8 @@
                         <tr>
                             <th>SN</th>
                             <th>NAME</th>
-                            <th>DESIGNATION</th>
-                            <th>Active Players</th>
+                            <th>POSITION</th>
+                            <th>ACTIVE</th>
 
                         </tr>
                     </thead>
@@ -82,8 +123,8 @@
                         <tr>
                             <th>SN</th>
                             <th>NAME</th>
-                            <th>DESIGNATION</th>
-                            <th>Active Players</th>
+                            <th>POSITION</th>
+                            <th>ACTIVE</th>
                         </tr>
                     </thead>
                     <tbody>

@@ -100,7 +100,7 @@ Match form
 class MatchForm(forms.ModelForm):
     class Meta:
         model = Match
-        fields = ['event', 'team1', 'team2','status', 'is_address_default', 'match_date', 'match_time', 'place', 'match_complete', 'notes']
+        fields = ['event', 'team1', 'team2','status', 'is_address_default', 'match_date', 'match_time', 'place', 'match_complete', 'notes','schedule']
         widgets = {
             'match_date': forms.DateInput(attrs={'type': 'date'}),
             'match_time': forms.TimeInput(attrs={'type': 'time'}),

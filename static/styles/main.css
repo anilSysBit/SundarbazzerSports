@@ -321,6 +321,9 @@ nav .part3 {
   background-color: transparent;
   border: 1px solid white;
 }
+.leaderboard_button.success, .global_btn.success {
+  background-color: green;
+}
 .leaderboard_button:hover, .global_btn:hover {
   background-color: #010c2a;
   box-shadow: 0px 0px 10px gray;
@@ -1921,7 +1924,7 @@ p {
   padding: 0px 40px;
 }
 .match_page .match_vs_box {
-  height: 150px;
+  height: 120px;
   width: 100%;
   border-radius: 10px;
   position: relative;
@@ -1943,7 +1946,6 @@ p {
 }
 .match_page .match_vs_box .team .score {
   font-size: 2.5rem;
-  font-weight: bold;
   color: white;
   width: 20%;
 }
@@ -1957,21 +1959,22 @@ p {
   -moz-column-gap: 20px;
        column-gap: 20px;
 }
+.match_page .match_vs_box .team .detail p {
+  font-size: 1rem;
+}
 .match_page .match_vs_box .team .avatar {
   display: flex;
   flex-direction: column;
   place-items: center;
   gap: 10px;
-  height: 60px;
-  width: 60px;
 }
 .match_page .match_vs_box .team .avatar img {
   height: 100%;
   width: 100%;
 }
 .match_page .match_vs_box .vs_box {
-  height: 150px;
-  width: 150px;
+  height: 120px;
+  width: 120px;
   position: absolute;
   border-radius: 10px;
   right: 50%;
@@ -1983,14 +1986,35 @@ p {
 }
 .match_page .match_vs_box .vs_box .vs_text {
   transform: rotate(-45deg);
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 2rem;
 }
 .match_page .match_details {
-  margin-top: 30px;
+  margin-top: 50px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: var(--box-color);
 }
-.match_page .match_details p {
-  text-align: center;
+.match_page .match_details .holder {
+  display: flex;
+  place-items: center;
+  -moz-column-gap: 30px;
+       column-gap: 30px;
+  margin-bottom: 10px;
+}
+.match_page .match_details .holder p {
+  font-size: 0.9rem;
+}
+.match_page .match_details .holder .icon {
+  color: white;
+}
+.match_page .timer-container {
+  display: flex;
+  place-content: center;
+  place-items: center;
+  flex-direction: column;
+  -moz-column-gap: 10px;
+       column-gap: 10px;
+  margin-top: 20px;
 }
 .match_page .player_details {
   margin-top: 40px;
@@ -2007,7 +2031,7 @@ p {
   color: green;
 }
 .match_page .player_details .team {
-  width: 45%;
+  width: 48%;
   border: 1px solid white;
   padding: 10px;
   border-radius: 10px;
