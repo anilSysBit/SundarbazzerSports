@@ -22,6 +22,7 @@ function toggleSelection(row, checkbox) {
         row.classList.add('selected');
         // Collect data from row
         const rowData = {
+            id:parseInt(checkbox.value),
             productName: row.cells[1].innerText,
             price: row.cells[2].innerText,
             quantity: row.cells[3].innerText
@@ -48,24 +49,39 @@ function toggleSelection(row, checkbox) {
 //     });
 // });
 
-// // Event listener for individual row checkboxes
-// document.querySelectorAll('.select-checkbox').forEach((checkbox) => {
-//     checkbox.addEventListener('change', function () {
-//         const row = checkbox.parentElement.parentElement;
-//         toggleSelection(row, checkbox);
+// Event listener for individual row checkboxes
+document.querySelectorAll('.select-checkbox').forEach((checkbox) => {
+    checkbox.addEventListener('click', function (event) {
+      console.log('event',event.target.value)
+        const row = checkbox.parentElement.parentElement;
+        toggleSelection(row, checkbox);
 
-//         // Update "Select All" checkbox state based on individual selections
-//         const allChecked = [...document.querySelectorAll('.select-checkbox')].every(cb => cb.checked);
-//         document.getElementById('selectAll').checked = allChecked;
-//     });
-// });
+        // Update "Select All" checkbox state based on individual selections
+        // const allChecked = [...document.querySelectorAll('.select-checkbox')].every(cb => cb.checked);
+        // document.getElementById('selectAll').checked = allChecked;
+    });
+});
 
-// // Function to handle selected data submission
-// function sendSelectedData() {
-//     console.log("Selected Data for Request:", selectedData);
-//     // Here you could send selectedData via a fetch or AJAX request
-//     // e.g., fetch('/your-endpoint', { method: 'POST', body: JSON.stringify(selectedData) })
-// }
+document.querySelectorAll('.select-checkbox-row').forEach((row) => {
+  row.addEventListener('click', function (event) {
+      // Get the checkbox inside the clicked row
+      const checkbox = row.querySelector('.select-checkbox');
+
+      // If the click is on the checkbox itself, skip toggling to avoid double-trigger
+      if (event.target === checkbox) return;
+
+      // Trigger the checkbox click
+      checkbox.click();
+  });
+});
+
+// Function to handle selected data submission
+function sendSelectedData() {
+    console.log("Selected Data for Request:", selectedData);
+    // Here you could send selectedData via a fetch or AJAX request
+    // e.g., fetch('/your-endpoint', { method: 'POST', body: JSON.stringify(selectedData) })
+}
+
 
 
 // for sidebar toggle

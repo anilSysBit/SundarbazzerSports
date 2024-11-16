@@ -61,6 +61,7 @@
             <table class="responsive-table">
                 <thead>
                     <tr>
+                        <th>Select</th>
                         <th>SN</th>
                         <th>JERSEY</th>
                         <th>NAME</th>
@@ -68,7 +69,9 @@
                 </thead>
                 <tbody>
                     {% for player in player1.active_players %}
-                    <tr>
+                    <tr class="select-checkbox-row">
+                        <td><input type="checkbox" class="select-checkbox" value="{{player.id}}"></td>
+
                         <td>{{ forloop.counter }}</td>
                         <td>{{player.jersey_no}}</td>
 
@@ -81,10 +84,12 @@
             </table>
 
             <p>Extra Players ({{count.team1.extra}})</p>
+            <button onclick="sendSelectedData()">send selected data</button>
             <!-- extra_players -->
             <table class="responsive-table">
                 <thead>
                     <tr>
+                        <th>Select</th>
                         <th>SN</th>
                         <th>JERSEY</th>
                         <th>NAME</th>
@@ -93,7 +98,8 @@
                 </thead>
                 <tbody>
                     {% for player in player1.extra_players %}
-                    <tr>
+                    <tr class="select-checkbox-row">
+                        <td><input type="checkbox" class="select-checkbox" value="{{player.id}}"></td>
                         <td>{{ forloop.counter }}</td>
                         <td>{{player.jersey_no}}</td>
 
@@ -106,6 +112,9 @@
             </table>
 
         </div>
+
+
+        
         <div class="team">
 
             <table class="responsive-table">

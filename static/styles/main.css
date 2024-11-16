@@ -1526,7 +1526,7 @@ p {
   color: white;
 }
 .responsive-table .selected {
-  background-color: gray;
+  background-color: green;
 }
 .responsive-table .checkbox {
   height: 20px;
