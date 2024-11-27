@@ -37,7 +37,7 @@ path('create-team/', views.create_team_view, name='create-team'),
 
     path('events/',views.event_list_view,name='event'),
     path('event/<int:event_id>/',views.event_profile_view,name='event-profile'),
-    path('event/<int:event_id>/matches/',views.match_view,name='event-matches'),
+    path('event/<int:event_id>/matches/',views.event_match_view,name='event-matches'),
     path('edit-match/<int:match_id>/',views.edit_match_view,name='edit-match-admin'),
     path('event/<int:event_id>/create-match/',views.create_match_view,name='create-match-admin'),
     path('create-event/',views.create_event_view,name='create-event'),

@@ -7,7 +7,7 @@ function updateGlobalState(newValue,name){
   console.log('updating')
   globalState.value = newValue
 
-  console.log(globalState)
+  console.log(globalState)  
 }
 
 
@@ -16,25 +16,30 @@ function updateGlobalState(newValue,name){
 
 const selectedData = [];
 
-// Function to toggle row selection
 function toggleSelection(row, checkbox) {
-    if (checkbox.checked) {
-        row.classList.add('selected');
-        // Collect data from row
-        const rowData = {
-            id:parseInt(checkbox.value),
-            productName: row.cells[1].innerText,
-            price: row.cells[2].innerText,
-            quantity: row.cells[3].innerText
-        };
-        selectedData.push(rowData);
-    } else {
-        row.classList.remove('selected');
-        // Remove deselected data
-        const productName = row.cells[1].innerText;
-        const index = selectedData.findIndex(data => data.productName === productName);
-        if (index > -1) selectedData.splice(index, 1);
-    }
+  const id = parseInt(checkbox.value);
+  if (checkbox.checked) {
+      row.classList.add('selected');
+
+      // Dynamically create row data with variable names based on the <td> id
+      const rowData = {
+        id:id,
+      };
+      Array.from(row.cells).forEach(cell => {
+          if (cell.id) { // Use the `id` of the cell if it exists
+              rowData[cell.id] = cell.innerText;
+          }
+      });
+
+      selectedData.push(rowData);
+  } else {
+      row.classList.remove('selected');
+
+      // Remove deselected data
+      const id = parseInt(checkbox.value);
+      const index = selectedData.findIndex(data => data.id === id);
+      if (index > -1) selectedData.splice(index, 1);
+  }
 }
 
 // // Function to handle "Select All" checkbox
@@ -52,13 +57,10 @@ function toggleSelection(row, checkbox) {
 // Event listener for individual row checkboxes
 document.querySelectorAll('.select-checkbox').forEach((checkbox) => {
     checkbox.addEventListener('click', function (event) {
-      console.log('event',event.target.value)
+      // console.log('event',event.target.value)
         const row = checkbox.parentElement.parentElement;
         toggleSelection(row, checkbox);
 
-        // Update "Select All" checkbox state based on individual selections
-        // const allChecked = [...document.querySelectorAll('.select-checkbox')].every(cb => cb.checked);
-        // document.getElementById('selectAll').checked = allChecked;
     });
 });
 
@@ -78,8 +80,6 @@ document.querySelectorAll('.select-checkbox-row').forEach((row) => {
 // Function to handle selected data submission
 function sendSelectedData() {
     console.log("Selected Data for Request:", selectedData);
-    // Here you could send selectedData via a fetch or AJAX request
-    // e.g., fetch('/your-endpoint', { method: 'POST', body: JSON.stringify(selectedData) })
 }
 
 
@@ -197,4 +197,6 @@ startCountdown("timer2")
 
 
 // startCountdown1("timer3")
+
+// for custom time
 

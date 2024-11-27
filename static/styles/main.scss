@@ -1938,10 +1938,16 @@ p{
     padding: 20px;
     transform: scale(0.7); /* Initial small scale */
     transition: transform 0.3s ease, opacity 0.3s ease;
+    .top_header{
+      font-size: 3rem;
+    }
     .icon_box{
       display: flex;
       place-content: center;
       place-items: center;
+      ._img{
+        height: 150px;
+      }
       .icon{
         font-size:50px;
       }
@@ -1988,6 +1994,7 @@ p{
 }
 
 
+
 .dialog_box{
   // border: 1px solid black;
   position: fixed;
@@ -2027,6 +2034,87 @@ p{
   transform: scale(1); /* Grows to full size */
   opacity: 1;
 }
+
+
+
+.goal_alert_box{
+  .size_manager{
+    min-height: 80%;
+    width: 80%;
+    display: flex;
+    justify-content: space-around;
+    padding: 50px;
+    .top_header{
+      margin-bottom: 30px;
+      font-weight: 400;
+    }
+    .side{
+      width: 30%;
+      display: flex;
+      justify-content: center;
+      justify-items: center;
+      flex-direction: column;
+      // border: 1px solid white;
+      justify-items: center;
+
+    }
+    .side2{
+      width: 70%;
+    }
+    .goal{
+      font-weight: bold;
+      font-size: 1.2rem;
+      width: 200px;
+    }
+
+    .detail_box{
+      margin-top: 5px;
+    }
+
+    .form-control{
+      // width: 50%;
+      // border: 1px solid white;
+      text-align: center;
+      margin-top: 10pxpx;
+      label{
+        color: white;
+        font-size: 0.9rem;
+      }
+
+      .time{
+        background-color: transparent;
+        padding: 10px;
+        border-radius: 10px;
+        color: white;
+        height: 40px;
+        min-width: 200px;
+        border: 1px solid white;
+
+      }
+
+      input[type="time"]::-webkit-calendar-picker-indicator {
+        filter: invert(100%) !important; /* Inverts the color of the clock icon to white */
+    }
+
+      
+      
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // Variables for Colors and Spacing
@@ -2700,3 +2788,86 @@ nav {
 
 
 }
+
+
+
+
+$primary-color: #f0c419;
+$secondary-color: #ff5733;
+$neckline-color: #659c35;
+$text-color: white;
+
+.jersey_container {
+  max-width: 200px;
+  display: flex;
+  flex-direction: column;
+  place-content: center;
+  place-items: center;
+  position: relative;
+
+  .jersey_no {
+    position: absolute;
+    top:40px;
+    font-size: 1.8rem;
+    color: $text-color;
+  }
+
+  .player_name {
+    display: flex;
+    place-content: center;
+    place-items: center;
+    padding: 2px 20px;
+    border-radius: 10px;
+    // background-color: gray;
+    display: none;
+    // min-height: 40px;
+
+
+    p {
+      font-size: 1rem;
+    }
+  }
+}
+
+
+
+// toggle radio customization
+
+/* Style the custom radio button */
+.custom-radio {
+  display: inline-block;
+  margin: 10px;
+  position: relative;
+
+  /* Style the custom label to act as a box */
+.radio-label {
+  display: inline-block;
+  padding: 10px 20px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  font-size: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  &:hover {
+    // background-color: #dcdcdc;
+    background-color: #4CAF50;
+  
+  }
+}
+}
+
+/* Hide the default radio input */
+.custom-radio input[type="radio"] {
+  visibility: hidden;
+}
+
+
+
+
+/* Style when the radio button is checked */
+.custom-radio input[type="radio"]:checked + .radio-label {
+  background-color: #4CAF50;
+  color: white;
+  border-color: #4CAF50;
+}
+

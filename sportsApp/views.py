@@ -16,7 +16,7 @@ from django.conf import settings
 from django.core.paginator import Paginator
 from .forms import PlayerForm,MatchForm,EventForm,TeamForm,EventTeamForm
 from django.contrib import messages
-
+from . import constants
 
 
 from .models import PointTable,TieSheet,RecentEvents,LatestNews,Team,TeamRequest,Coach,Player
@@ -381,7 +381,7 @@ def join_now(request):
     Match Views 
 """
 
-def match_view(request,event_id):
+def event_match_view(request,event_id):
     event = get_object_or_404(Event,pk=event_id)
     matches = Match.objects.filter(event = event)
 
@@ -528,6 +528,7 @@ def create_event_team(request,event_id):
 
 """ 
     End of Event Team
+    
 """
 
 
@@ -586,9 +587,22 @@ def match_simulator_view(request,match_id):
        'match':match,
        'event':event,
        'count':count,
+       'alerts':game_stimulation_alerts(),
+       'goal_type_choices':constants.GOAL_TYPE.choices,
        'player1':{'active_players':players1,'extra_players':extra_players1},
        'player2':{'active_players':players2,'extra_players':extra_players2},
 
     }
 
     return render(request,'game/match_simulator.html',context=context)
+
+
+
+def game_stimulation_alerts():
+     alerts = [
+        {"title": "Permission 1", "message": "Allow access to camera?", "button_text": "Allow", "handle_action": "handleCameraPermission()"},
+        {"title": "Permission 2", "message": "Enable notifications?", "button_text": "Enable", "handle_action": "handleNotificationPermission()"},
+        # Add more alerts as needed
+    ]
+     
+     return alerts

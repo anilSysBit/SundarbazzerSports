@@ -5,7 +5,7 @@
 
 <div class="main_page_container match_page simulation">
         
-
+  {% include 'game/alerts/goal_alert.html' %}
     <div class="match_vs_box">
         <div class="vs_box">
             <p class="vs_text">Vs</p>
@@ -55,6 +55,7 @@
         </div>
     </div>
 
+
     <div class="player_details">
         <div class="team">
             <p>Active Players ({{count.team1.active}})</p>
@@ -62,49 +63,41 @@
                 <thead>
                     <tr>
                         <th>Select</th>
-                        <th>SN</th>
+                        <th hidden>teamid</th>
+                        <th hidden>teamname</th>
                         <th>JERSEY</th>
                         <th>NAME</th>
+                        <th>G</th>
+                        <th>F</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for player in player1.active_players %}
                     <tr class="select-checkbox-row">
-                        <td><input type="checkbox" class="select-checkbox" value="{{player.id}}"></td>
-
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{player.jersey_no}}</td>
-
-                        <td>{{player.designation}} - {{player.name}}</td>
+                        <td ><input type="checkbox" class="select-checkbox" value="{{player.id}}"></td>
+                        <td id="team_id" hidden>{{player.team.id}}</td>
+                        <td id="team_name" hidden>{{player.team.name}}</td>
+                        <td id="jersey">{{player.jersey_no}}</td>
+                        <td id="name">{{player.designation}} - {{player.name}}</td>
+                        <td>0</td>
+                        <td>0</td>
 
                     </tr>
 
                     {% endfor%}
-                </tbody>
-            </table>
-
-            <p>Extra Players ({{count.team1.extra}})</p>
-            <button onclick="sendSelectedData()">send selected data</button>
-            <!-- extra_players -->
-            <table class="responsive-table">
-                <thead>
                     <tr>
-                        <th>Select</th>
-                        <th>SN</th>
-                        <th>JERSEY</th>
-                        <th>NAME</th>
-
+                        <td>Extra Players ({{count.team1.extra}})</td>
+                        <td><button onclick="sendSelectedData()">send selected data</button></td>
                     </tr>
-                </thead>
-                <tbody>
                     {% for player in player1.extra_players %}
                     <tr class="select-checkbox-row">
                         <td><input type="checkbox" class="select-checkbox" value="{{player.id}}"></td>
-                        <td>{{ forloop.counter }}</td>
                         <td>{{player.jersey_no}}</td>
 
                         <td>{{player.designation}} - {{player.name}}</td>
-
+                        <td>0</td>
+                        <td>0</td>
+                        
                     </tr>
 
                     {% endfor%}

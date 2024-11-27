@@ -142,6 +142,7 @@ function showSnackBar(message='Testing the javascript snackbar',type='success'){
 
 
 
+
 console.log('Hello')
 const alertboxDeleteTeam = new AlertBox('alert-box-delete-team')
 
@@ -304,3 +305,42 @@ const handleDeleteMatch =async(event)=>{
     console.log('error',error)
   }
 }
+
+
+
+
+const handleOpenGoalAlert =()=>{
+  const selected = selectedData[0];
+  console.log('selecte dtaa',selectedData)
+  if(selectedData.length < 1){
+    showSnackBar(message="You should choose player before adding goal",type='error')
+    return;
+  }else if(selectedData.length > 1){
+    showSnackBar(message="Two players cannot be selected at one to add a goal",type='error')
+    return;
+  }
+  const alertbox = document.getElementById('goal-alert-box');
+  const note = document.getElementById('note')
+  const header = document.getElementById('header')
+  const sub_header = document.getElementById('sub-header')
+  const jersey_no = document.getElementById('jersey-no')
+  const player_name = document.getElementById('player-name')
+
+  header.textContent = `${selected.name} (${selected.team_name})`
+  // sub_header.textContent = `${selected.team_name}`
+
+  jersey_no.textContent = `${selected.jersey}`
+  player_name.textContent = `${selected.team_name}`
+
+  alertbox.classList.add('show')
+}
+
+
+const handleCloseAlerts =()=>{
+  const boxes = document.querySelectorAll('.dialog-overlay')
+  
+  boxes.forEach((item,index)=>{
+    item.classList.remove('show')
+  })
+}
+

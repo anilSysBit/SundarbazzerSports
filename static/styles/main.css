@@ -1641,10 +1641,16 @@ p {
   transform: scale(0.7); /* Initial small scale */
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
+.custom_alert_box .size_manager .top_header {
+  font-size: 3rem;
+}
 .custom_alert_box .size_manager .icon_box {
   display: flex;
   place-content: center;
   place-items: center;
+}
+.custom_alert_box .size_manager .icon_box ._img {
+  height: 150px;
 }
 .custom_alert_box .size_manager .icon_box .icon {
   font-size: 50px;
@@ -1717,6 +1723,57 @@ p {
 .dialog-overlay.show .dialog {
   transform: scale(1); /* Grows to full size */
   opacity: 1;
+}
+
+.goal_alert_box .size_manager {
+  min-height: 80%;
+  width: 80%;
+  display: flex;
+  justify-content: space-around;
+  padding: 50px;
+}
+.goal_alert_box .size_manager .top_header {
+  margin-bottom: 30px;
+  font-weight: 400;
+}
+.goal_alert_box .size_manager .side {
+  width: 30%;
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  flex-direction: column;
+  justify-items: center;
+}
+.goal_alert_box .size_manager .side2 {
+  width: 70%;
+}
+.goal_alert_box .size_manager .goal {
+  font-weight: bold;
+  font-size: 1.2rem;
+  width: 200px;
+}
+.goal_alert_box .size_manager .detail_box {
+  margin-top: 5px;
+}
+.goal_alert_box .size_manager .form-control {
+  text-align: center;
+  margin-top: 10pxpx;
+}
+.goal_alert_box .size_manager .form-control label {
+  color: white;
+  font-size: 0.9rem;
+}
+.goal_alert_box .size_manager .form-control .time {
+  background-color: transparent;
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+  height: 40px;
+  min-width: 200px;
+  border: 1px solid white;
+}
+.goal_alert_box .size_manager .form-control input[type=time]::-webkit-calendar-picker-indicator {
+  filter: invert(100%) !important; /* Inverts the color of the clock icon to white */
 }
 
 .wrapper {
@@ -2272,4 +2329,61 @@ p {
   .accordin_container .size_manager {
     padding: 0;
   }
+}
+.jersey_container {
+  max-width: 200px;
+  display: flex;
+  flex-direction: column;
+  place-content: center;
+  place-items: center;
+  position: relative;
+}
+.jersey_container .jersey_no {
+  position: absolute;
+  top: 40px;
+  font-size: 1.8rem;
+  color: white;
+}
+.jersey_container .player_name {
+  display: flex;
+  place-content: center;
+  place-items: center;
+  padding: 2px 20px;
+  border-radius: 10px;
+  display: none;
+}
+.jersey_container .player_name p {
+  font-size: 1rem;
+}
+
+/* Style the custom radio button */
+.custom-radio {
+  display: inline-block;
+  margin: 10px;
+  position: relative;
+  /* Style the custom label to act as a box */
+}
+.custom-radio .radio-label {
+  display: inline-block;
+  padding: 10px 20px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  font-size: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.custom-radio .radio-label:hover {
+  background-color: #4CAF50;
+}
+
+/* Hide the default radio input */
+.custom-radio input[type=radio] {
+  visibility: hidden;
+}
+
+/* Style when the radio button is checked */
+.custom-radio input[type=radio]:checked + .radio-label {
+  background-color: #4CAF50;
+  color: white;
+  border-color: #4CAF50;
 }/*# sourceMappingURL=main.css.map */
