@@ -16,6 +16,17 @@ function updateGlobalState(newValue,name){
 
 const selectedData = [];
 
+function removeSelection(){
+  selectedData.splice(0, selectedData.length);
+  document.querySelectorAll('.select-checkbox').forEach((checkbox) => {
+    const row = checkbox.parentElement.parentElement;
+    row.classList.remove('selected');
+    checkbox.checked = false
+    // Remove deselected data
+    const id = parseInt(checkbox.value);
+    
+});
+}
 function toggleSelection(row, checkbox) {
   const id = parseInt(checkbox.value);
   if (checkbox.checked) {
@@ -200,3 +211,26 @@ startCountdown("timer2")
 
 // for custom time
 
+function handleFetchTestData(){
+  const button = document.getElementById('fetchButton');
+  button.classList.add('loading');
+  const spinner = document.createElement('span')
+  spinner.classList.add('spinner')
+
+
+
+  // Simulate an API call
+  fetch('https://jsonplaceholder.typicode.com/todos/1') // Replace with your API URL
+    .then(response => response.json())
+    .then(data => {
+      console.log(data); // Log the response data
+      alert("Data fetched successfully!");
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert("Failed to fetch data.");
+    })
+    .finally(() => {
+      button.classList.remove('loading');
+    });
+}

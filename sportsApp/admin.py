@@ -139,6 +139,12 @@ class GoalInline(admin.TabularInline):
     model = Goal
     extra = 1
 
+@admin.register(Goal)
+class GoalAdmin(admin.ModelAdmin):
+    
+    list_display = ('id','player','match','goal_time','goal_type')
+
+
 class FallInline(admin.TabularInline):
     model = Fall
     extra = 1

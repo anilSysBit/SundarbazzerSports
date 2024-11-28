@@ -100,31 +100,46 @@ class AlertBox {
 
 
 class SnackBar{
-    constructor(id){
-        
-        const snackbar = document.createElement("div")
-        snackbar.classList.add('snackbar')
-        snackbar.id = 'snackbar'
-        this.snackbar = snackbar
-        document.body.appendChild(snackbar)
-    }
-
-    showSnack(message,type){
-        // console.log('going')
-
-        this.snackbar.classList.remove('hide')
-
-        this.snackbar.classList.add('show')
-        if(type){
-        this.snackbar.classList.add(type)
-
+      constructor() {
+        // Create a container for all snackbars if it doesn't exist
+        if (!document.querySelector('.snackbar-container')) {
+            const container = document.createElement('div');
+            container.classList.add('snackbar-container');
+            document.body.appendChild(container);
         }
-        this.snackbar.textContent = message
+        this.container = document.querySelector('.snackbar-container');
     }
-    hide(){
-        this.snackbar.classList.remove('show')
-        this.snackbar.classList.add('hide')
-        
+
+    showSnack(message, type) {
+      // Create a new snackbar element
+      const snackbar = document.createElement('div');
+      snackbar.classList.add('snackbar');
+      if (type) {
+          snackbar.classList.add(type); // Add type-specific class (e.g., success, error)
+      }
+      snackbar.textContent = message;
+
+      // Append snackbar to the container
+      this.container.appendChild(snackbar);
+
+      // Trigger fade-in effect
+      setTimeout(() => {
+          snackbar.classList.add('show');
+      }, 10);
+
+      // Automatically hide the snackbar after 3 seconds
+      setTimeout(() => {
+          this.hide(snackbar);
+      }, 3000);
+  }
+      hide(snackbar) {
+        // snackbar.classList.remove('show');
+        snackbar.classList.add('hide');
+        // snackbar.style.display = 'none'
+
+        setTimeout(()=>{
+          snackbar.remove()
+        },500)
     }
 }
 
@@ -311,7 +326,7 @@ const handleDeleteMatch =async(event)=>{
 
 const handleOpenGoalAlert =()=>{
   const selected = selectedData[0];
-  console.log('selecte dtaa',selectedData)
+  // console.log('selecte dtaa',selectedData)
   if(selectedData.length < 1){
     showSnackBar(message="You should choose player before adding goal",type='error')
     return;
@@ -325,6 +340,10 @@ const handleOpenGoalAlert =()=>{
   const sub_header = document.getElementById('sub-header')
   const jersey_no = document.getElementById('jersey-no')
   const player_name = document.getElementById('player-name')
+  const player_id = document.getElementById('player')
+
+  player_id.value = selected.id
+
 
   header.textContent = `${selected.name} (${selected.team_name})`
   // sub_header.textContent = `${selected.team_name}`

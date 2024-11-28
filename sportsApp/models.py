@@ -294,28 +294,14 @@ class MatchInterruption(models.Model):
 
 # Models for Fall Goal
 class Goal(models.Model):
-    match = models.OneToOneField(Match,on_delete=models.CASCADE)
-    team = models.ForeignKey(Team,on_delete=models.CASCADE)
+    match = models.ForeignKey(Match,on_delete=models.CASCADE)
     player = models.ForeignKey(Player,on_delete=models.CASCADE)
-    goal_description = models.CharField(max_length=255)
+    goal_description = models.CharField(max_length=255,blank=True,null=True)
     goal_type = models.CharField(max_length=20,choices=constants.GOAL_TYPE.choices,default=constants.GOAL_TYPE.OPEN_PLAY)
     goal_time = models.TimeField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
-    def clean(self):
-        super().clean()
-
-        if self.team not in [self.match.team1,self.match.team2]:
-            raise ValidationError('The Selected Team Must be one of the Teams playing in the Match')
-        
-        if self.player.team != self.team:
-            raise ValidationError('The Selected Player must be on the Selected Team')
-        
-    def save(self,*args,**kwargs):
-        self.clean()
-        super().save(*args,**kwargs)
 
 
 class Fall(models.Model):

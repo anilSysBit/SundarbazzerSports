@@ -2,6 +2,7 @@
 
 
 {% block content %}
+{% load static %}
 
 <div class="main_page_container match_page simulation">
         
@@ -75,7 +76,6 @@
                     {% for player in player1.active_players %}
                     <tr class="select-checkbox-row">
                         <td ><input type="checkbox" class="select-checkbox" value="{{player.id}}"></td>
-                        <td id="team_id" hidden>{{player.team.id}}</td>
                         <td id="team_name" hidden>{{player.team.name}}</td>
                         <td id="jersey">{{player.jersey_no}}</td>
                         <td id="name">{{player.designation}} - {{player.name}}</td>
@@ -92,9 +92,9 @@
                     {% for player in player1.extra_players %}
                     <tr class="select-checkbox-row">
                         <td><input type="checkbox" class="select-checkbox" value="{{player.id}}"></td>
-                        <td>{{player.jersey_no}}</td>
-
-                        <td>{{player.designation}} - {{player.name}}</td>
+                        <td id="team_name" hidden>{{player.team.name}}</td>
+                        <td id="jersey">{{player.jersey_no}}</td>
+                        <td id="name">{{player.designation}} - {{player.name}}</td>
                         <td>0</td>
                         <td>0</td>
                         
@@ -154,5 +154,6 @@
         </div>
     </div>
 
+    <script src="{% static 'js/game.js' %}"></script>
 
 {% endblock content %}

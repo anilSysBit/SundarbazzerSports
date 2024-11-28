@@ -14,7 +14,7 @@ import json
 import base64
 from django.conf import settings
 from django.core.paginator import Paginator
-from .forms import PlayerForm,MatchForm,EventForm,TeamForm,EventTeamForm
+from .forms import PlayerForm,MatchForm,EventForm,TeamForm,EventTeamForm,GoalForm
 from django.contrib import messages
 from . import constants
 
@@ -596,6 +596,39 @@ def match_simulator_view(request,match_id):
 
     return render(request,'game/match_simulator.html',context=context)
 
+
+
+def add_goal_view(request):
+    if request.method == 'POST':
+        form = GoalForm(request.POST)
+
+
+        if form.is_valid():
+            player = form.cleaned_data['player']
+            if not player.is_active:
+                return JsonResponse({
+                    'success': False,
+                    'message': f'Error: {player.name} is not active. Cannot add goal of extra players',
+                }, status=400)
+                
+            goal = form.save()
+            # messages.success(request,f'Added goal of {goal.player.name}')
+            return JsonResponse({
+                'success': True,
+                'message': f'Added goal of {goal.player.name}',
+                
+            }, status=201)
+        else:
+            return JsonResponse({
+                'success': False,
+                'errors': form.errors,
+            }, status=400)
+    else:
+        return JsonResponse({
+            'success': False,
+            'message': 'Invalid request method. Use POST.',
+        }, status=405)
+    
 
 
 def game_stimulation_alerts():

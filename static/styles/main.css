@@ -1114,6 +1114,17 @@ nav .part3 {
   font-weight: bold;
 }
 
+.snackbar-container {
+  position: fixed;
+  bottom: 20px;
+  left: 200px;
+  transform: translateX(-150px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+}
+
 /* Snack Bar Styling */
 .snackbar {
   visibility: hidden;
@@ -1123,11 +1134,8 @@ nav .part3 {
   text-align: center;
   border-radius: 4px;
   padding: 16px;
-  position: fixed;
-  bottom: 20px;
-  left: 3%;
   font-size: 17px;
-  z-index: 1;
+  z-index: 10;
   opacity: 0;
   transition: opacity 0.5s ease, top 0.5s ease;
   box-shadow: 1px 1px 10px gray;
@@ -2378,7 +2386,7 @@ p {
 
 /* Hide the default radio input */
 .custom-radio input[type=radio] {
-  visibility: hidden;
+  opacity: 0;
 }
 
 /* Style when the radio button is checked */

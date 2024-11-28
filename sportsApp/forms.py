@@ -1,5 +1,5 @@
 from django import forms
-from .models import Team,Payment,Player,Match,EventTeam,Event
+from .models import Team,Payment,Player,Match,EventTeam,Event,Goal
 from django.core.mail import send_mail
 from django.conf import settings
 from django.utils.crypto import get_random_string
@@ -225,3 +225,40 @@ class EventTeamForm(forms.ModelForm):
                 raise ValidationError("This team has already been registered for this event.")
         
         return cleaned_data
+
+
+
+
+
+class GoalForm(forms.ModelForm):
+    class Meta:
+        model = Goal
+        fields = ['match', 'player', 'goal_description', 'goal_type', 'goal_time']
+        widgets = {
+            'goal_description': forms.TextInput(attrs={'placeholder': 'Describe the goal', 'class': 'form-control'}),
+            'goal_type': forms.Select(attrs={'class': 'form-select'}),
+            'goal_time': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
+            'match': forms.Select(attrs={'class': 'form-select'}),
+            'player': forms.Select(attrs={'class': 'form-select'}),
+        }
+        labels = {
+            'goal_description': 'Description',
+            'goal_type': 'Type of Goal',
+            'goal_time': 'Time of Goal',
+        }
+
+
+    def clean(self):
+        cleaned_data = super().clean()
+        match = cleaned_data.get('match')
+        player = cleaned_data.get('player')
+
+        print('player',player)
+        
+
+        return cleaned_data
+
+    def save(self, commit=True):
+        # Perform validation again before saving
+        self.clean()
+        return super().save(commit=commit)
