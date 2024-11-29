@@ -321,7 +321,13 @@ const handleDeleteMatch =async(event)=>{
   }
 }
 
-
+const getCustomCurrentTime =()=>{
+  const now = new Date();
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+  return `${hours}:${minutes}:${seconds}`
+}
 
 
 const handleOpenGoalAlert =()=>{
@@ -335,6 +341,16 @@ const handleOpenGoalAlert =()=>{
     return;
   }
   const alertbox = document.getElementById('goal-alert-box');
+  alertbox.reset()
+
+  const timeInput = document.getElementById('custom-time')
+
+  // alertbox.remove()
+
+  const timeValue = getCustomCurrentTime()
+  timeInput.value = timeValue;
+
+  
   const note = document.getElementById('note')
   const header = document.getElementById('header')
   const sub_header = document.getElementById('sub-header')
@@ -357,7 +373,10 @@ const handleOpenGoalAlert =()=>{
 
 const handleCloseAlerts =()=>{
   const boxes = document.querySelectorAll('.dialog-overlay')
+  const alertbox = document.getElementById('goal-alert-box');
   
+
+  // alertbox.remove()
   boxes.forEach((item,index)=>{
     item.classList.remove('show')
   })

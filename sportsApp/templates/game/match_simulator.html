@@ -19,12 +19,12 @@
                 </div>
                 <p>{{match.team1.team.name}}</p>
             </div>
-            <div class="score">0</div>
+            <div class="score" id="team1-score">{{count.team1.total_goals}}</div>
         </div>
         <div class="team team2">
-            <div class="score right">0</div>
+            <div class="score right" id="team2-score">{{count.team2.total_goals}}</div>
             <div class="detail">
-                <p>{{match.team2.team.name}}</p>
+                <p >{{match.team2.team.name}}</p>
             <div class="avatar">
                 <img src="https://picsum.photos/101" alt="">
 
@@ -51,7 +51,7 @@
         </div>
 
         <div class="holder center">
-            <a href=""><button class="global_btn success goal_btn">Add Goal</button></a>
+            <button class="global_btn success goal_btn" type="button" onclick="handleOpenGoalAlert()">Add Goal</button>
 
         </div>
     </div>
@@ -74,13 +74,13 @@
                 </thead>
                 <tbody>
                     {% for player in player1.active_players %}
-                    <tr class="select-checkbox-row">
+                    <tr class="select-checkbox-row" data-player-id="{{ player.id }}">
                         <td ><input type="checkbox" class="select-checkbox" value="{{player.id}}"></td>
                         <td id="team_name" hidden>{{player.team.name}}</td>
                         <td id="jersey">{{player.jersey_no}}</td>
                         <td id="name">{{player.designation}} - {{player.name}}</td>
-                        <td>0</td>
-                        <td>0</td>
+                        <td class="goal-count-1">{{ player.goal_count }}</td> <!-- Use class instead of ID -->
+                        <td class="foul-count-1">{{ player.foul_count }}</td> <!-- Use class instead of ID -->
 
                     </tr>
 
@@ -95,8 +95,8 @@
                         <td id="team_name" hidden>{{player.team.name}}</td>
                         <td id="jersey">{{player.jersey_no}}</td>
                         <td id="name">{{player.designation}} - {{player.name}}</td>
-                        <td>0</td>
-                        <td>0</td>
+                        <td id="goal-count-1">0</td>
+                        <td id="foul-count-2">0</td>
                         
                     </tr>
 
@@ -154,6 +154,9 @@
         </div>
     </div>
 
+    <script>
+        const matchId = "{{match.id}}";
+    </script>
     <script src="{% static 'js/game.js' %}"></script>
 
 {% endblock content %}

@@ -46,9 +46,50 @@ async function addGoalFromForm(e) {
         const alertbox = document.getElementById('goal-alert-box');
         alertbox.classList.remove('show')
         removeSelection()
+        updateMatchData();
         
     } catch (error) {
         console.error('Unexpected error:', error);
         return { success: false, errors: 'An unexpected error occurred.' };
     }
 }
+
+
+
+// JavaScript function to update the player stats dynamically
+function updateMatchData() {
+    fetch(`/match-data-api/${matchId}/`)
+        .then(response => response.json())
+        .then(data => {
+
+            document.getElementById('team1-score').textContent = data.team1.total_goals;
+            document.getElementById('team2-score').textContent = data.team2.total_goals;
+
+            // Update team 1 players' goal and foul counts
+            data.team1.active_players.forEach(player => {
+                const goalCells = document.querySelectorAll('.goal-count-1');
+                const foulCells = document.querySelectorAll('.foul-count-1');
+                
+                // Loop through all goal and foul count cells for Team 1 and update based on player ID
+                goalCells.forEach(cell => {
+                    if (cell.closest('tr').dataset.playerId == player.id) {
+                        cell.textContent = player.goal_count;
+                    }
+                });
+
+                foulCells.forEach(cell => {
+                    if (cell.closest('tr').dataset.playerId == player.id) {
+                        cell.textContent = player.foul_count;
+                    }
+                });
+            });
+
+            // Update team 2 players' goal and foul counts
+            data.team2.active_players.forEach(player => {
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching match data:', error);
+        });
+}
+

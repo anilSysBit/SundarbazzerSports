@@ -295,7 +295,7 @@ class MatchInterruption(models.Model):
 # Models for Fall Goal
 class Goal(models.Model):
     match = models.ForeignKey(Match,on_delete=models.CASCADE)
-    player = models.ForeignKey(Player,on_delete=models.CASCADE)
+    player = models.ForeignKey(Player,on_delete=models.CASCADE,related_name='goals')
     goal_description = models.CharField(max_length=255,blank=True,null=True)
     goal_type = models.CharField(max_length=20,choices=constants.GOAL_TYPE.choices,default=constants.GOAL_TYPE.OPEN_PLAY)
     goal_time = models.TimeField()
@@ -313,8 +313,7 @@ class Fall(models.Model):
     )
     
     match = models.OneToOneField(Match,on_delete=models.CASCADE)
-    team = models.ForeignKey(Team,on_delete=models.CASCADE)
-    player = models.ForeignKey(Player,on_delete=models.CASCADE)
+    player = models.ForeignKey(Player,on_delete=models.CASCADE,related_name='fouls')
 
     fall_type = models.CharField(max_length=20,choices=FALL_TYPE)
     fall_description = models.CharField(max_length=255)

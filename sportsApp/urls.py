@@ -62,6 +62,7 @@ path('create-team/', views.create_team_view, name='create-team'),
 
     path('add-goal/',views.add_goal_view,name='add-goal'),
     path('game-simulation/<int:match_id>/',views.match_simulator_view,name='match-simulate'),
+    path('match-data-api/<int:match_id>/',views.match_data_api,name='match_data_api'),
 ]
 
 if settings.DEBUG:
