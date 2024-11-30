@@ -44,8 +44,11 @@ path('create-team/', views.create_team_view, name='create-team'),
     path('edit-event/<int:event_id>/',views.edit_event_view,name='edit-event'),
     path('register-team-event/<int:event_id>/',views.create_event_team,name='register-team-event'),
     
-    # Matches
 
+    # player api
+    path('player-data-api/<int:player_id>/',views.player_data_api,name='player-api'),
+
+    # Matches
     path("match/<int:match_id>/",views.match_view,name='match-profile'),
     # path("create-team/",views.submit_team_request,name='submit_team_request'),
     path("success_state/",views.success_state,name="success_state"),
@@ -61,6 +64,7 @@ path('create-team/', views.create_team_view, name='create-team'),
     # game simulator
 
     path('add-goal/',views.add_goal_view,name='add-goal'),
+    path('add-foul/',views.add_foul_view,name='add-foul'),
     path('game-simulation/<int:match_id>/',views.match_simulator_view,name='match-simulate'),
     path('match-data-api/<int:match_id>/',views.match_data_api,name='match_data_api'),
 ]

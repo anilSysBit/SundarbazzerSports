@@ -1,5 +1,5 @@
 <div class="jersey_container">
-    <h1 class="jersey_no" id="jersey-no">00</h1>
+    <h1 class="jersey_no" id="jersey-no{{type}}">00</h1>
     <svg
       width="150"
       height="160"
@@ -35,6 +35,6 @@
       />
     </svg>
     <div class="player_name">
-      <p class="player-name" id="player-name">{{ name|default:"Player" }}</p>
+      <p class="player-name" id="player-name{{type}}">{{ name|default:"Player" }}</p>
     </div>
   </div>

@@ -70,3 +70,22 @@ class EVENT_TYPE (models.TextChoices):
         LEAGUE='League'
         KNOCKOUT='Knockout'
         FRIENDLY='Friendly'
+
+
+
+class FoulChoices(models.TextChoices):
+    HAND_BALL = 'HAND_BALL', 'Hand Ball'
+    OFFSIDE = 'OFFSIDE', 'Offside'
+    DANGEROUS_PLAY = 'DANGEROUS_PLAY', 'Dangerous Play'
+    PUSHING = 'PUSHING', 'Pushing'
+    TRIPPING = 'TRIPPING', 'Tripping'
+    UNSPORTING_BEHAVIOR = 'UNSPORTING_BEHAVIOR', 'Unsporting Behavior'
+    OBSTRUCTION = 'OBSTRUCTION', 'Obstruction'
+    ILLEGAL_TACKLE = 'ILLEGAL_TACKLE', 'Illegal Tackle'
+    OTHER = 'OTHER', 'Other'
+
+
+class FoulCategory(models.TextChoices):
+    NORMAL_FALL = 'NORMAL_FALL', 'Normal Fall'
+    YELLOW_CARD = 'YELLOW_CARD', 'Yellow Card'
+    RED_CARD = 'RED_CARD', 'Red Card'

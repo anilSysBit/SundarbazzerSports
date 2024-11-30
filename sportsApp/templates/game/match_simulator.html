@@ -6,7 +6,12 @@
 
 <div class="main_page_container match_page simulation">
         
-  {% include 'game/alerts/goal_alert.html' %}
+    
+    <div class="alert_box" id="component">
+        {% include 'game/alerts/goal_alert.html' %}
+        {% include 'game/alerts/foul_alert.html' %}
+    </div>
+
     <div class="match_vs_box">
         <div class="vs_box">
             <p class="vs_text">Vs</p>
@@ -43,7 +48,7 @@
         </div>
 
         <div class="holder center">
-            <a href=""><button class="global_btn error">Add Fall</button></a>
+            <button class="global_btn error" onclick="handleOpenFoulAlert()">Add Foul</button>
             <a href=""><button class="global_btn">Add Freekick</button></a>
             <a href=""><button class="global_btn warning">Add Penalty</button></a>
             <a href=""><button class="global_btn">Add Corner</button></a>
@@ -52,6 +57,7 @@
 
         <div class="holder center">
             <button class="global_btn success goal_btn" type="button" onclick="handleOpenGoalAlert()">Add Goal</button>
+            <button class="global_btn success goal_btn" type="button" onclick="handleOpenGoalAlert()">Reload</button>
 
         </div>
     </div>
@@ -95,8 +101,8 @@
                         <td id="team_name" hidden>{{player.team.name}}</td>
                         <td id="jersey">{{player.jersey_no}}</td>
                         <td id="name">{{player.designation}} - {{player.name}}</td>
-                        <td id="goal-count-1">0</td>
-                        <td id="foul-count-2">0</td>
+                        <td id="goal-count-1">{{ player.goal_count }}</td>
+                        <td id="foul-count-2">{{ player.foul_count }}</td>
                         
                     </tr>
 

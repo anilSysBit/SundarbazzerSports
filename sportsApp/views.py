@@ -14,7 +14,7 @@ import json
 import base64
 from django.conf import settings
 from django.core.paginator import Paginator
-from .forms import PlayerForm,MatchForm,EventForm,TeamForm,EventTeamForm,GoalForm
+from .forms import PlayerForm,MatchForm,EventForm,TeamForm,EventTeamForm,GoalForm,FoulForm
 from django.contrib import messages
 from . import constants
 from django.db.models import Count,Q
@@ -612,6 +612,7 @@ def match_simulator_view(request,match_id):
        'match':match,
        'event':event,
        'count':count,
+       'foul':FoulForm(instance=match),
        'alerts':game_stimulation_alerts(),
        'goal_type_choices':constants.GOAL_TYPE.choices,
        'player1':{'active_players':players1,'extra_players':extra_players1},
@@ -620,6 +621,18 @@ def match_simulator_view(request,match_id):
     }
 
     return render(request,'game/match_simulator.html',context=context)
+
+def player_data_api(request,player_id):
+    player = get_object_or_404(Player,pk=player_id)
+
+    playerData = {
+        'id':player.id,
+        'name':player.name,
+        'designation':player.designation,
+        'jersey_no':player.jersey_no,
+        'team_name':player.team.name,
+    }
+    return JsonResponse(playerData)
 
 def match_data_api(request, match_id):
     match = get_object_or_404(Match, pk=match_id)
@@ -677,6 +690,37 @@ def add_goal_view(request):
             return JsonResponse({
                 'success': True,
                 'message': f'Added goal of {goal.player.name}',
+                
+            }, status=201)
+        else:
+            return JsonResponse({
+                'success': False,
+                'errors': form.errors,
+            }, status=400)
+    else:
+        return JsonResponse({
+            'success': False,
+            'message': 'Invalid request method. Use POST.',
+        }, status=405)
+    
+def add_foul_view(request):
+    if request.method == 'POST':
+        form = FoulForm(request.POST)
+
+
+        if form.is_valid():
+            player = form.cleaned_data['player']
+            if not player.is_active:
+                return JsonResponse({
+                    'success': False,
+                    'message': f'Error: {player.name} is not active. Cannot add Foul of extra players',
+                }, status=400)
+                
+            goal = form.save()
+            # messages.success(request,f'Added goal of {goal.player.name}')
+            return JsonResponse({
+                'success': True,
+                'message': f'Added foul of {goal.player.name}',
                 
             }, status=201)
         else:

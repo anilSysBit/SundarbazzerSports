@@ -1,5 +1,5 @@
 from django import forms
-from .models import Team,Payment,Player,Match,EventTeam,Event,Goal
+from .models import Team,Payment,Player,Match,EventTeam,Event,Goal,Fall
 from django.core.mail import send_mail
 from django.conf import settings
 from django.utils.crypto import get_random_string
@@ -262,3 +262,23 @@ class GoalForm(forms.ModelForm):
         # Perform validation again before saving
         self.clean()
         return super().save(commit=commit)
+
+
+
+class CustomRadioSelect(forms.RadioSelect):
+    template_name = 'widgets/custom_radio.html'  # Custom template for radio buttons
+
+class FoulForm(forms.ModelForm):
+    class Meta:
+        model = Fall
+        fields = ['match', 'player', 'fall_category', 'fall_type', 'fall_description', 'fall_time']
+        widgets = {
+            'fall_category': CustomRadioSelect,  # Use radio buttons for this field
+            'fall_type': forms.Select,      # Use radio buttons for this field
+        }
+        labels = {
+            'fall_category': 'Foul Category',
+            'fall_type': 'Foul Type',
+            'fall_description': 'Description',
+            'fall_time': 'Time of Foul',
+        }

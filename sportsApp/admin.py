@@ -144,6 +144,10 @@ class GoalAdmin(admin.ModelAdmin):
     
     list_display = ('id','player','match','goal_time','goal_type')
 
+@admin.register(Fall)
+class FoulAdmin(admin.ModelAdmin):
+    list_display = ('id','player','match','fall_time','fall_type','fall_category')
+
 
 class FallInline(admin.TabularInline):
     model = Fall

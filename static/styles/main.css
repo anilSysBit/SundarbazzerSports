@@ -1765,7 +1765,19 @@ p {
 }
 .goal_alert_box .size_manager .form-control {
   text-align: center;
-  margin-top: 10pxpx;
+  margin-top: 10px;
+}
+.goal_alert_box .size_manager .form-control select {
+  height: 40px;
+  border: 1px solid white;
+  padding: 5px;
+  border-radius: 5px;
+  width: 50%;
+  background-color: transparent;
+  color: white;
+}
+.goal_alert_box .size_manager .form-control select option {
+  color: black;
 }
 .goal_alert_box .size_manager .form-control label {
   color: white;

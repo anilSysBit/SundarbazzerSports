@@ -2081,7 +2081,20 @@ p{
       // width: 50%;
       // border: 1px solid white;
       text-align: center;
-      margin-top: 10pxpx;
+      margin-top: 10px;
+
+      select{
+        height: 40px;
+        border: 1px solid white;
+        padding: 5px;
+        border-radius: 5px;
+        width: 50%;
+        background-color: transparent;
+        color: white;
+        option{
+          color: black;
+        }
+      }
       label{
         color: white;
         font-size: 0.9rem;

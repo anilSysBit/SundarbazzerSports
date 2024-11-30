@@ -371,6 +371,64 @@ const handleOpenGoalAlert =()=>{
 }
 
 
+const fetchPlayerData =async(id)=>{
+
+  const response = await fetch(`/player-data-api/${id}/`,{
+    method:"get"
+  })
+
+  return response.json()
+
+}
+
+const handleOpenFoulAlert =async()=>{
+  const selected = selectedData[0];
+
+  const responseData = await fetchPlayerData(selected.id)
+
+
+  console.log('selecte dtaa',selectedData)
+  if(selectedData.length < 1){
+    showSnackBar(message="You should choose player before adding foul",type='error')
+    return;
+  }else if(selectedData.length > 1){
+    showSnackBar(message="Two players cannot be selected at one to add a foul",type='error')
+    return;
+  }
+  const alertbox = document.getElementById('foul-alert-box');
+  alertbox.reset()
+
+  const timeInput = document.getElementById('custom-time-foul')
+
+  // alertbox.remove()
+
+  const timeValue = getCustomCurrentTime()
+  timeInput.value = timeValue;
+
+  
+  // const note = document.getElementById('note')
+  const header = document.getElementById('header-foul')
+  // const sub_header = document.getElementById('sub-header')
+  const jersey_no = document.getElementById(`jersey-nofoul`)
+  const player_name = document.getElementById('player-namefoul')
+  const player_id = document.getElementById('player-foul')
+  
+
+  player_id.value = responseData.id
+
+  header.textContent = `${responseData.name} (${responseData.team_name})`
+  // sub_header.textContent = `${selected.team_name}`
+
+
+  jersey_no.textContent = `${responseData.jersey_no}`
+  player_name.textContent = `${responseData.name}`
+
+  alertbox.classList.add('show')
+}
+
+
+
+
 const handleCloseAlerts =()=>{
   const boxes = document.querySelectorAll('.dialog-overlay')
   const alertbox = document.getElementById('goal-alert-box');

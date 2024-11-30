@@ -56,6 +56,59 @@ async function addGoalFromForm(e) {
 
 
 
+async function addFoulFromForm(e) {
+    e.preventDefault();
+    try {
+        // Get the form element
+        const form = document.getElementById('foul-alert-box');
+
+        // Create FormData object to gather form data
+        const formData = new FormData(form);
+
+        // Convert FormData to a plain object
+        const goalData = Object.fromEntries(formData.entries());
+        console.log(goalData)
+
+
+
+        if(!goalData.fall_time){
+            showSnackBar(message='Enter the time when player scored a goal, or check the add current time box',type='error',position='top')
+            return;
+        }
+        // return;
+        // Make the API request
+        const response = await fetch('/add-foul/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': goalData.csrfmiddlewaretoken, // Include CSRF token
+            },
+            body: formData, // Send FormData directly for compatibility with Django
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Error:', errorData.errors || errorData.message);
+            snack.showSnack(message=errorData.message,type='error')
+
+            return { success: false, errors: errorData.errors || errorData.message };
+        }
+
+        const responseData = await response.json();
+        console.log('Goal added successfully:', responseData);
+        // return { success: true, data: responseData };
+        snack.showSnack(message=responseData.message,type='success')
+        form.classList.remove('show')
+        removeSelection()
+        updateMatchData();
+        
+    } catch (error) {
+        console.error('Unexpected error:', error);
+        return { success: false, errors: 'An unexpected error occurred.' };
+    }
+}
+
+
+
 // JavaScript function to update the player stats dynamically
 function updateMatchData() {
     fetch(`/match-data-api/${matchId}/`)
@@ -93,3 +146,26 @@ function updateMatchData() {
         });
 }
 
+
+
+
+const checkbox = document.getElementById('checkbox');
+const timeInputBox = document.getElementById('time-input-box');
+const timeInput = document.getElementById('custom-time')
+
+
+function toggleTimeInput() {
+    const prevValue = getCustomCurrentTime()
+    if (checkbox.checked) {
+        // timeInputBox.style.display = 'none';
+        timeInput.value = prevValue
+        // timeInputBox.style.display = 'block';
+
+    } else {
+        timeInput.value = prevValue;
+
+    }
+}
+
+// Attach event listener to toggle visibility
+checkbox.addEventListener('change', ()=>toggleTimeInput());
