@@ -50,16 +50,20 @@ class GuestAdmin(admin.ModelAdmin):
 
 @admin.register(MatchTimeManager)
 class MatchTimeManagerAdmin(admin.ModelAdmin):
-    list_display = ('match', 'start_time', 'resumed_time', 'paused_time', 'total_elapsed_time', 'extra_time')
-    list_filter = ('start_time', 'resumed_time')
-    search_fields = ('match__id',)
-    readonly_fields = ('total_elapsed_time',)
-    fieldsets = (
-        (None, {
-            'fields': ('match', 'start_time', 'resumed_time', 'paused_time', 'half_time_interval', 'extra_time', 'full_time_duration', 'total_elapsed_time')
-        }),
-        ('Advanced options', {
-            'classes': ('collapse',),
-            'fields': (),
-        }),
+    list_display = (
+        'match', 
+        'start_time', 
+        'half_time_interval', 
+        'extra_time', 
+        'full_time_duration', 
+        'match_ended', 
+        'match_status'
     )
+    search_fields = ('match__id',)  # Search by match id
+    list_filter = ('match_ended', 'start_time')  # Filter by match end status and start time
+    readonly_fields = ('match_status',)  # Make match status read-only as it's calculated
+
+    # Optionally, you can add inlines for related models, if there are any like `pause_resume_sessions`
+    # inlines = [PauseResumeSessionInline]
+
+# Register the model and admin class

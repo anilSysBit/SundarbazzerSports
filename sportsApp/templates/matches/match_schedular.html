@@ -20,6 +20,8 @@
         </div>
 
           <div class="side side2">
+
+            <!-- {{time_form.as_p}} -->
             <div class="form-control">
                     <p>Select Goal Type</p>
                    {% for value,label in goal_type_choices %}
@@ -42,7 +44,7 @@
                 <input type="text" class="time" id="custom-time" name="goal_time" placeholder="HH:mm:ss">
             </div>
         <div class="button_box">
-            <button class="global_btn success goal">Goal</button>
+            <button class="global_btn secondary goal">Start Match</button>
             <button class="global_btn outline" onclick="handleCloseAlerts()" type="button">Cancel</button>
 
         </div>

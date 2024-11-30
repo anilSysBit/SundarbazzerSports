@@ -42,52 +42,59 @@ class Match(models.Model):
         return f"{self.team1} vs {self.team2} on {self.match_date}"
 
 
+
+
 class MatchTimeManager(models.Model):
-    match = models.OneToOneField('Match', on_delete=models.CASCADE, related_name='time_manager')
+    match = models.OneToOneField(Match, on_delete=models.CASCADE, related_name='time_manager')
     start_time = models.DateTimeField(null=True, blank=True, help_text="The time the match started.")
-    paused_time = models.DurationField(default=timedelta(0), help_text="The total duration the match was paused.")
-    resumed_time = models.DateTimeField(null=True, blank=True, help_text="The time the match resumed after a pause.")
     half_time_interval = models.DurationField(default=timedelta(minutes=15), help_text="The interval duration at halftime.")
     extra_time = models.DurationField(default=timedelta(0), help_text="Additional time added to the match.")
     full_time_duration = models.DurationField(default=timedelta(minutes=90), help_text="Regular full-time duration of the match.")
-    total_elapsed_time = models.DurationField(default=timedelta(0), help_text="Total elapsed time of the match.")
+    match_ended = models.BooleanField(default=False, help_text="Indicates whether the match has ended.")
 
-    def calculate_total_elapsed_time(self):
+    @property
+    def total_paused_time(self):
         """
-        Updates the total elapsed time considering pauses, start time, and extra time.
+        Calculates the total paused time by summing up all pause durations.
         """
-        if self.start_time:
-            current_time = self.resumed_time or models.functions.Now()
-            total_playing_time = (current_time - self.start_time) - self.paused_time
-            self.total_elapsed_time = total_playing_time + self.extra_time
+        return sum(
+            (session.duration() for session in self.pause_resume_sessions.all()),
+            timedelta(0)
+        )
 
-    def pause_match(self, pause_time):
+    @property
+    def match_status(self):
         """
-        Updates paused time.
+        Determines the current status of the match.
         """
-        if self.resumed_time:
-            self.paused_time += pause_time - self.resumed_time
-            self.resumed_time = None
-
-    def resume_match(self, resume_time):
-        """
-        Sets resumed time.
-        """
-        self.resumed_time = resume_time
-
-    def end_match(self):
-        """
-        Ends the match and calculates the final elapsed time.
-        """
-        self.calculate_total_elapsed_time()
-        self.save()
+        if self.match_ended:
+            return "Ended"
+        if not self.start_time:
+            return "Not Started"
+        # If there's a pause without a resume, the match is paused
+        if self.pause_resume_sessions.filter(resumed_at__isnull=True).exists():
+            return "Paused"
+        return "Ongoing"
 
     def __str__(self):
-        return f"Time Manager for Match {self.match.id}"
+        return f"Time Manager for Match {self.match.id} - Status: {self.match_status}"
 
 
+class MatchPauseResume(models.Model):
+    match_time_manager = models.ForeignKey('MatchTimeManager', on_delete=models.CASCADE, related_name='pause_resume_sessions')
+    paused_at = models.DateTimeField(help_text="The time when the match was paused.")
+    resumed_at = models.DateTimeField(null=True, blank=True, help_text="The time when the match resumed.")
+    
+    def duration(self):
+        """
+        Returns the duration of this pause if resumed.
+        """
+        if self.resumed_at:
+            return self.resumed_at - self.paused_at
+        return timedelta(0)
 
-
+    def __str__(self):
+        return f"Pause at {self.paused_at}, Resume at {self.resumed_at or 'Not Resumed'}"
 # Match Interruption Model
 
 class MatchInterruption(models.Model):

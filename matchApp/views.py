@@ -1,6 +1,6 @@
 
 from django.shortcuts import render,get_object_or_404
-from django.shortcuts import HttpResponse,render,redirect
+from django.shortcuts import render,redirect
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseBadRequest,JsonResponse
 from django.views.decorators.http import require_POST
@@ -10,7 +10,7 @@ from sportsApp.models import Event
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.paginator import Paginator
-from .forms import GoalForm,FoulForm
+from .forms import GoalForm,FoulForm,MatchTimeManagerForm
 from django.contrib import messages
 from sportsApp import constants
 from django.db.models import Count,Q
@@ -28,6 +28,7 @@ def match_list_view(request):
 def match_view(request,match_id):
     match = get_object_or_404(Match,pk=match_id)
     event = get_object_or_404(Event,pk=match.event.id)
+    timeManagerForm = MatchTimeManagerForm(instance=match)
     players1 = Player.objects.filter(team=match.team1.team).order_by('-is_active')
     players2 = Player.objects.filter(team=match.team2.team).order_by('-is_active')
 
@@ -37,7 +38,7 @@ def match_view(request,match_id):
     elif match.status == 'Initiated':
         details['match_status'] = 'Match Has Not Started'
     
-    return render(request,'matches/match_view.html',{'event':event,'match':match,'player1':players1,'player2':players2})
+    return render(request,'matches/match_view.html',{'event':event,'match':match,'time_form':timeManagerForm,'player1':players1,'player2':players2})
 
 
 # Match Simulator

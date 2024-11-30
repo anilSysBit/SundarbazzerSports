@@ -1,10 +1,11 @@
 
 from django import forms
-from .models import Match,Goal,Fall
+from .models import Match,Goal,Fall,MatchTimeManager
 from sportsApp.models import EventTeam
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.db import models
+from datetime import timedelta
 
 class MatchForm(forms.ModelForm):
     class Meta:
@@ -123,3 +124,8 @@ class FoulForm(forms.ModelForm):
             'fall_description': 'Description',
             'fall_time': 'Time of Foul',
         }
+
+
+
+class MatchTimeManagerForm():
+    pass
