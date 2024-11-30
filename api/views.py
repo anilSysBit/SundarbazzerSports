@@ -4,7 +4,8 @@ from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework import generics
-from sportsApp.models import TeamRequest,Team,Event, EventOrganizer,Match
+from sportsApp.models import TeamRequest,Team,Event, EventOrganizer
+from matchApp.models import Match
 from .serializers.team_serializers import TeamRequestSerializer,TeamSerializer,UserProfileSerializer
 from django.contrib.auth.models import User
 from .serializers.event_serializers import EventListSerializer, EventOrganizerSerializer,OrganizerEventListSerializer

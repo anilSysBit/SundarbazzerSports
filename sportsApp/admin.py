@@ -1,6 +1,6 @@
 from typing import Any
 from django.contrib import admin
-from .models import TeamRequest,TeamOwner,Payment,Team,Transaction,EventMember,EventTeam,EventOrganizer,EventRequest,Guest, PointTable,Coach,Goal,Fall,Substitution,PlayerMatchEvents, TieSheet, Match,MatchStatus,RecentEvents,LatestNews,Player,Messages,Subscriber,Event,TeamStatus,Sponser,TeamDesign
+from .models import TeamRequest,TeamOwner,Payment,Team,Transaction,EventMember,EventTeam,EventOrganizer,EventRequest, PointTable,Coach,RecentEvents,LatestNews,Player,Messages,Subscriber,Event,TeamStatus,Sponser,TeamDesign
 
 from django.utils.html import mark_safe
 from .utils import send_registration_mail
@@ -135,42 +135,6 @@ class EventAdmin(admin.ModelAdmin):
     # list_filter = ('is_verified', 'registration_start_date', 'resistration_end_date', 'event_start_date', 'event_end_date', 'created_at', 'updated_at')
 
 
-class GoalInline(admin.TabularInline):
-    model = Goal
-    extra = 1
-
-@admin.register(Goal)
-class GoalAdmin(admin.ModelAdmin):
-    
-    list_display = ('id','player','match','goal_time','goal_type')
-
-@admin.register(Fall)
-class FoulAdmin(admin.ModelAdmin):
-    list_display = ('id','player','match','fall_time','fall_type','fall_category')
-
-
-class FallInline(admin.TabularInline):
-    model = Fall
-    extra = 1
-
-class SubstitutionInline(admin.TabularInline):
-    model = Substitution
-    extra = 1
-
-class PlayerEventsInline(admin.TabularInline):
-    model = PlayerMatchEvents
-    extra = 1
-
-
-
-@admin.register(Match)
-class MatchAdmin(admin.ModelAdmin):
-    inlines = [GoalInline,FallInline,SubstitutionInline,PlayerEventsInline]
-    list_display = ('team_vs','match_date','place','match_complete')
-
-
-    def team_vs(self,obj):
-        return f'{obj.team1} vs {obj.team2}'
 
 @admin.register(Sponser)
 class SponserAdmin(admin.ModelAdmin):
@@ -206,9 +170,7 @@ class EventMemberAdmin(admin.ModelAdmin):
     list_display = ('first_name','last_name','role','salary','organizer')
 
 
-@admin.register(Guest)
-class GuestAdmin(admin.ModelAdmin):
-    list_display = ('name','designation','is_event_guest','match')
+
 
 
 # add a event team
@@ -226,3 +188,5 @@ class TransactionAdmin(admin.ModelAdmin):
 
     def payment_user(self,obj):
         return obj.payment.user
+
+

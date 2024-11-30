@@ -1,5 +1,7 @@
 from rest_framework import serializers
-from sportsApp.models import TeamRequest, Team, Match
+from sportsApp.models import TeamRequest, Team
+from matchApp.models import Match
+
 
 from rest_framework.permissions import IsAuthenticated
 from django.db import transaction

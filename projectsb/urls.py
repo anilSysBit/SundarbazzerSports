@@ -23,6 +23,7 @@ from address import views as address_view
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('sportsApp.urls')),
+    path('match/',include('matchApp.urls')),
     path("api/",include('api.urls')),
     path('ajax/load_districts/', address_view.load_districts, name='load_districts'),
     path('ajax/load_municipalities/', address_view.load_municipalities, name='load_municipalities'),

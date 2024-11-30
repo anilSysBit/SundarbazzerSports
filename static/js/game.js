@@ -23,7 +23,7 @@ async function addGoalFromForm(e) {
         }
         // return;
         // Make the API request
-        const response = await fetch('/add-goal/', {
+        const response = await fetch('/match/add-goal/', {
             method: 'POST',
             headers: {
                 'X-CSRFToken': goalData.csrfmiddlewaretoken, // Include CSRF token
@@ -77,7 +77,7 @@ async function addFoulFromForm(e) {
         }
         // return;
         // Make the API request
-        const response = await fetch('/add-foul/', {
+        const response = await fetch('/match/add-foul/', {
             method: 'POST',
             headers: {
                 'X-CSRFToken': goalData.csrfmiddlewaretoken, // Include CSRF token
@@ -111,7 +111,7 @@ async function addFoulFromForm(e) {
 
 // JavaScript function to update the player stats dynamically
 function updateMatchData() {
-    fetch(`/match-data-api/${matchId}/`)
+    fetch(`/match/match-data-api/${matchId}/`)
         .then(response => response.json())
         .then(data => {
 

@@ -89,3 +89,11 @@ class FoulCategory(models.TextChoices):
     NORMAL_FALL = 'NORMAL_FALL', 'Normal Fall'
     YELLOW_CARD = 'YELLOW_CARD', 'Yellow Card'
     RED_CARD = 'RED_CARD', 'Red Card'
+
+
+class PlayerEventStatusType(models.TextChoices):
+    FREEKICK = 'FREEKICK', 'FreeKick'
+    CORNER = 'CORNER', 'Corner'
+    PENALTY = 'PENALTY', 'Penalty'
+    OFFSIDE = 'OFFSIDE', 'Offside'
+    INJURY = 'INJURY', 'Injury'

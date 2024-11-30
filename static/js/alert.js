@@ -384,7 +384,6 @@ const fetchPlayerData =async(id)=>{
 const handleOpenFoulAlert =async()=>{
   const selected = selectedData[0];
 
-  const responseData = await fetchPlayerData(selected.id)
 
 
   console.log('selecte dtaa',selectedData)
@@ -395,6 +394,9 @@ const handleOpenFoulAlert =async()=>{
     showSnackBar(message="Two players cannot be selected at one to add a foul",type='error')
     return;
   }
+
+  const responseData = await fetchPlayerData(selected.id)
+
   const alertbox = document.getElementById('foul-alert-box');
   alertbox.reset()
 

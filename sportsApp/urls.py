@@ -30,10 +30,9 @@ path('create-team/', views.create_team_view, name='create-team'),
 
     # matches
 
-    path('matches/',views.match_list_view,name='match'),
     path('delete-match/<int:match_id>/',views.delete_match_view,name='delete-match'),
 
-    # events
+    # eventsf
 
     path('events/',views.event_list_view,name='event'),
     path('event/<int:event_id>/',views.event_profile_view,name='event-profile'),
@@ -48,8 +47,6 @@ path('create-team/', views.create_team_view, name='create-team'),
     # player api
     path('player-data-api/<int:player_id>/',views.player_data_api,name='player-api'),
 
-    # Matches
-    path("match/<int:match_id>/",views.match_view,name='match-profile'),
     # path("create-team/",views.submit_team_request,name='submit_team_request'),
     path("success_state/",views.success_state,name="success_state"),
     path('payment/',views.esewa_payment,name='payment'),
@@ -58,16 +55,11 @@ path('create-team/', views.create_team_view, name='create-team'),
     path("payment/successfull",views.esewa_response,name='payment_successfull'),
     path("join",views.join_now,name='join_now'),
     # for event
-    # path("organizer/",EventView.index , name='organizer')
 
 
-    # game simulator
-
-    path('add-goal/',views.add_goal_view,name='add-goal'),
-    path('add-foul/',views.add_foul_view,name='add-foul'),
-    path('game-simulation/<int:match_id>/',views.match_simulator_view,name='match-simulate'),
-    path('match-data-api/<int:match_id>/',views.match_data_api,name='match_data_api'),
 ]
+
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
