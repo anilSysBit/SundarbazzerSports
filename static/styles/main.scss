@@ -2077,11 +2077,27 @@ p{
       margin-top: 5px;
     }
 
+    .form-box{
+      // width: 50%;
+      border: 1px solid white;
+    }
+
     .form-control{
       // width: 50%;
       // border: 1px solid white;
       text-align: center;
-      margin-top: 10px;
+      // margin-top: 10px;
+
+      input[type="text"]{
+        border: 1px solid white;
+        height: 40px;
+        background-color: transparent;
+        color: white;
+        padding: 5px;
+        border-radius: 8px;
+        width: 100%;
+        max-width: 300px;
+      }
 
       select{
         height: 40px;
@@ -2118,8 +2134,26 @@ p{
       
       
     }
+
+    .schedule_match{
+      border: 1px solid white;
+      // display: flex;
+      place-content: center;
+      place-items: center;
+      // width: 50%;
+      .basic-form{
+        width: 50%;
+        box-shadow: none;
+        .form-control{
+          width: 100%;
+        }
+      }
+    }
+
   }
 }
+
+
 
 
 

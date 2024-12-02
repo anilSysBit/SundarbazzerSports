@@ -1763,9 +1763,21 @@ p {
 .goal_alert_box .size_manager .detail_box {
   margin-top: 5px;
 }
+.goal_alert_box .size_manager .form-box {
+  border: 1px solid white;
+}
 .goal_alert_box .size_manager .form-control {
   text-align: center;
-  margin-top: 10px;
+}
+.goal_alert_box .size_manager .form-control input[type=text] {
+  border: 1px solid white;
+  height: 40px;
+  background-color: transparent;
+  color: white;
+  padding: 5px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 300px;
 }
 .goal_alert_box .size_manager .form-control select {
   height: 40px;
@@ -1794,6 +1806,18 @@ p {
 }
 .goal_alert_box .size_manager .form-control input[type=time]::-webkit-calendar-picker-indicator {
   filter: invert(100%) !important; /* Inverts the color of the clock icon to white */
+}
+.goal_alert_box .size_manager .schedule_match {
+  border: 1px solid white;
+  place-content: center;
+  place-items: center;
+}
+.goal_alert_box .size_manager .schedule_match .basic-form {
+  width: 50%;
+  box-shadow: none;
+}
+.goal_alert_box .size_manager .schedule_match .basic-form .form-control {
+  width: 100%;
 }
 
 .wrapper {

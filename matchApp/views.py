@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.http import HttpResponseBadRequest,JsonResponse
 from django.views.decorators.http import require_POST
 from django.db import IntegrityError
-from .models import Match,Goal,Player
+from .models import Match,Goal,Player,MatchTimeManager
 from sportsApp.models import Event
 from django.contrib.auth.models import User
 from django.conf import settings
@@ -28,7 +28,9 @@ def match_list_view(request):
 def match_view(request,match_id):
     match = get_object_or_404(Match,pk=match_id)
     event = get_object_or_404(Event,pk=match.event.id)
-    timeManagerForm = MatchTimeManagerForm(instance=match)
+
+    time_manager, created = MatchTimeManager.objects.get_or_create(match=match)
+    timeManagerForm = MatchTimeManagerForm(instance=time_manager)
     players1 = Player.objects.filter(team=match.team1.team).order_by('-is_active')
     players2 = Player.objects.filter(team=match.team2.team).order_by('-is_active')
 

@@ -5,7 +5,7 @@ from sportsApp.models import EventTeam
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.db import models
-from datetime import timedelta
+from datetime import timedelta,datetime
 
 class MatchForm(forms.ModelForm):
     class Meta:
@@ -126,6 +126,29 @@ class FoulForm(forms.ModelForm):
         }
 
 
-
-class MatchTimeManagerForm():
-    pass
+class MatchTimeManagerForm(forms.ModelForm):
+    class Meta:
+        model = MatchTimeManager
+        fields = [
+            'match',
+            'start_time',
+            'half_time_interval',
+            'extra_time_first_half',
+            'extra_time_full_time',
+            'full_time_duration',
+            'match_ended'
+        ]
+        widgets = {
+            'start_time': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'half_time_interval': forms.TimeInput(attrs={'type': 'time'}),
+            'extra_time_first_half': forms.TimeInput(attrs={'type': 'time'}),
+            'extra_time_full_time': forms.TimeInput(attrs={'type': 'time'}),
+            'full_time_duration': forms.TimeInput(attrs={'type': 'time'}),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.get('instance')
+        if instance and instance.start_time is None and instance.match.match_date and instance.match.match_time:
+            # Prefill start_time from match_date and match_time
+            instance.start_time = datetime.combine(instance.match.match_date, instance.match.match_time)
+        super().__init__(*args, **kwargs)

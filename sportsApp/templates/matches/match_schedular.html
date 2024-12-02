@@ -19,30 +19,28 @@
         </div>
         </div>
 
-          <div class="side side2">
+          <div class="side side2 schedule_match">
 
-            <!-- {{time_form.as_p}} -->
-            <div class="form-control">
-                    <p>Select Goal Type</p>
-                   {% for value,label in goal_type_choices %}
 
-                   <div class="custom-radio">
-                    <input type="radio" id="{{value}}" name="goal_type" value="{{value}}">
-                    <label for="{{value}}" class="radio-label">{{label}}</label>
-                </div>
-
-                   {% endfor %}
-            </div>
-
-            <div class="form-control mt-10">
+            <!-- <div class="form-control mt-10">
                 <label for="checkbox">Add Current Time</label>
                 <input type="checkbox" id="checkbox">
-            </div>
-            <div class="form-control" id="time-input-box">
+            </div> -->
+            <!-- <div class="form-control" id="time-input-box">
                 <label for="time-input">Enter Time (24 hr format)</label>
                 <br>
                 <input type="text" class="time" id="custom-time" name="goal_time" placeholder="HH:mm:ss">
-            </div>
+            </div> -->
+
+       <div class="basic-form">
+        <div class="form-container">
+           <div class="form-control">
+            <label for="id_start_time">Match Start Date Time</label>
+            {{time_form.start_time}}
+           </div>
+        </div>
+       </div>
+
         <div class="button_box">
             <button class="global_btn secondary goal">Start Match</button>
             <button class="global_btn outline" onclick="handleCloseAlerts()" type="button">Cancel</button>

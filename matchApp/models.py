@@ -48,7 +48,8 @@ class MatchTimeManager(models.Model):
     match = models.OneToOneField(Match, on_delete=models.CASCADE, related_name='time_manager')
     start_time = models.DateTimeField(null=True, blank=True, help_text="The time the match started.")
     half_time_interval = models.DurationField(default=timedelta(minutes=15), help_text="The interval duration at halftime.")
-    extra_time = models.DurationField(default=timedelta(0), help_text="Additional time added to the match.")
+    extra_time_first_half = models.DurationField(default=timedelta(0))
+    extra_time_full_time = models.DurationField(default=timedelta(0))
     full_time_duration = models.DurationField(default=timedelta(minutes=90), help_text="Regular full-time duration of the match.")
     match_ended = models.BooleanField(default=False, help_text="Indicates whether the match has ended.")
 

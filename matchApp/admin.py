@@ -54,7 +54,7 @@ class MatchTimeManagerAdmin(admin.ModelAdmin):
         'match', 
         'start_time', 
         'half_time_interval', 
-        'extra_time', 
+        # 'extra_time', 
         'full_time_duration', 
         'match_ended', 
         'match_status'
