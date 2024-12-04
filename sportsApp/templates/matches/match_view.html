@@ -79,7 +79,9 @@
 
             <a href="{% url 'edit-match-admin' match.id %}"><button class="global_btn">Schedule / Edit Match Details</button></a>
             <a href="{% url 'edit-event' event.id %}?focus=id_match_duration"><button class="global_btn outline">Edit Match Duration</button></a>
-            <a  href="{% url 'match-simulate' match.id %}" target="_blank"><button class="global_btn success">Run this Match</button></a>
+            <!-- <a  href="{% url 'match-simulate' match.id %}" target="_blank"><button class="global_btn success">Run this Match</button></a> -->
+            <button class="global_btn success" onclick="handleOpenMatchSchedular()">Run this Match</button>
+
             <button class="global_btn secondary">View Match Details</button>
         </div>
 

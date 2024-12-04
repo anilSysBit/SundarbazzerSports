@@ -442,3 +442,11 @@ const handleCloseAlerts =()=>{
   })
 }
 
+
+
+// match schedular
+
+const handleOpenMatchSchedular=()=>{
+  const alertbox = document.getElementById('match-schedule-alert-box')
+  alertbox.classList.add('show')
+}

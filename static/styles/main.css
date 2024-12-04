@@ -1808,13 +1808,11 @@ p {
   filter: invert(100%) !important; /* Inverts the color of the clock icon to white */
 }
 .goal_alert_box .size_manager .schedule_match {
-  border: 1px solid white;
   place-content: center;
   place-items: center;
 }
 .goal_alert_box .size_manager .schedule_match .basic-form {
   width: 50%;
-  box-shadow: none;
 }
 .goal_alert_box .size_manager .schedule_match .basic-form .form-control {
   width: 100%;

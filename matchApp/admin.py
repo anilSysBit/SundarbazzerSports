@@ -52,15 +52,13 @@ class GuestAdmin(admin.ModelAdmin):
 class MatchTimeManagerAdmin(admin.ModelAdmin):
     list_display = (
         'match', 
-        'start_time', 
-        'half_time_interval', 
-        # 'extra_time', 
-        'full_time_duration', 
+        'extra_time_first_half',    
+        'extra_time_full_time', 
         'match_ended', 
         'match_status'
     )
     search_fields = ('match__id',)  # Search by match id
-    list_filter = ('match_ended', 'start_time')  # Filter by match end status and start time
+    list_filter = ('match_ended',)  # Filter by match end status and start time
     readonly_fields = ('match_status',)  # Make match status read-only as it's calculated
 
     # Optionally, you can add inlines for related models, if there are any like `pause_resume_sessions`

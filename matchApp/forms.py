@@ -131,24 +131,24 @@ class MatchTimeManagerForm(forms.ModelForm):
         model = MatchTimeManager
         fields = [
             'match',
-            'start_time',
-            'half_time_interval',
+            'match_start_time',
             'extra_time_first_half',
             'extra_time_full_time',
-            'full_time_duration',
             'match_ended'
         ]
         widgets = {
-            'start_time': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-            'half_time_interval': forms.TimeInput(attrs={'type': 'time'}),
-            'extra_time_first_half': forms.TimeInput(attrs={'type': 'time'}),
-            'extra_time_full_time': forms.TimeInput(attrs={'type': 'time'}),
-            'full_time_duration': forms.TimeInput(attrs={'type': 'time'}),
+            'match_start_time': forms.TimeInput (attrs={'type': 'time'}),
+            'extra_time_first_half': forms.TimeInput(attrs={'type': 'duration'}),
+            'extra_time_full_time': forms.TimeInput(attrs={'type': 'duration'}),
         }
     
-    def __init__(self, *args, **kwargs):
+
+    def __init__(self,*args,**kwargs):
         instance = kwargs.get('instance')
-        if instance and instance.start_time is None and instance.match.match_date and instance.match.match_time:
-            # Prefill start_time from match_date and match_time
-            instance.start_time = datetime.combine(instance.match.match_date, instance.match.match_time)
-        super().__init__(*args, **kwargs)
+
+        if instance and instance.match_start_time is None:
+            match = instance.match
+
+            if match.match_time:
+                instance.match_start_time = match.match_time
+        super().__init__(*args,**kwargs)

@@ -2136,14 +2136,15 @@ p{
     }
 
     .schedule_match{
-      border: 1px solid white;
+      // border: 1px solid white;
       // display: flex;
       place-content: center;
       place-items: center;
       // width: 50%;
       .basic-form{
         width: 50%;
-        box-shadow: none;
+        // box-shadow: none;
+
         .form-control{
           width: 100%;
         }

@@ -45,24 +45,26 @@ class Match(models.Model):
 
 
 class MatchTimeManager(models.Model):
-    match = models.OneToOneField(Match, on_delete=models.CASCADE, related_name='time_manager')
-    start_time = models.DateTimeField(null=True, blank=True, help_text="The time the match started.")
-    half_time_interval = models.DurationField(default=timedelta(minutes=15), help_text="The interval duration at halftime.")
-    extra_time_first_half = models.DurationField(default=timedelta(0))
-    extra_time_full_time = models.DurationField(default=timedelta(0))
-    full_time_duration = models.DurationField(default=timedelta(minutes=90), help_text="Regular full-time duration of the match.")
-    match_ended = models.BooleanField(default=False, help_text="Indicates whether the match has ended.")
+    match = models.OneToOneField(
+        'Match',
+        on_delete=models.CASCADE,
+        related_name='time_manager'
+    )
+    match_start_time = models.TimeField(blank=True,null=True)
 
-    @property
-    def total_paused_time(self):
-        """
-        Calculates the total paused time by summing up all pause durations.
-        """
-        return sum(
-            (session.duration() for session in self.pause_resume_sessions.all()),
-            timedelta(0)
-        )
+    extra_time_first_half = models.DurationField(
+        default=timedelta(0), 
+        help_text="Extra time added after the first half."
+    )
+    extra_time_full_time = models.DurationField(
+        default=timedelta(0), 
+        help_text="Extra time added after the full-time duration."
+    )
 
+    match_ended = models.BooleanField(
+        default=False, 
+        help_text="Indicates whether the match has ended."
+    )
     @property
     def match_status(self):
         """
@@ -70,7 +72,7 @@ class MatchTimeManager(models.Model):
         """
         if self.match_ended:
             return "Ended"
-        if not self.start_time:
+        if self.match.start_time is None:
             return "Not Started"
         # If there's a pause without a resume, the match is paused
         if self.pause_resume_sessions.filter(resumed_at__isnull=True).exists():
@@ -79,7 +81,6 @@ class MatchTimeManager(models.Model):
 
     def __str__(self):
         return f"Time Manager for Match {self.match.id} - Status: {self.match_status}"
-
 
 class MatchPauseResume(models.Model):
     match_time_manager = models.ForeignKey('MatchTimeManager', on_delete=models.CASCADE, related_name='pause_resume_sessions')

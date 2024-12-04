@@ -14,7 +14,7 @@ from .forms import GoalForm,FoulForm,MatchTimeManagerForm
 from django.contrib import messages
 from sportsApp import constants
 from django.db.models import Count,Q
-
+from utils.time_formatter import format_duration
 
 
 def match_list_view(request):
@@ -29,6 +29,13 @@ def match_view(request,match_id):
     match = get_object_or_404(Match,pk=match_id)
     event = get_object_or_404(Event,pk=match.event.id)
 
+    match_duration = format_duration(event.match_duration)
+    half_time = event.match_duration / 2
+    match_time = {
+        'duration':match_duration,
+        'half_time':format_duration(half_time)
+    }
+
     time_manager, created = MatchTimeManager.objects.get_or_create(match=match)
     timeManagerForm = MatchTimeManagerForm(instance=time_manager)
     players1 = Player.objects.filter(team=match.team1.team).order_by('-is_active')
@@ -40,7 +47,7 @@ def match_view(request,match_id):
     elif match.status == 'Initiated':
         details['match_status'] = 'Match Has Not Started'
     
-    return render(request,'matches/match_view.html',{'event':event,'match':match,'time_form':timeManagerForm,'player1':players1,'player2':players2})
+    return render(request,'matches/match_view.html',{'event':event,'match':match,'match_time':match_time,'time_form':timeManagerForm,'player1':players1,'player2':players2})
 
 
 # Match Simulator
