@@ -12,7 +12,7 @@ urlpatterns = [
 
 
     # Team url admin panel
-path('create-team/', views.create_team_view, name='create-team'),
+    path('create-team/', views.create_team_view, name='create-team'),
     path("teams/",views.TeamView.as_view(),name="team"),
     path("teams/<int:team_id>/",views.team_profile,name="team-profile"),
     path("teams/<int:team_id>/players/",views.view_players,name="team-players"),

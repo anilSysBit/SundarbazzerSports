@@ -50,14 +50,18 @@ class MatchTimeManager(models.Model):
         on_delete=models.CASCADE,
         related_name='time_manager'
     )
-    match_start_time = models.TimeField(blank=True,null=True)
+    start_time = models.TimeField(blank=True,null=True)
 
     extra_time_first_half = models.DurationField(
-        default=timedelta(0), 
+        default=timedelta(0),
+        blank=True,
+        null=True, 
         help_text="Extra time added after the first half."
     )
     extra_time_full_time = models.DurationField(
         default=timedelta(0), 
+        blank=True,
+        null=True,
         help_text="Extra time added after the full-time duration."
     )
 
@@ -72,7 +76,7 @@ class MatchTimeManager(models.Model):
         """
         if self.match_ended:
             return "Ended"
-        if self.match.start_time is None:
+        if self.match.match_time is None:
             return "Not Started"
         # If there's a pause without a resume, the match is paused
         if self.pause_resume_sessions.filter(resumed_at__isnull=True).exists():

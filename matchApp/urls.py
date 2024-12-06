@@ -15,6 +15,10 @@ urlpatterns = [
     path('add-foul/',views.add_foul_view,name='add-foul'),
     path('game-simulation/<int:match_id>/',views.match_simulator_view,name='match-simulate'),
     path('match-data-api/<int:match_id>/',views.match_data_api,name='match_data_api'),
+
+
+    # adding match time scheduling
+    path('match-schedule/<int:pk>/',views.match_time_manager_view,name='match-schedule')
 ]
 
 if settings.DEBUG:

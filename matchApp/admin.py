@@ -51,11 +51,12 @@ class GuestAdmin(admin.ModelAdmin):
 @admin.register(MatchTimeManager)
 class MatchTimeManagerAdmin(admin.ModelAdmin):
     list_display = (
-        'match', 
+        'match',
+        'start_time',
         'extra_time_first_half',    
         'extra_time_full_time', 
         'match_ended', 
-        'match_status'
+        # 'match_status'
     )
     search_fields = ('match__id',)  # Search by match id
     list_filter = ('match_ended',)  # Filter by match end status and start time

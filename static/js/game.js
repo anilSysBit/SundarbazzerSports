@@ -169,3 +169,46 @@ function toggleTimeInput() {
 
 // Attach event listener to toggle visibility
 checkbox.addEventListener('change', ()=>toggleTimeInput());
+
+
+
+// function that handles the add match schedular 
+
+async function handleMatchSchedular(e,id){
+    e.preventDefault();
+
+
+
+    const form = document.getElementById('match-schedule-alert-box');
+
+    // Create FormData object to gather form data
+    const formData = new FormData(form);
+
+    // Convert FormData to a plain object
+    const goalData = Object.fromEntries(formData.entries());
+    console.log(goalData)
+
+    try{
+        const response = await fetch(`/match/match-schedule/${id || ''}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': goalData.csrfmiddlewaretoken, // Include CSRF token
+            },
+            body: formData, // Send FormData directly for compatibility with Django
+        });
+        const responseData = await response.json()
+        console.log('Match Schedule Response',responseData)
+
+        if(!response.ok){
+            snack.showSnack(message=responseData.message,type='error')
+        }else{
+            snack.showSnack(message=responseData.message,type='success')
+
+        }
+
+        form.classList.remove('show')
+
+    }catch(error){
+        console.log(error)
+    }
+}

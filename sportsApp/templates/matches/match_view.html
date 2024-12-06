@@ -1,6 +1,7 @@
 {% extends 'event/event_index.html' %}
 
 
+{% load static %}
 {%block content%}
 
     {% include 'matches/match_schedular.html' %}
@@ -152,4 +153,8 @@
             </div>
         </div>
     </div>
+
+
+
+    <script src="{% static 'js/game.js' %}"></script>
 {% endblock content %}

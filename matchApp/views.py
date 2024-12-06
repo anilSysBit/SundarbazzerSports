@@ -15,6 +15,7 @@ from django.contrib import messages
 from sportsApp import constants
 from django.db.models import Count,Q
 from utils.time_formatter import format_duration
+from django.views.decorators.csrf import csrf_exempt
 
 
 def match_list_view(request):
@@ -235,3 +236,32 @@ def game_stimulation_alerts():
     ]
      
      return alerts
+
+
+@csrf_exempt
+def match_time_manager_view(request, pk=None):
+    if request.method == 'POST':
+        if pk:
+            instance = get_object_or_404(MatchTimeManager, pk=pk)
+            form = MatchTimeManagerForm(request.POST, instance=instance)
+        else:
+            form = MatchTimeManagerForm(request.POST)
+        
+        if form.is_valid():
+            match_time_manager = form.save()
+            new_time = form.cleaned_data['start_time']
+
+            return JsonResponse({
+                'success': True,
+                'message': f'Match time manager updated successfully. New Time is {new_time}',
+                'data': {
+                }
+            })
+        else:
+            return JsonResponse({
+                'success': False,
+                'message': 'Invalid form data',
+                'errors': form.errors
+            }, status=400)
+    
+    return JsonResponse({'success': False, 'message': 'Invalid HTTP method'}, status=405)

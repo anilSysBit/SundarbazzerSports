@@ -131,13 +131,13 @@ class MatchTimeManagerForm(forms.ModelForm):
         model = MatchTimeManager
         fields = [
             'match',
-            'match_start_time',
+            'start_time',
             'extra_time_first_half',
             'extra_time_full_time',
             'match_ended'
         ]
         widgets = {
-            'match_start_time': forms.TimeInput (attrs={'type': 'time'}),
+            'start_time': forms.TimeInput (attrs={'type': 'time'}),
             'extra_time_first_half': forms.TimeInput(attrs={'type': 'duration'}),
             'extra_time_full_time': forms.TimeInput(attrs={'type': 'duration'}),
         }
@@ -146,9 +146,9 @@ class MatchTimeManagerForm(forms.ModelForm):
     def __init__(self,*args,**kwargs):
         instance = kwargs.get('instance')
 
-        if instance and instance.match_start_time is None:
+        if instance and instance.start_time is None:
             match = instance.match
 
             if match.match_time:
-                instance.match_start_time = match.match_time
+                instance.start_time = match.match_time
         super().__init__(*args,**kwargs)
