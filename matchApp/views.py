@@ -16,7 +16,7 @@ from sportsApp import constants
 from django.db.models import Count,Q
 from utils.time_formatter import format_duration
 from django.views.decorators.csrf import csrf_exempt
-
+from datetime import datetime
 
 def match_list_view(request):
     
@@ -25,16 +25,36 @@ def match_list_view(request):
     print(Match.objects.count())
     return render(request,'matches/all_match.html',{'matches':matches})
 
+
 # Create your views here.
 def match_view(request,match_id):
     match = get_object_or_404(Match,pk=match_id)
     event = get_object_or_404(Event,pk=match.event.id)
 
+    match_datetime = datetime.combine(match.match_date,match.match_time)
+
+    time_manager = get_object_or_404(MatchTimeManager,match=match)
+    match_status = constants.MatchStatus
+
+    if match.status == match_status.EXPIRED:
+        is_match_open = False
+    
+    elif datetime.now() > match_datetime and match.status != match_status.EXPIRED:
+        print('Running this')
+        match.status = constants.MatchStatus.ONGOING
+        match.save()
+        is_match_open = False
+    else:
+        is_match_open = True
+
+
     match_duration = format_duration(event.match_duration)
     half_time = event.match_duration / 2
     match_time = {
         'duration':match_duration,
-        'half_time':format_duration(half_time)
+        'half_time':format_duration(half_time),
+        'is_match_open':is_match_open,
+        'actual_time':datetime.combine(match.match_date,time_manager.start_time or match.match_time)
     }
 
     time_manager, created = MatchTimeManager.objects.get_or_create(match=match)
@@ -250,6 +270,8 @@ def match_time_manager_view(request, pk=None):
         if form.is_valid():
             match_time_manager = form.save()
             new_time = form.cleaned_data['start_time']
+
+            
 
             return JsonResponse({
                 'success': True,

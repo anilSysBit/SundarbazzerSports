@@ -37,10 +37,10 @@
             </div>
         </div>
 
-        {% if match.schedule %}
+        {% if match_time.is_match_open %}
         <div class="timer-container">
             <p>Match Start After</p>
-            <div id="timer" class="timer_box timer">{{ match.match_date|date:"Y-m-d" }} {{match.match_time|date:"H:i:s"}}</div>
+            <div id="timer" class="timer_box timer">{{ match_time.actual_time|date:"Y-m-d H:i:s"}}</div>
         </div>
         {% endif %}
 
@@ -78,10 +78,12 @@
                     <p>Match Duration : {{event.match_duration}} </p>
             </div>
 
+            <!-- <a  href="{% url 'match-simulate' match.id %}" target="_blank"><button class="global_btn success">Run this Match</button></a> -->
+            {% if match_time.is_match_open %}
             <a href="{% url 'edit-match-admin' match.id %}"><button class="global_btn">Schedule / Edit Match Details</button></a>
             <a href="{% url 'edit-event' event.id %}?focus=id_match_duration"><button class="global_btn outline">Edit Match Duration</button></a>
-            <!-- <a  href="{% url 'match-simulate' match.id %}" target="_blank"><button class="global_btn success">Run this Match</button></a> -->
-            <button class="global_btn success" onclick="handleOpenMatchSchedular()">Run this Match</button>
+                <button class="global_btn success" onclick="handleOpenMatchSchedular()">Run this Match</button>
+            {% endif %}
 
             <button class="global_btn secondary">View Match Details</button>
         </div>

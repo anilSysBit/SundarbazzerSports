@@ -30,6 +30,12 @@ DEBUG = True
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'  # URL of the Redis server
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'  # Update timezone if needed
+
 # Application definition
 
 INSTALLED_APPS = [

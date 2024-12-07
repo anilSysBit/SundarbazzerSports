@@ -61,10 +61,12 @@ class EventStatus(models.TextChoices):
 
 class MatchStatus(models.TextChoices):
     INITIATED = 'Initiated'
-    RUNNING = 'Running'
+    ONGOING = 'Ongoing'
     INTERRUPTED = 'Interrupted'
     CANCELLED = 'Cancelled'
     COMPLETED = 'Completed'
+    SCHEDULED = 'Scheduled'
+    EXPIRED = 'Expired'
 
 class EVENT_TYPE (models.TextChoices):
         LEAGUE='League'

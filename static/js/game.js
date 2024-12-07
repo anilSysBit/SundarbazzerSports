@@ -203,6 +203,7 @@ async function handleMatchSchedular(e,id){
             snack.showSnack(message=responseData.message,type='error')
         }else{
             snack.showSnack(message=responseData.message,type='success')
+            window.location.href = `/match/game-simulation/${goalData.match}/`
 
         }
 
