@@ -10,6 +10,7 @@
     <div class="alert_box" id="component">
         {% include 'game/alerts/goal_alert.html' %}
         {% include 'game/alerts/foul_alert.html' %}
+        {% include 'game/alerts/substitution_alert.html' %}
     </div>
 
     <div class="match_vs_box">
@@ -52,7 +53,7 @@
             <a href=""><button class="global_btn">Add Freekick</button></a>
             <a href=""><button class="global_btn warning">Add Penalty</button></a>
             <a href=""><button class="global_btn">Add Corner</button></a>
-            <a href=""><button class="global_btn secondary">Substitution</button></a>
+            <button class="global_btn secondary" onclick="handleOpenSubstitutionBox()">Substitution</button>
         </div>
 
         <div class="holder center">

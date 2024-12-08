@@ -10,7 +10,7 @@ urlpatterns = [
     path("<int:match_id>/",views.match_view,name='match-profile'),
 
     # game simulator
-
+    path("substitution-players/<int:pid1>/<int:pid2>/",views.get_player_for_substitution,name='substitution-players'),
     path('add-goal/',views.add_goal_view,name='add-goal'),
     path('add-foul/',views.add_foul_view,name='add-foul'),
     path('game-simulation/<int:match_id>/',views.match_simulator_view,name='match-simulate'),

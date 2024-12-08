@@ -109,6 +109,7 @@ class Player(models.Model):
     phone = models.CharField(max_length=10,blank=True,null=True)
     weight = models.PositiveIntegerField(blank=True,null=True)
     is_active = models.BooleanField(default=False)
+    is_playing = models.BooleanField(default=False)
     profile_image = models.ImageField(upload_to='images/teams/', blank=True, null=True)
     height = models.PositiveIntegerField(blank=True,null=True)
     blood_group = models.CharField(max_length=25, choices=constants.BLOOD_GROUPS.choices)

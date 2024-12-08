@@ -377,7 +377,13 @@ const fetchPlayerData =async(id)=>{
     method:"get"
   })
 
-  return response.json()
+  const responseData = await response.json();
+  if(!response.ok){
+    snack.showSnack(message=responseData.message, type='error')
+  }
+  
+  console.log('fetch team resopnse',responseData)
+  return responseData
 
 }
 
@@ -450,3 +456,5 @@ const handleOpenMatchSchedular=()=>{
   const alertbox = document.getElementById('match-schedule-alert-box')
   alertbox.classList.add('show')
 }
+
+

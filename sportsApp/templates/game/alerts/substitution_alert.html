@@ -1,0 +1,44 @@
+{% load static %}
+
+<button class="global_btn" onclick="handleOpenGoalAlert()">asd alert</button>
+
+<form class="custom_alert_box substitution_alert dialog-overlay"  id="substitution-alert-box" >
+    {% csrf_token %}
+    <input type="text" hidden value="{{match.id}}" name="match">
+    <input type="text" hidden name="player" id="player">
+    <div class="size_manager dialog goal_alert">
+        <div class="side side1">
+            <h2 class="top_header txt-center">Substitute a Player</h2>
+        <div class="icon_box">
+            <!-- <img class="_img" src="{% static 'images/footbg.png' %}" alt=""> -->
+             {% include 'components/jersey.html' with type="out" name=true%}
+             <div class="img_box">
+                <!-- <img src="" alt=""> -->
+                 
+             </div>
+             {% include 'components/subsitution_board.html' with type="simu"%}
+             {% include 'components/jersey.html' with type="in" name=true%}
+        </div>
+        </div>
+
+        <div class="detail_box">
+            <h3 id="team-name">Team Name<h3>
+        </div>
+
+          <div class="side side2 basic-form">
+
+            <div class="form-container">
+                <div class="form-control mt-10" id="time-input-box">
+                    <label for="time-input">Enter Substitution Time (24 hr format)</label>
+                    <input type="text" class="time" id="custom-time-substitution" name="goal_time" placeholder="HH:mm:ss">
+                </div>
+            </div>
+        <div class="button_box">
+            <button class="global_btn secondary goal">Subsitute</button>
+            <button class="global_btn outline" onclick="handleCloseAlerts()" type="button">Cancel</button>
+
+        </div>
+          </div>
+    </div>
+  </form>
+

@@ -40,14 +40,13 @@ def match_view(request,match_id):
         is_match_open = False
     
     elif datetime.now() > match_datetime and match.status != match_status.EXPIRED:
-        print('Running this')
         match.status = constants.MatchStatus.ONGOING
         match.save()
         is_match_open = False
     else:
         is_match_open = True
 
-
+    is_match_open = True
     match_duration = format_duration(event.match_duration)
     half_time = event.match_duration / 2
     match_time = {
@@ -287,3 +286,36 @@ def match_time_manager_view(request, pk=None):
             }, status=400)
     
     return JsonResponse({'success': False, 'message': 'Invalid HTTP method'}, status=405)
+
+
+def get_player_data(player):
+    playerData = {
+        'id':player.id,
+        'name':player.name,
+        'designation':player.designation,
+        'jersey_no':player.jersey_no,
+        'team_name':player.team.name,
+    }
+
+    return playerData
+
+def get_player_for_substitution(request, pid1, pid2):
+    player1 = get_object_or_404(Player, pk=pid1)
+    player2 = get_object_or_404(Player, pk=pid2)
+
+    if player1.team != player2.team:
+        return JsonResponse({'error': 'Both Players should be of same teams.'}, status=400)
+
+    if player1.is_active and player2.is_active:
+        return JsonResponse({'error': 'Cannot SubstituteBoth players are currently playing.'}, status=400)
+
+    if player1.is_active and not player2.is_active:
+        player1_data = get_player_data(player1)
+        player2_data = get_player_data(player2)
+        return JsonResponse({'player1': player1_data, 'player2': player2_data}, status=200)
+
+    return JsonResponse({'error': 'Player 1 is not playing.'}, status=400)
+
+
+
+

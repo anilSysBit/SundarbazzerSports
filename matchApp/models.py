@@ -172,29 +172,13 @@ class Fall(models.Model):
     
 class Substitution(models.Model):
     match = models.OneToOneField(Match,on_delete=models.CASCADE)
-    team = models.ForeignKey(Team,on_delete=models.CASCADE)
-    new_player = models.ForeignKey(Player, related_name='new_player_substitutions', on_delete=models.CASCADE)
-    previous_player = models.ForeignKey(Player, related_name='previous_player_substitutions', on_delete=models.CASCADE)
+    player_out = models.ForeignKey(Player, related_name='new_player_substitutions', on_delete=models.CASCADE)
+    player_in = models.ForeignKey(Player, related_name='previous_player_substitutions', on_delete=models.CASCADE)
+    time = models.TimeField(blank=True,null=True)
     is_emergency_substitution = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def clean(self):
-        super().clean()
-
-        if self.team not in [self.match.team1,self.match.team2]:
-            raise ValidationError('The Selected Team Must be one of the Teams playing in the Match')
-        
-        if (self.player.team != self.team) or (self.new_player.team != self.team):
-            raise ValidationError('The Selected Player must be on the Selected Team')
-        
-        if(self.new_player  == self.previous_player):
-            raise ValidationError('Same Player Cannot be substituted')
-        
-        
-    def save(self,*args,**kwargs):
-        self.clean()
-        super().save(*args,**kwargs)
 
 class PlayerMatchEvents(models.Model):
 

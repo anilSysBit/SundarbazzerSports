@@ -1,6 +1,6 @@
 
 from django import forms
-from .models import Match,Goal,Fall,MatchTimeManager
+from .models import Match,Goal,Fall,MatchTimeManager,Substitution
 from sportsApp.models import EventTeam
 from django.utils import timezone
 from django.core.exceptions import ValidationError
@@ -152,3 +152,31 @@ class MatchTimeManagerForm(forms.ModelForm):
             if match.match_time:
                 instance.start_time = match.match_time
         super().__init__(*args,**kwargs)
+
+
+
+# class for the substitution
+
+class SubstitutionForm(forms.ModelForm):
+    class Meta:
+        model = Substitution
+        fields = ['match', 'player_out', 'player_in', 'time', 'is_emergency_substitution']
+        widgets = {
+            'time': forms.TimeInput(attrs={'type': 'time'}),
+        }
+
+
+    def clean(self):
+        cleaned_data = super().clean()
+        match = cleaned_data.get('match')
+        player_out = cleaned_data.get('player_out')
+        player_in = cleaned_data.get('player_in')
+
+        if match and player_out and player_in:
+            if player_out.team != player_in.team:
+                raise forms.ValidationError({"message":"Player Out and Player In must belong to the same team."})
+            
+            if player_out.team != match.team1 and player_out.team != match.team2:
+                raise forms.ValidationError({"message":"Players must be from one of the teams in the selected match."})
+        
+        return cleaned_data
