@@ -40,8 +40,9 @@
     </div>
 
     <div class="match_details">
-        <div class="holder center">
-            <h2>45 : 00</h2>
+        <div class="holder time_container center">
+            <p>Start Time : {{match.match_date}} {{match.time_manager.start_time}} </p>
+            <p>Duration: {{event.match_duration}}</p>
         </div>
         <div class="holder center">
             <a href=""><button class="global_btn outline">Stop Match</button></a>

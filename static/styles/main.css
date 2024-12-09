@@ -2106,6 +2106,9 @@ p {
   border-radius: 10px;
   background-color: var(--box-color);
 }
+.match_page .match_details .time_container {
+  border: 1px solid white;
+}
 .match_page .match_details .holder {
   display: flex;
   place-items: center;

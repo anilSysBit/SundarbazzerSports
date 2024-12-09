@@ -173,10 +173,14 @@ class SubstitutionForm(forms.ModelForm):
         player_in = cleaned_data.get('player_in')
 
         if match and player_out and player_in:
+            if Substitution.objects.filter(match=match, player_out=player_out, player_in=player_in).exists():
+                raise forms.ValidationError(
+                    f"A substitution for Player Out '{player_out}' and Player In '{player_in}' has already occurred in match {match}."
+                )
             if player_out.team != player_in.team:
-                raise forms.ValidationError({"message":"Player Out and Player In must belong to the same team."})
+                raise forms.ValidationError("Player Out and Player In must belong to the same team.")
             
-            if player_out.team != match.team1 and player_out.team != match.team2:
-                raise forms.ValidationError({"message":"Players must be from one of the teams in the selected match."})
+            if player_out.team != match.team1.team and player_out.team != match.team2.team:
+                raise forms.ValidationError("Players must be from one of the teams in the selected match.")
         
         return cleaned_data

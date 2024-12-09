@@ -2537,6 +2537,10 @@ $font-family: Arial, sans-serif;
     // width: 50%;
     border-radius: 10px;
     background-color: var(--box-color);
+
+    .time_container{
+      border: 1px solid white;
+    }
     .holder{
       display: flex;
       place-items: center;

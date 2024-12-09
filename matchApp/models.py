@@ -171,7 +171,7 @@ class Fall(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
 class Substitution(models.Model):
-    match = models.OneToOneField(Match,on_delete=models.CASCADE)
+    match = models.ForeignKey(Match,on_delete=models.CASCADE)
     player_out = models.ForeignKey(Player, related_name='new_player_substitutions', on_delete=models.CASCADE)
     player_in = models.ForeignKey(Player, related_name='previous_player_substitutions', on_delete=models.CASCADE)
     time = models.TimeField(blank=True,null=True)

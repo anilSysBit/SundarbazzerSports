@@ -13,6 +13,7 @@ urlpatterns = [
     path("substitution-players/<int:pid1>/<int:pid2>/",views.get_player_for_substitution,name='substitution-players'),
     path('add-goal/',views.add_goal_view,name='add-goal'),
     path('add-foul/',views.add_foul_view,name='add-foul'),
+    path('add-substitution/',views.add_substitutiton_api,name='subsitution-api'),
     path('game-simulation/<int:match_id>/',views.match_simulator_view,name='match-simulate'),
     path('match-data-api/<int:match_id>/',views.match_data_api,name='match_data_api'),
 

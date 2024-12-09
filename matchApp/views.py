@@ -10,7 +10,7 @@ from sportsApp.models import Event
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.paginator import Paginator
-from .forms import GoalForm,FoulForm,MatchTimeManagerForm
+from .forms import GoalForm,FoulForm,MatchTimeManagerForm,SubstitutionForm
 from django.contrib import messages
 from sportsApp import constants
 from django.db.models import Count,Q
@@ -130,6 +130,7 @@ def match_simulator_view(request,match_id):
     }
 
 
+
     context = {
        'match':match,
        'event':event,
@@ -143,6 +144,11 @@ def match_simulator_view(request,match_id):
     }
 
     return render(request,'game/match_simulator.html',context=context)
+
+
+
+def get_match_time_data_api(request,match_id):
+    pass
 
 
 def match_data_api(request, match_id):
@@ -315,6 +321,42 @@ def get_player_for_substitution(request, pid1, pid2):
         return JsonResponse({'player1': player1_data, 'player2': player2_data}, status=200)
 
     return JsonResponse({'error': 'Player 1 is not playing.'}, status=400)
+
+
+
+
+
+# substitution form
+
+def add_substitutiton_api(request):
+
+    if request.method == 'POST':
+        form = SubstitutionForm(request.POST)
+
+
+        if form.is_valid():
+            player_out = form.cleaned_data['player_out']
+            player_in = form.cleaned_data['player_in']
+
+            goal = form.save()
+            # messages.success(request,f'Added goal of {goal.player.name}')
+            return JsonResponse({
+                'success': True,
+                'message': f'Substituted player , {player_out.name}({player_out.jersey_no}) OUT {player_in.name} ({player_in.jersey_no})IN',
+                
+            }, status=201)
+        else:
+            return JsonResponse({
+                'success': False,
+                'errors': form.errors,
+            }, status=400)
+    else:
+        return JsonResponse({
+            'success': False,
+            'message': 'Invalid request method. Use POST.',
+        }, status=405)
+
+
 
 
 

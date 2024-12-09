@@ -66,3 +66,10 @@ class MatchTimeManagerAdmin(admin.ModelAdmin):
     # inlines = [PauseResumeSessionInline]
 
 # Register the model and admin class
+@admin.register(Substitution)
+class SubstitutionAdmin(admin.ModelAdmin):
+    list_display = ('match', 'player_out', 'player_in', 'time', 'is_emergency_substitution', 'created_at', 'updated_at')
+    # list_filter = ('is_emergency_substitution', 'created_at', 'updated_at')
+    search_fields = ('match__team1__name', 'match__team2__name', 'player_out__name', 'player_in__name')
+    ordering = ('-created_at',)
+

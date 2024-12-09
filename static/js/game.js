@@ -304,17 +304,22 @@ const handleOpenSubstitutionBox=async()=>{
     // player_name.textContent = `${responseData.name}`
   
     alertbox.classList.add('show')
+
+
+    alertbox.onsubmit =(event)=> handleSubmitSubstitution(event,player1.id,player2.id);
   }
 
 
 
-const handleSubmitSubstitution =async(event)=>{
-    e.preventDefault();
+const handleSubmitSubstitution =async(event,player_out,player_in)=>{
+    event.preventDefault();
     try {
         // Get the form element
         const form = document.getElementById('substitution-alert-box');
 
         const formData = new FormData(form);
+        formData.append("player_out",player_out)
+        formData.append("player_in",player_in)
 
         // Convert FormData to a plain object
         const goalData = Object.fromEntries(formData.entries());
@@ -322,8 +327,8 @@ const handleSubmitSubstitution =async(event)=>{
 
 
 
-        if(!goalData.fall_time){
-            showSnackBar(message='Enter the time when player scored a goal, or check the add current time box',type='error',position='top')
+        if(!goalData.time){
+            showSnackBar(message='Enter the time when subsitutuion occured',type='error',position='top')
             return;
         }
         // return;
@@ -339,7 +344,7 @@ const handleSubmitSubstitution =async(event)=>{
         if (!response.ok) {
             const errorData = await response.json();
             console.error('Error:', errorData.errors || errorData.message);
-            snack.showSnack(message=errorData.message,type='error')
+            snack.showSnack(message=errorData.errors.__all__,type='error')
 
             return { success: false, errors: errorData.errors || errorData.message };
         }
@@ -359,4 +364,6 @@ const handleSubmitSubstitution =async(event)=>{
 
 
 }
+
+
 
