@@ -31,10 +31,10 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'  # URL of the Redis server
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'UTC'  # Update timezone if needed
+# CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'  # URL of the Redis server
+# CELERY_ACCEPT_CONTENT = ['json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_TIMEZONE = 'UTC'  # Update timezone if needed
 
 # Application definition
 
@@ -145,9 +145,9 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Kathmandu'
 
-USE_I18N = True
+# USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

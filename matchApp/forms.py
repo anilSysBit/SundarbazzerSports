@@ -164,6 +164,7 @@ class SubstitutionForm(forms.ModelForm):
         widgets = {
             'time': forms.TimeInput(attrs={'type': 'time'}),
         }
+        
 
 
     def clean(self):

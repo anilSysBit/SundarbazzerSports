@@ -50,8 +50,11 @@ class MatchTimeManager(models.Model):
         on_delete=models.CASCADE,
         related_name='time_manager'
     )
-    start_time = models.TimeField(blank=True,null=True)
+    start_time = models.DateTimeField(blank=True,null=True)
 
+    first_half_start_time = models.DateTimeField(blank=True,null=True)
+    second_half_start_time = models.DateTimeField(blank=True,null=True)
+    
     extra_time_first_half = models.DurationField(
         default=timedelta(0),
         blank=True,
@@ -69,6 +72,9 @@ class MatchTimeManager(models.Model):
         default=False, 
         help_text="Indicates whether the match has ended."
     )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
     @property
     def match_status(self):
         """
@@ -76,7 +82,7 @@ class MatchTimeManager(models.Model):
         """
         if self.match_ended:
             return "Ended"
-        if self.match.match_time is None:
+        if self.start_time is None:
             return "Not Started"
         # If there's a pause without a resume, the match is paused
         if self.pause_resume_sessions.filter(resumed_at__isnull=True).exists():
@@ -90,6 +96,9 @@ class MatchPauseResume(models.Model):
     match_time_manager = models.ForeignKey('MatchTimeManager', on_delete=models.CASCADE, related_name='pause_resume_sessions')
     paused_at = models.DateTimeField(help_text="The time when the match was paused.")
     resumed_at = models.DateTimeField(null=True, blank=True, help_text="The time when the match resumed.")
+    is_before_half = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     
     def duration(self):
         """

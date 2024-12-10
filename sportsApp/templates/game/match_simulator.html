@@ -13,54 +13,72 @@
         {% include 'game/alerts/substitution_alert.html' %}
     </div>
 
-    <div class="match_vs_box">
-        <div class="vs_box">
-            <p class="vs_text">Vs</p>
-        </div>
-        <div class="team team1">
-            <div class="detail">
-                <div class="avatar">
-                    <img src="https://picsum.photos/100" alt="">
-                    
+    <form action="" id="simulation-form">{%csrf_token%}</form>
+    <div class="sticky-container">
+        <div class="match_vs_box">
+            <div class="vs_box">
+                <p class="vs_text">Vs</p>
+            </div>
+            <div class="team team1">
+                <div class="detail">
+                    <div class="avatar">
+                        <img src="https://picsum.photos/100" alt="">
+                        
+                    </div>
+                    <p>{{match.team1.team.name}}</p>
                 </div>
-                <p>{{match.team1.team.name}}</p>
+                <div class="score" id="team1-score">{{count.team1.total_goals}}</div>
             </div>
-            <div class="score" id="team1-score">{{count.team1.total_goals}}</div>
-        </div>
-        <div class="team team2">
-            <div class="score right" id="team2-score">{{count.team2.total_goals}}</div>
-            <div class="detail">
-                <p >{{match.team2.team.name}}</p>
-            <div class="avatar">
-                <img src="https://picsum.photos/101" alt="">
-
+            <div class="team team2">
+                <div class="score right" id="team2-score">{{count.team2.total_goals}}</div>
+                <div class="detail">
+                    <p >{{match.team2.team.name}}</p>
+                <div class="avatar">
+                    <img src="https://picsum.photos/101" alt="">
+    
+                </div>
+                </div>
             </div>
+        </div>
+    
+        <div class="match_details">
+            <div class="holder time_container center">
+                <div class="block1 block">
+
+                    <button onclick="updateGameTimeData('{{match.id}}')">Refresh time</button>
+                    <!-- <p class="match_date_time">{{match.time_manager.start_time}} </p> -->
+                    <P id="game-start-time">First Half Start Time : {% if match.time_manager.first_half_start_time%}{{match.time_manager.first_half_start_time}}  {% else %} Not Started Yet( Assumed to start on {{match.time_manager.start_time}}) {%endif%}</P>
+                    <p id="game-total-duration">Duration: {{event.match_duration}}</p>
+                </div>
+
+                <div>
+                    <p id="game-half-duration"></p>
+                    <p id="game-total-time-running"></p>
+                    <p id="game-total-time-remaining"></p>
+                </div>
+
+                <div class="block">
+                    <p>Remaning time:</p>
+                </div>
             </div>
-        </div>
-    </div>
-
-    <div class="match_details">
-        <div class="holder time_container center">
-            <p>Start Time : {{match.match_date}} {{match.time_manager.start_time}} </p>
-            <p>Duration: {{event.match_duration}}</p>
-        </div>
-        <div class="holder center">
-            <a href=""><button class="global_btn outline">Stop Match</button></a>
-            <a href=""><button class="global_btn plain">Pause Match</button></a>
-        </div>
-
-        <div class="holder center">
-            <button class="global_btn error" onclick="handleOpenFoulAlert()">Add Foul</button>
-            <a href=""><button class="global_btn">Add Freekick</button></a>
-            <a href=""><button class="global_btn warning">Add Penalty</button></a>
-            <a href=""><button class="global_btn">Add Corner</button></a>
-            <button class="global_btn secondary" onclick="handleOpenSubstitutionBox()">Substitution</button>
-        </div>
-
-        <div class="holder center">
-            <button class="global_btn success goal_btn" type="button" onclick="handleOpenGoalAlert()">Add Goal</button>
-            <button class="global_btn success goal_btn" type="button" onclick="handleOpenGoalAlert()">Reload</button>
-
+            <div class="holder center">
+                <button class="global_btn outline" onclick="handleClickStartMatch('{{match.id}}')">Start First Half</button>
+                <a href=""><button class="global_btn plain">Pause Match</button></a>
+            </div>
+    
+            <div class="holder center">
+                <button class="global_btn error" onclick="handleOpenFoulAlert()">Add Foul</button>
+                <a href=""><button class="global_btn">Add Freekick</button></a>
+                <a href=""><button class="global_btn warning">Add Penalty</button></a>
+                <a href=""><button class="global_btn">Add Corner</button></a>
+                <button class="global_btn secondary" onclick="handleOpenSubstitutionBox()">Substitution</button>
+            </div>
+    
+            <div class="holder center">
+                <button class="global_btn success goal_btn" type="button" onclick="handleOpenGoalAlert()">Add Goal</button>
+                <button class="global_btn success goal_btn" type="button" onclick="handleOpenGoalAlert()">Reload</button>
+    
+            </div>
         </div>
     </div>
 

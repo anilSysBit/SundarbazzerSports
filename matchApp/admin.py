@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Guest,Goal,Fall,Substitution,PlayerMatchEvents, Match,MatchTimeManager
+from .models import Guest,Goal,Fall,Substitution,PlayerMatchEvents, Match,MatchTimeManager,MatchPauseResume
 
 # Register your models here.
 
@@ -73,3 +73,23 @@ class SubstitutionAdmin(admin.ModelAdmin):
     search_fields = ('match__team1__name', 'match__team2__name', 'player_out__name', 'player_in__name')
     ordering = ('-created_at',)
 
+
+@admin.register(MatchPauseResume)
+class MatchPauseResumeAdmin(admin.ModelAdmin):
+    list_display = ('match_time_manager', 'paused_at', 'resumed_at', 'duration_display')
+    list_filter = ('paused_at', 'resumed_at')
+    search_fields = ('match_time_manager__match__team1__name', 'match_time_manager__match__team2__name')
+    ordering = ('-paused_at',)
+    
+    def duration_display(self, obj):
+        """
+        Display the duration in a human-readable format (HH:MM:SS).
+        """
+        duration = obj.duration()
+        total_seconds = duration.total_seconds()
+        hours = int(total_seconds // 3600)
+        minutes = int((total_seconds % 3600) // 60)
+        seconds = int(total_seconds % 60)
+        return f'{hours:02d}:{minutes:02d}:{seconds:02d}'
+    
+    duration_display.short_description = 'Duration (HH:MM:SS)'

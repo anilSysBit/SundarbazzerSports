@@ -18,6 +18,7 @@ from utils.time_formatter import format_duration
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 
+
 def match_list_view(request):
     
     matches = Match.objects.all()
@@ -128,8 +129,7 @@ def match_simulator_view(request,match_id):
             'total_goals': team2_total_goals,
         }
     }
-
-
+    
 
     context = {
        'match':match,
@@ -148,7 +148,23 @@ def match_simulator_view(request,match_id):
 
 
 def get_match_time_data_api(request,match_id):
-    pass
+    match = get_object_or_404(Match,pk=match_id)
+    event = get_object_or_404(Event,pk=match.event)
+
+    data = {
+        'match_date':match.match_date,
+        'prev_match_time':match.match_time,
+        'match_day':match.match_day,
+        'match_duration':format_duration(event.match_duration),
+        'match_start_time':match.time_manager.start_time
+    }
+
+    return JsonResponse({
+        'success':True,
+        'data':data,
+        'message':"Data fetched Successfully",
+        'status':200
+    })
 
 
 def match_data_api(request, match_id):
@@ -322,6 +338,72 @@ def get_player_for_substitution(request, pid1, pid2):
 
     return JsonResponse({'error': 'Player 1 is not playing.'}, status=400)
 
+
+
+def format_iso_duration(iso_duration):
+    formatted_duration = int(iso_duration.total_seconds())
+    return format_duration
+
+@csrf_exempt
+def get_match_time_api(request,match_id):
+    
+    if request.method == 'GET':
+
+        match = get_object_or_404(Match,pk=match_id)
+        match_time_manager = get_object_or_404(MatchTimeManager,match=match)
+        event = get_object_or_404(Event,id=match.event.id)
+
+        match_duration = event.match_duration
+        half_time_duration = match_duration / 2
+
+        first_half_start_time = match_time_manager.first_half_start_time.time().strftime("%H:%M %p")
+
+        # print('time',first_half_start_time)
+
+        running_time = datetime.now() - match_time_manager.first_half_start_time
+
+        
+
+        data = {
+            'start_time':match_time_manager.start_time,
+            'game_duration':format_duration(event.match_duration),
+            'half_time_duration': format_duration(half_time_duration),
+            'first_half_start_time':first_half_start_time,
+            'second_half_start_time':match_time_manager.second_half_start_time,
+            'running_time':running_time.seconds,
+        }
+    return JsonResponse({
+        'success':False,
+        'data':data,
+        "message":"Invalid GET request",
+        'status':400
+    })
+
+@csrf_exempt
+def actual_start_match_api(request,match_id):
+
+    if request.method == "POST":
+
+        match_time_manager = get_object_or_404(MatchTimeManager,match=match_id)
+
+        current_time = datetime.now()
+        match_time_manager.first_half_start_time = current_time
+
+        match_time_manager.save()
+
+        # print('check date time',datetime.now().time())
+
+        return JsonResponse({
+            'success':True,
+            'message':f"Successfully started the match on ({current_time.strftime('%H:%M %p')}). This time will calcuate all the durations.",
+            'status':200,
+        })
+
+    return JsonResponse({
+        'success':False,
+        "message":"Invalid POST request",
+        'status':400
+    })
 
 
 

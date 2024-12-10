@@ -367,3 +367,160 @@ const handleSubmitSubstitution =async(event,player_out,player_in)=>{
 
 
 
+// handle click start match
+
+
+const handleRequestGameStart =async(id)=>{
+    const form = document.getElementById('simulation-form');
+
+    const formData = new FormData(form)
+    const formValues = Object.fromEntries(formData.entries());
+
+
+    try{
+        const response = await fetch(`/match/start-match/${id}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': formValues.csrfmiddlewaretoken, // Include CSRF token
+            },
+            body: formValues, // Send FormData directly for compatibility with Django
+        });
+
+        const responseData = await response.json();
+
+        console.log('response data of start time',responseData)
+        if(!response.ok){
+            snack.showSnack(message="Error starting the time",type="error")
+            return;
+        }
+
+        snack.showSnack(message=responseData?.message || "Success",type='success')
+
+        updateGameTimeData(id);
+
+
+
+
+    }catch(error){
+        console.log(error)
+    }
+}
+
+const runTimer =(start_time)=>{
+    const datetime = new Date(start_time);
+
+}
+function secondsToHHSS(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    const secs = Math.floor(seconds % 60);
+    return `${String(hours).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+}
+
+function secondsToHHMMSS(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+}
+
+
+
+
+
+async function updateGameTimeData (id){
+    const data = await fetchGameTimeData(id)
+
+    const game_start_time = document.getElementById('game-start-time')
+    const game_total_duration = document.getElementById('game-total-duration')
+    const half_duration = document.getElementById("game-half-duration")
+    const total_time_running_date = document.getElementById('game-total-time-running') 
+    const toal_time_remaining_date = document.getElementById('game-total-time-remaining')
+
+
+
+    if(data){
+        if(data.first_half_start_time){
+            game_start_time.textContent = `First Half Start Time : ${data.first_half_start_time}`
+        }
+
+        game_total_duration.textContent = `Duration : ${data?.game_duration}`
+
+        if(data.first_half_start_time && !data.second_half_start_time){
+            half_duration.textContent = `Running First Half : ${data?.half_time_duration}`
+        }else{
+            half_duration.textContent = `Second Half : ${data?.half_time_duration}`
+
+        }
+
+        function startStopwatchFrom(secondsStart) {
+            let seconds = secondsStart;
+            let minutes = Math.floor(seconds / 60);
+            let hours = Math.floor(minutes / 60);
+            minutes = minutes % 60;
+            seconds = seconds % 60;
+        
+            const stopwatchInterval = setInterval(() => {
+                // Increment seconds, and handle overflow to minutes and hours
+                seconds++;
+        
+                if (seconds === 60) {
+                    seconds = 0;
+                    minutes++;
+                }
+        
+                if (minutes === 60) {
+                    minutes = 0;
+                    hours++;
+                }
+        
+                // Format time as HH:MM:SS
+                const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        
+                // Display the stopwatch time
+                // console.log(formattedTime);
+                total_time_running_date.textContent = `${formattedTime}`
+        
+            }, 1000);  // Update every second
+        
+            // Function to stop the stopwatch
+            function stopStopwatch() {
+                clearInterval(stopwatchInterval);
+                console.log('Stopwatch stopped');
+            }
+        
+            return stopStopwatch;  // Return the stop function to stop the stopwatch externally
+        }
+
+        startStopwatchFrom(data?.running_time)
+        
+
+        
+    }
+}
+
+function handleClickStartMatch (id){
+    if(confirm("Are you sure you want to start the match")){
+        console.log('Game Confirmed')
+        handleRequestGameStart(id);
+    }else{
+        console.log('Cancelled the confiramtion')
+    }
+}
+
+
+const fetchGameTimeData =async(id)=>{
+
+    const response = await fetch(`/match/match-time-api/${id}/`,{
+        method:"GET",
+    })
+    const responseData = await response.json();
+    if(!response.ok){
+        snack.showSnack(message="Error Fetching the match data try again.",type='error')
+        return;
+    }
+
+    return responseData.data
+}
+
+
+
