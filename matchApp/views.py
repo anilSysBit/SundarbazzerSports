@@ -5,12 +5,12 @@ from django.core.exceptions import ValidationError
 from django.http import HttpResponseBadRequest,JsonResponse
 from django.views.decorators.http import require_POST
 from django.db import IntegrityError
-from .models import Match,Goal,Player,MatchTimeManager
+from .models import Match,Goal,Player,MatchTimeManager,MatchPauseResume
 from sportsApp.models import Event
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.paginator import Paginator
-from .forms import GoalForm,FoulForm,MatchTimeManagerForm,SubstitutionForm
+from .forms import GoalForm,FoulForm,MatchTimeManagerForm,SubstitutionForm,MatchPauseResumeForm
 from django.contrib import messages
 from sportsApp import constants
 from django.db.models import Count,Q
@@ -34,7 +34,7 @@ def match_view(request,match_id):
 
     match_datetime = datetime.combine(match.match_date,match.match_time)
 
-    time_manager = get_object_or_404(MatchTimeManager,match=match)
+    # time_manager = get_object_or_404(MatchTimeManager,match=match)
     match_status = constants.MatchStatus
 
     if match.status == match_status.EXPIRED:
@@ -54,11 +54,11 @@ def match_view(request,match_id):
         'duration':match_duration,
         'half_time':format_duration(half_time),
         'is_match_open':is_match_open,
-        'actual_time':datetime.combine(match.match_date,time_manager.start_time or match.match_time)
+        'actual_time':'',
     }
 
     time_manager, created = MatchTimeManager.objects.get_or_create(match=match)
-    timeManagerForm = MatchTimeManagerForm(instance=time_manager)
+    timeManagerForm = MatchTimeManagerForm()
     players1 = Player.objects.filter(team=match.team1.team).order_by('-is_active')
     players2 = Player.objects.filter(team=match.team2.team).order_by('-is_active')
 
@@ -137,6 +137,7 @@ def match_simulator_view(request,match_id):
        'count':count,
        'foul':FoulForm(instance=match),
        'alerts':game_stimulation_alerts(),
+       'match_pause_status':False,
        'goal_type_choices':constants.GOAL_TYPE.choices,
        'player1':{'active_players':players1,'extra_players':extra_players1},
        'player2':{'active_players':players2,'extra_players':extra_players2},
@@ -344,6 +345,61 @@ def format_iso_duration(iso_duration):
     formatted_duration = int(iso_duration.total_seconds())
     return format_duration
 
+
+@csrf_exempt
+def pause_match(request):
+    if request.method == 'POST':
+        form = MatchPauseResumeForm(request.POST)
+        if form.is_valid():
+            match_pause_resume = form.save()
+            return JsonResponse({
+                'success': True,
+                'message': 'Match paused successfully.',
+                'data': {
+                    'id': match_pause_resume.id,
+                    'match_time_manager': match_pause_resume.match_time_manager.id,
+                    'paused_at': match_pause_resume.paused_at,
+                    'is_before_half': match_pause_resume.is_before_half,
+                }
+            })
+        else:
+            return JsonResponse({
+                'success': False,
+                'errors': form.errors
+            })
+    return JsonResponse({
+        'success': False,
+        'message': 'Only POST requests are allowed.'
+    })
+
+@csrf_exempt
+def resume_match(request, pk):
+    if request.method == 'POST':
+        match_pause_resume = get_object_or_404(MatchPauseResume, pk=pk)
+        form = MatchPauseResumeForm(request.POST, instance=match_pause_resume)
+        if form.is_valid():
+            match_pause_resume = form.save()
+            return JsonResponse({
+                'success': True,
+                'message': 'Match resumed successfully.',
+                'data': {
+                    'id': match_pause_resume.id,
+                    'match_time_manager': match_pause_resume.match_time_manager.id,
+                    'paused_at': match_pause_resume.paused_at,
+                    'resumed_at': match_pause_resume.resumed_at,
+                    'is_before_half': match_pause_resume.is_before_half,
+                }
+            })
+        else:
+            return JsonResponse({
+                'success': False,
+                'errors': form.errors
+            })
+    return JsonResponse({
+        'success': False,
+        'message': 'Only POST requests are allowed.'
+    })
+
 @csrf_exempt
 def get_match_time_api(request,match_id):
     
@@ -356,14 +412,19 @@ def get_match_time_api(request,match_id):
         match_duration = event.match_duration
         half_time_duration = match_duration / 2
 
-        first_half_start_time = match_time_manager.first_half_start_time.time().strftime("%H:%M %p")
+        first_half_start_time = match_time_manager.first_half_start_time.time().strftime('%H:%M %p')
+        if not first_half_start_time:
+            return JsonResponse({
+                'success':False,
+                'message':'Start First half to Calulate the time',
+                'status':400,
+            })
 
-        # print('time',first_half_start_time)
+        print('time',match_time_manager)
 
         running_time = datetime.now() - match_time_manager.first_half_start_time
 
         
-
         data = {
             'start_time':match_time_manager.start_time,
             'game_duration':format_duration(event.match_duration),
@@ -371,6 +432,8 @@ def get_match_time_api(request,match_id):
             'first_half_start_time':first_half_start_time,
             'second_half_start_time':match_time_manager.second_half_start_time,
             'running_time':running_time.seconds,
+            'leakage_time':'',
+            'pause_running_time':False
         }
     return JsonResponse({
         'success':False,

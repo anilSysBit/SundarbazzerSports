@@ -1,6 +1,6 @@
 
 from django import forms
-from .models import Match,Goal,Fall,MatchTimeManager,Substitution
+from .models import Match,Goal,Fall,MatchTimeManager,Substitution,MatchPauseResume
 from sportsApp.models import EventTeam
 from django.utils import timezone
 from django.core.exceptions import ValidationError
@@ -137,21 +137,21 @@ class MatchTimeManagerForm(forms.ModelForm):
             'match_ended'
         ]
         widgets = {
-            'start_time': forms.TimeInput (attrs={'type': 'time'}),
+            'start_time': forms.DateTimeInput(attrs={'type': 'datetime-local','required':True}),
             'extra_time_first_half': forms.TimeInput(attrs={'type': 'duration'}),
             'extra_time_full_time': forms.TimeInput(attrs={'type': 'duration'}),
         }
     
 
-    def __init__(self,*args,**kwargs):
-        instance = kwargs.get('instance')
+    # def __init__(self,*args,**kwargs):
+    #     instance = kwargs.get('instance')
 
-        if instance and instance.start_time is None:
-            match = instance.match
+    #     if instance and instance.start_time is None:
+    #         match = instance.match
 
-            if match.match_time:
-                instance.start_time = match.match_time
-        super().__init__(*args,**kwargs)
+    #         if match.match_time:
+    #             instance.start_time = match.match_time
+    #     super().__init__(*args,**kwargs)
 
 
 
@@ -183,5 +183,32 @@ class SubstitutionForm(forms.ModelForm):
             
             if player_out.team != match.team1.team and player_out.team != match.team2.team:
                 raise forms.ValidationError("Players must be from one of the teams in the selected match.")
+        
+        return cleaned_data
+
+
+
+class MatchPauseResumeForm(forms.ModelForm):
+    class Meta:
+        model = MatchPauseResume
+        fields = ['match_time_manager', 'paused_at', 'resumed_at', 'is_before_half']
+        
+        widgets = {
+            'paused_at': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'resumed_at': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }
+        
+        help_texts = {
+            'paused_at': 'The time when the match was paused.',
+            'resumed_at': 'The time when the match resumed.',
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        paused_at = cleaned_data.get('paused_at')
+        resumed_at = cleaned_data.get('resumed_at')
+        
+        if resumed_at and resumed_at <= paused_at:
+            self.add_error('resumed_at', 'Resume time must be after the pause time.')
         
         return cleaned_data

@@ -423,8 +423,92 @@ function secondsToHHMMSS(seconds) {
     return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 }
 
+function startStopwatchFrom(secondsStart,element,format,pause=false) {
+    let seconds = secondsStart;
+    let minutes = Math.floor(seconds / 60);
+    let hours = Math.floor(minutes / 60);
+    let days = Math.floor(hours / 24);
+    
+    seconds = seconds % 60;
+    minutes = minutes % 60;
+    hours = hours % 24;
 
 
+    if(pause){
+        element.innerHTML = `
+            <p class="time_box">${minutes} M</p>
+            <p class="time_box">${seconds} S</p>
+        `
+        return;
+    }
+    const stopwatchInterval = setInterval(() => {
+        // Increment seconds, and handle overflow to minutes, hours, and days
+        seconds++;
+
+        if (seconds === 60) {
+            seconds = 0;
+            minutes++;
+        }
+
+        if (minutes === 60) {
+            minutes = 0;
+            hours++;
+        }
+
+        if (hours === 24) {
+            hours = 0;
+            days++;
+        }
+
+        // Display the time according to the format
+        let formattedTime = '';
+        
+        switch (format) {
+            case 'm-s':
+                formattedTime = `
+                    <p class="time_box">${minutes} M</p>
+                    <p class="time_box">${seconds} S</p>
+                `;
+                break;
+
+            case 'h-m-s':
+                formattedTime = `
+                    <p class="time_box">${hours} H</p>
+                    <p class="time_box">${minutes} M</p>
+                    <p class="time_box">${seconds} S</p>
+                `;
+                break;
+
+            case 'd-h-m-s':
+                formattedTime = `
+                    <p class="time_box">${days} D</p>
+                    <p class="time_box">${hours} H</p>
+                    <p class="time_box">${minutes} M</p>
+                    <p class="time_box">${seconds} S</p>
+                `;
+                break;
+
+            default:
+                formattedTime = `
+                    <p class="time_box">${hours} H</p>
+                    <p class="time_box">${minutes} M</p>
+                    <p class="time_box">${seconds} S</p>
+                `;
+        }
+
+        // Update the display
+        element.innerHTML = formattedTime;
+
+    }, 1000);  // Update every second
+
+    // Function to stop the stopwatch
+    function stopStopwatch() {
+        clearInterval(stopwatchInterval);
+        console.log('Stopwatch stopped');
+    }
+
+    return stopStopwatch;  // Return the stop function to stop the stopwatch externally
+}
 
 
 async function updateGameTimeData (id){
@@ -435,6 +519,9 @@ async function updateGameTimeData (id){
     const half_duration = document.getElementById("game-half-duration")
     const total_time_running_date = document.getElementById('game-total-time-running') 
     const toal_time_remaining_date = document.getElementById('game-total-time-remaining')
+    const timerType = total_time_running_date.getAttribute('data-timer-type')
+
+
 
 
 
@@ -451,47 +538,10 @@ async function updateGameTimeData (id){
             half_duration.textContent = `Second Half : ${data?.half_time_duration}`
 
         }
+        
 
-        function startStopwatchFrom(secondsStart) {
-            let seconds = secondsStart;
-            let minutes = Math.floor(seconds / 60);
-            let hours = Math.floor(minutes / 60);
-            minutes = minutes % 60;
-            seconds = seconds % 60;
-        
-            const stopwatchInterval = setInterval(() => {
-                // Increment seconds, and handle overflow to minutes and hours
-                seconds++;
-        
-                if (seconds === 60) {
-                    seconds = 0;
-                    minutes++;
-                }
-        
-                if (minutes === 60) {
-                    minutes = 0;
-                    hours++;
-                }
-        
-                // Format time as HH:MM:SS
-                const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-        
-                // Display the stopwatch time
-                // console.log(formattedTime);
-                total_time_running_date.textContent = `${formattedTime}`
-        
-            }, 1000);  // Update every second
-        
-            // Function to stop the stopwatch
-            function stopStopwatch() {
-                clearInterval(stopwatchInterval);
-                console.log('Stopwatch stopped');
-            }
-        
-            return stopStopwatch;  // Return the stop function to stop the stopwatch externally
-        }
 
-        startStopwatchFrom(data?.running_time)
+            startStopwatchFrom(data?.running_time,total_time_running_date,timerType,data?.pause_running_time)
         
 
         
@@ -524,3 +574,60 @@ const fetchGameTimeData =async(id)=>{
 
 
 
+
+
+
+
+// pause resume
+const handlePauseMatchRequest =async()=>{
+    const response = await fetch(`/match/pause-match/`,{
+        method:"POST",
+    })
+    const responseData = await response.json()
+
+    console.log('responese of pause',responseData)
+
+    if(!response.ok){
+        snack.showSnack(message=responseData?.message || 'Something Went Wrong',type='error')
+        return
+    }
+
+    return responseData.data;
+}
+
+
+const handleResumeMatchRequest =async(id)=>{
+    const response = await fetch(`/match/resume-match/${id}/`,{
+        method:"POST",
+    })
+    const responseData = await response.json()
+
+    console.log('responese of resume',responseData)
+
+    if(!response.ok){
+        snack.showSnack(message=responseData?.message || 'Something Went Wrong',type='error')
+        return
+    }
+
+    return responseData.data
+}
+
+const handlePauseResumeMatch =async(status)=>{
+    const toggleButton = document.getElementById("pause-resume-button")
+
+    const textContent = toggleButton.textContent.trim()
+    
+    if (textContent === 'Pause Match') {
+        console.log('yes pause')
+        const responseData = await handlePauseMatchRequest();
+        if(responseData.success){
+            toggleButton.textContent = 'Resume Match';
+        }
+            
+        
+    } else {
+        const responseData = await handleResumeMatchRequest()
+        toggleButton.textContent = 'Pause Match';
+    }
+    
+}

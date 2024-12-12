@@ -7,7 +7,7 @@ urlpatterns = [
 
     path('matches/',views.match_list_view,name='match'),
 
-    path("<int:match_id>/",views.match_view,name='match-profile'),
+    path("view/<int:match_id>/",views.match_view,name='match-profile'),
 
     
     # game simulator
@@ -21,6 +21,10 @@ urlpatterns = [
 
     path('start-match/<int:match_id>/',views.actual_start_match_api,name='start-match-update-time'),
 
+
+    # add match pause resumes
+    path('pause-match/',views.pause_match,name='add-match-pause-api'),
+    path('resume-match/<int:pk>/',views.resume_match,name='add-match-resume-api'),
 
     # get match times api
     path('match-time-api/<int:match_id>/',views.get_match_time_api,name='match-time-api'),

@@ -26,7 +26,8 @@
 
             <div class="form-control">
                 <label for="">Match Start Time</label>
-                {{time_form.start_time}}
+                <!-- {{time_form.start_time}} -->
+                <input type="datetime-local" name="start_time" value="{{ match.time_manager.start_time|date:'Y-m-d\\TH:i' }}">
             </div>
 
             <p class="sm_text">This match will be scheduled for that time and the dashboard for organizer to push data will be enabled after the time</p>

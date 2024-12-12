@@ -53,17 +53,26 @@
 
                 <div>
                     <p id="game-half-duration"></p>
-                    <p id="game-total-time-running"></p>
+                    <p id="game-total-time-running" class="timer_box timer" data-timer-type="m-s"></p>
                     <p id="game-total-time-remaining"></p>
+
                 </div>
 
                 <div class="block">
                     <p>Remaning time:</p>
+                    <p id="game-total-leakage-time">Leakage Time : 0 min</p>
                 </div>
             </div>
             <div class="holder center">
                 <button class="global_btn outline" onclick="handleClickStartMatch('{{match.id}}')">Start First Half</button>
-                <a href=""><button class="global_btn plain">Pause Match</button></a>
+                <button class="global_btn plain" id="pause-resume-button" onclick="handlePauseResumeMatch('{% if match_pause_status %}1{%else%}0{% endif %}')">
+                    {% if match_pause_status %}
+                        Resume Match
+                    {% else %}
+                        Pause Match
+                    {% endif %}
+                </button>
+
             </div>
     
             <div class="holder center">
