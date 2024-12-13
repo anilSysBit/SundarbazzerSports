@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.db import models
 from datetime import timedelta,datetime
+from django.utils.timezone import now
 
 class MatchForm(forms.ModelForm):
     class Meta:
@@ -191,7 +192,7 @@ class SubstitutionForm(forms.ModelForm):
 class MatchPauseResumeForm(forms.ModelForm):
     class Meta:
         model = MatchPauseResume
-        fields = ['match_time_manager', 'paused_at', 'resumed_at', 'is_before_half']
+        fields = ['match', 'paused_at', 'resumed_at', 'is_before_half']
         
         widgets = {
             'paused_at': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
@@ -205,6 +206,33 @@ class MatchPauseResumeForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
+        match = cleaned_data.get('match')
+
+        if match:
+            # Get the related MatchTimeManager from the match
+            match_time_manager = match.time_manager # Assuming related name is 'match_time_manager'
+            
+            if match_time_manager:
+                first_half_start_time = match_time_manager.first_half_start_time
+                second_half_start_time = match_time_manager.second_half_start_time
+                
+                if first_half_start_time and second_half_start_time:
+                    cleaned_data['is_before_half'] = False  # Both are present, so set to False
+                elif first_half_start_time and not second_half_start_time:
+                    cleaned_data['is_before_half'] = True  # Only first half start time present, so set to True
+                else:
+                    raise ValidationError({
+                        'is_before_half': 'Both first_half_start_time and second_half_start_time are missing.'
+                    })
+            else:
+                raise ValidationError({
+                    'match': 'Match Time Manager is not linked to this match.'
+                })
+        else:
+            raise ValidationError({
+                'match': 'Match is required.'
+            })
+
         paused_at = cleaned_data.get('paused_at')
         resumed_at = cleaned_data.get('resumed_at')
         

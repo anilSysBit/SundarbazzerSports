@@ -423,26 +423,30 @@ function secondsToHHMMSS(seconds) {
     return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 }
 
-function startStopwatchFrom(secondsStart,element,format,pause=false) {
+
+function startStopwatchFrom(pause = false, secondsStart, element, format) {
     let seconds = secondsStart;
     let minutes = Math.floor(seconds / 60);
     let hours = Math.floor(minutes / 60);
     let days = Math.floor(hours / 24);
-    
+
     seconds = seconds % 60;
     minutes = minutes % 60;
     hours = hours % 24;
 
-
-    if(pause){
-        element.innerHTML = `
-            <p class="time_box">${minutes} M</p>
-            <p class="time_box">${seconds} S</p>
-        `
-        return;
+    // Clear any existing stopwatch interval before starting a new one
+    if (element.stopwatchInterval) {
+        clearInterval(element.stopwatchInterval);
     }
+
+    // If paused, display the time without starting the interval
+    if (pause) {
+        element.innerHTML = formatTime(minutes, seconds, hours, days, format);
+        return;  // Exit the function without starting the interval
+    }
+
+    // Start the stopwatch interval
     const stopwatchInterval = setInterval(() => {
-        // Increment seconds, and handle overflow to minutes, hours, and days
         seconds++;
 
         if (seconds === 60) {
@@ -460,59 +464,67 @@ function startStopwatchFrom(secondsStart,element,format,pause=false) {
             days++;
         }
 
-        // Display the time according to the format
-        let formattedTime = '';
-        
-        switch (format) {
-            case 'm-s':
-                formattedTime = `
-                    <p class="time_box">${minutes} M</p>
-                    <p class="time_box">${seconds} S</p>
-                `;
-                break;
+        // Update the display with formatted time
+        element.innerHTML = formatTime(minutes, seconds, hours, days, format);
+    }, 1000);
 
-            case 'h-m-s':
-                formattedTime = `
-                    <p class="time_box">${hours} H</p>
-                    <p class="time_box">${minutes} M</p>
-                    <p class="time_box">${seconds} S</p>
-                `;
-                break;
+    // Store the interval ID on the element for future reference (for stopping)
+    element.stopwatchInterval = stopwatchInterval;
 
-            case 'd-h-m-s':
-                formattedTime = `
-                    <p class="time_box">${days} D</p>
-                    <p class="time_box">${hours} H</p>
-                    <p class="time_box">${minutes} M</p>
-                    <p class="time_box">${seconds} S</p>
-                `;
-                break;
-
-            default:
-                formattedTime = `
-                    <p class="time_box">${hours} H</p>
-                    <p class="time_box">${minutes} M</p>
-                    <p class="time_box">${seconds} S</p>
-                `;
-        }
-
-        // Update the display
-        element.innerHTML = formattedTime;
-
-    }, 1000);  // Update every second
-
-    // Function to stop the stopwatch
+    // Return the stop function
     function stopStopwatch() {
         clearInterval(stopwatchInterval);
+        delete element.stopwatchInterval; // Remove the reference to the interval
         console.log('Stopwatch stopped');
     }
 
-    return stopStopwatch;  // Return the stop function to stop the stopwatch externally
+    return stopStopwatch; // Return the stop function to stop the stopwatch externally
 }
 
+// Helper function to format time
+function formatTime(minutes, seconds, hours, days, format) {
+    let formattedTime = '';
 
+    switch (format) {
+        case 'm-s':
+            formattedTime = `
+                <p class="time_box">${minutes} M</p>
+                <p class="time_box">${seconds} S</p>
+            `;
+            break;
+
+        case 'h-m-s':
+            formattedTime = `
+                <p class="time_box">${hours} H</p>
+                <p class="time_box">${minutes} M</p>
+                <p class="time_box">${seconds} S</p>
+            `;
+            break;
+
+        case 'd-h-m-s':
+            formattedTime = `
+                <p class="time_box">${days} D</p>
+                <p class="time_box">${hours} H</p>
+                <p class="time_box">${minutes} M</p>
+                <p class="time_box">${seconds} S</p>
+            `;
+            break;
+
+        default:
+            formattedTime = `
+                <p class="time_box">${hours} H</p>
+                <p class="time_box">${minutes} M</p>
+                <p class="time_box">${seconds} S</p>
+            `;
+    }
+
+    return formattedTime;
+}
+
+let currentStopwatch;
 async function updateGameTimeData (id){
     const data = await fetchGameTimeData(id)
+
 
     const game_start_time = document.getElementById('game-start-time')
     const game_total_duration = document.getElementById('game-total-duration')
@@ -520,7 +532,16 @@ async function updateGameTimeData (id){
     const total_time_running_date = document.getElementById('game-total-time-running') 
     const toal_time_remaining_date = document.getElementById('game-total-time-remaining')
     const timerType = total_time_running_date.getAttribute('data-timer-type')
+    const leaked_time = document.getElementById('game-total-leakage-time')
+    const remaning_time = document.getElementById('game-total-remaning-time')
 
+    remaning_time.textContent = `Remaning Time : ${data?.remaning_time}`
+    
+
+    if(data?.leakage_time){
+        format_leakage = secondsToHHMMSS(data?.leakage_time)
+        leaked_time.textContent = `Leakage Time : ${format_leakage}`
+    }
 
 
 
@@ -538,11 +559,20 @@ async function updateGameTimeData (id){
             half_duration.textContent = `Second Half : ${data?.half_time_duration}`
 
         }
-        
 
 
-            startStopwatchFrom(data?.running_time,total_time_running_date,timerType,data?.pause_running_time)
         
+        // Stop the current stopwatch before starting a new one
+        if (currentStopwatch) {
+            currentStopwatch(); // Stop the previous stopwatch
+        }
+
+        currentStopwatch = startStopwatchFrom(
+            data?.pause_running_time,
+            data?.running_time,
+            total_time_running_date,
+            timerType
+        );
 
         
     }
@@ -564,6 +594,8 @@ const fetchGameTimeData =async(id)=>{
         method:"GET",
     })
     const responseData = await response.json();
+
+    console.log('fetch tiem api resopnse',responseData)
     if(!response.ok){
         snack.showSnack(message="Error Fetching the match data try again.",type='error')
         return;
@@ -576,13 +608,64 @@ const fetchGameTimeData =async(id)=>{
 
 
 
+// load pause resume api time load data
+
+const handleLoadPauseResumeData =async(match)=>{
+    
+    try{
+        const response = await fetch(`/match/game-pause-resume-status/${match}/`,{
+            method:"GET"  
+        })
+
+        const responseData = await response.json()
+
+        console.log('Response of pause resume initial data',responseData)
+        if(!response.ok){
+            snack.showSnack(message=responseData.message || 'Something Went Wrong',type='error')
+            return;
+        }
+
+        if(responseData.data){
+            managePauseResumeDom(responseData.data)
+        }
+
+
+    }catch(error){
+        snack.showSnack(message="Error Fetching the Pause Resume Recent Status, Try Again!",type='error')
+    }
+}
+
+
+const managePauseResumeDom =(data)=>{
+    const button = document.getElementById('pause-resume-button')
+
+    
+    if(data){
+        console.log('dom data passing',data)
+        if(data.recent_status == 'paused'){
+            button.textContent = 'Resume Match'
+            button.onclick =()=> handleResumeMatchRequest(data.match,data.recent_resume_id)
+        }else if(data.recent_status == 'resumed'){
+            button.textContent = 'Pause Match'
+            button.onclick =()=> handlePauseMatchRequest(data.match)
+        }
+    }
+}
+
 
 
 // pause resume
-const handlePauseMatchRequest =async()=>{
+const handlePauseMatchRequest =async(match)=>{
+
+    console.log('match id',match)
+    const formData = new FormData()
+    formData.append('match',match)
     const response = await fetch(`/match/pause-match/`,{
         method:"POST",
+        body:formData,        
     })
+
+    // console.log(await response)
     const responseData = await response.json()
 
     console.log('responese of pause',responseData)
@@ -592,12 +675,17 @@ const handlePauseMatchRequest =async()=>{
         return
     }
 
-    return responseData.data;
+    snack.showSnack(message="Successfully Paused the Match. Time Duration between Paused and Resumed will be listed on Leakage Time.",type="success")
+
+    // return responseData;
+    handleLoadPauseResumeData(match);
+    updateGameTimeData(match)
 }
 
 
-const handleResumeMatchRequest =async(id)=>{
-    const response = await fetch(`/match/resume-match/${id}/`,{
+
+const handleResumeMatchRequest =async(match,resume_id)=>{
+    const response = await fetch(`/match/resume-match/${resume_id}/`,{
         method:"POST",
     })
     const responseData = await response.json()
@@ -609,25 +697,10 @@ const handleResumeMatchRequest =async(id)=>{
         return
     }
 
-    return responseData.data
+    snack.showSnack(message=responseData.message || 'Successfully Resumed the Match',type="success")
+
+    handleLoadPauseResumeData(match);
+    updateGameTimeData(match);
 }
 
-const handlePauseResumeMatch =async(status)=>{
-    const toggleButton = document.getElementById("pause-resume-button")
 
-    const textContent = toggleButton.textContent.trim()
-    
-    if (textContent === 'Pause Match') {
-        console.log('yes pause')
-        const responseData = await handlePauseMatchRequest();
-        if(responseData.success){
-            toggleButton.textContent = 'Resume Match';
-        }
-            
-        
-    } else {
-        const responseData = await handleResumeMatchRequest()
-        toggleButton.textContent = 'Pause Match';
-    }
-    
-}

@@ -17,6 +17,7 @@ from django.db.models import Count,Q
 from utils.time_formatter import format_duration
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
+from django.utils.timezone import now
 
 
 def match_list_view(request):
@@ -346,10 +347,71 @@ def format_iso_duration(iso_duration):
     return format_duration
 
 
+def get_pause_or_resumed(request,match_id):
+    match = get_object_or_404(Match,pk=match_id)
+    match_pause_resume = MatchPauseResume.objects.filter(match=match)
+    match_time_manager = get_object_or_404(MatchTimeManager,match=match)
+    data = {
+        'match':match.id,
+        'time_manager_initiation':False,
+        'pause_resume_initiation':False,
+        'is_ongoing':False,
+        'recent_status':'resumed',
+    }
+    message = ''
+
+    
+    match_status = constants.MatchStatus
+    if match.status == match_status.ONGOING:
+        data['is_ongoing']  = True
+        if match_time_manager :
+            data['time_manager_initiation'] = True
+
+            if match_time_manager.first_half_start_time and match_time_manager.second_half_start_time:
+                data['is_before_half'] = False
+            else:
+                data['is_before_half'] =True
+
+
+        if match_pause_resume.count() > 0:
+            latest_pause_resume = match_pause_resume.latest('paused_at')
+
+            print('latest pause resume',latest_pause_resume)
+
+            if latest_pause_resume.paused_at and not latest_pause_resume.resumed_at:
+                data['recent_status'] = 'paused'
+                data['recent_resume_id'] = latest_pause_resume.id
+            else:
+                data['recent_status'] = 'resumed'
+
+            data['pause_resume_initiation'] = True
+    else:
+        message="Match should be ongoing to get the detail."
+
+    
+
+    return JsonResponse({
+        'success':True,
+        'message':message,
+        'data':data
+    })
+    
+
 @csrf_exempt
 def pause_match(request):
     if request.method == 'POST':
-        form = MatchPauseResumeForm(request.POST)
+        post_data = request.POST.copy()  # Make a mutable copy of POST data
+        if not post_data.get('paused_at'):  # If paused_at is not provided
+            post_data['paused_at'] = now()  # Set paused_at to current time
+        
+        form = MatchPauseResumeForm(post_data)
+        
+        if form.errors:  
+            return JsonResponse({
+                'success': False,
+                'errors': form.errors
+            }, status=400)  # <-- Return status 400 if form has errors
+
         if form.is_valid():
             match_pause_resume = form.save()
             return JsonResponse({
@@ -357,48 +419,66 @@ def pause_match(request):
                 'message': 'Match paused successfully.',
                 'data': {
                     'id': match_pause_resume.id,
-                    'match_time_manager': match_pause_resume.match_time_manager.id,
+                    'match': match_pause_resume.match.id,
                     'paused_at': match_pause_resume.paused_at,
                     'is_before_half': match_pause_resume.is_before_half,
                 }
             })
-        else:
-            return JsonResponse({
-                'success': False,
-                'errors': form.errors
-            })
+
     return JsonResponse({
         'success': False,
         'message': 'Only POST requests are allowed.'
-    })
+    }, status=405)  # <-- 405 Method Not Allowed
 
 @csrf_exempt
-def resume_match(request, pk):
+def resume_match(request, resume_id):
     if request.method == 'POST':
-        match_pause_resume = get_object_or_404(MatchPauseResume, pk=pk)
+        match_pause_resume = get_object_or_404(MatchPauseResume, pk=resume_id)
         form = MatchPauseResumeForm(request.POST, instance=match_pause_resume)
-        if form.is_valid():
-            match_pause_resume = form.save()
+        if match_pause_resume:
+            match_pause_resume.resumed_at = now()
+            match_pause_resume.save()
+
             return JsonResponse({
-                'success': True,
-                'message': 'Match resumed successfully.',
-                'data': {
-                    'id': match_pause_resume.id,
-                    'match_time_manager': match_pause_resume.match_time_manager.id,
-                    'paused_at': match_pause_resume.paused_at,
-                    'resumed_at': match_pause_resume.resumed_at,
-                    'is_before_half': match_pause_resume.is_before_half,
-                }
-            })
+                'success':True,
+                'message':'Successfully Resumed the match',
+            },status=200)
         else:
             return JsonResponse({
                 'success': False,
-                'errors': form.errors
-            })
+                'message':'Cannot Resume ! No Data Found for when it was paused'
+            },status=400)
     return JsonResponse({
         'success': False,
         'message': 'Only POST requests are allowed.'
-    })
+    },status=405)
+
+
+def get_leaked_duration(match,match_time_manager,is_before_half=True):
+    
+    leaked_time = 0
+    if match_time_manager.first_half_start_time and not match_time_manager.second_half_start_time:
+        match_pause_resume = MatchPauseResume.objects.filter(match=match,is_before_half=is_before_half)
+        resumed_data = match_pause_resume.exclude(resumed_at__isnull=True)
+        if match_pause_resume.count() > 0:
+            if resumed_data.count() > 0:
+                for data in resumed_data:
+                    leaked_duration = data.resumed_at - data.paused_at
+                    
+                    leaked_time += leaked_duration.seconds
+
+            latest_pivot = match_pause_resume.latest('created_at')
+            # print('latest pivot',latest_pivot)
+            if latest_pivot.paused_at and latest_pivot.resumed_at is None:
+                pause_running_time = True
+            else:
+                pause_running_time = False
+        else:
+            pause_running_time = False
+
+
+
+    return {'leaked_time':leaked_time,'pause_running_time':pause_running_time}
 
 @csrf_exempt
 def get_match_time_api(request,match_id):
@@ -420,27 +500,46 @@ def get_match_time_api(request,match_id):
                 'status':400,
             })
 
-        print('time',match_time_manager)
 
         running_time = datetime.now() - match_time_manager.first_half_start_time
 
+        pause_resume_overview = get_leaked_duration(match,match_time_manager,is_before_half=True)
+
+        print('time',pause_resume_overview)
+        leckage_time = pause_resume_overview['leaked_time']
+        pause_running_time = pause_resume_overview['pause_running_time']
+
         
+        
+        # return
+        data_running_time = running_time
+        data_remaning_time = half_time_duration - data_running_time
+
         data = {
             'start_time':match_time_manager.start_time,
             'game_duration':format_duration(event.match_duration),
             'half_time_duration': format_duration(half_time_duration),
             'first_half_start_time':first_half_start_time,
             'second_half_start_time':match_time_manager.second_half_start_time,
-            'running_time':running_time.seconds,
-            'leakage_time':'',
-            'pause_running_time':False
+            'running_time':data_running_time.seconds,
+            'remaning_time':format_duration(data_remaning_time),
+            'leakage_time':leckage_time,
+            'pause_running_time':pause_running_time,
         }
+
+        return JsonResponse({
+            'success':True,
+            'data':data,
+            "message":"Successfully get the Data",
+        })
+
+        
+
     return JsonResponse({
         'success':False,
-        'data':data,
+        # 'data':data,
         "message":"Invalid GET request",
-        'status':400
-    })
+    },status=405)
 
 @csrf_exempt
 def actual_start_match_api(request,match_id):

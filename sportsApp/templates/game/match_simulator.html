@@ -59,18 +59,14 @@
                 </div>
 
                 <div class="block">
-                    <p>Remaning time:</p>
+                    <p id="game-total-remaning-time">Remaning time:</p>
                     <p id="game-total-leakage-time">Leakage Time : 0 min</p>
                 </div>
             </div>
             <div class="holder center">
                 <button class="global_btn outline" onclick="handleClickStartMatch('{{match.id}}')">Start First Half</button>
-                <button class="global_btn plain" id="pause-resume-button" onclick="handlePauseResumeMatch('{% if match_pause_status %}1{%else%}0{% endif %}')">
-                    {% if match_pause_status %}
-                        Resume Match
-                    {% else %}
-                        Pause Match
-                    {% endif %}
+                <button class="global_btn plain" id="pause-resume-button" onclick="handleLoadPauseResumeData('{{match.id}}')">
+                    Load Time Data
                 </button>
 
             </div>

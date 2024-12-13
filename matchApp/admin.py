@@ -76,9 +76,9 @@ class SubstitutionAdmin(admin.ModelAdmin):
 
 @admin.register(MatchPauseResume)
 class MatchPauseResumeAdmin(admin.ModelAdmin):
-    list_display = ('match_time_manager', 'paused_at', 'resumed_at', 'duration_display')
+    list_display = ('match', 'paused_at', 'resumed_at', 'duration_display')
     list_filter = ('paused_at', 'resumed_at')
-    search_fields = ('match_time_manager__match__team1__name', 'match_time_manager__match__team2__name')
+    search_fields = ('match__team1__name', 'match__team2__name')
     ordering = ('-paused_at',)
     
     def duration_display(self, obj):

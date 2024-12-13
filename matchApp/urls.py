@@ -24,8 +24,8 @@ urlpatterns = [
 
     # add match pause resumes
     path('pause-match/',views.pause_match,name='add-match-pause-api'),
-    path('resume-match/<int:pk>/',views.resume_match,name='add-match-resume-api'),
-
+    path('resume-match/<int:resume_id>/',views.resume_match,name='add-match-resume-api'),
+    path('game-pause-resume-status/<int:match_id>/',views.get_pause_or_resumed,name='get-pause-resumed-status-api'),
     # get match times api
     path('match-time-api/<int:match_id>/',views.get_match_time_api,name='match-time-api'),
     # adding match time scheduling

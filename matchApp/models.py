@@ -9,7 +9,7 @@ from django.core.exceptions import ValidationError
 import uuid
 from sportsApp import constants
 from datetime import timedelta
-
+from django.utils.timezone import now
 # Create your models here.
 # Match Model
 class Match(models.Model):
@@ -85,7 +85,7 @@ class MatchTimeManager(models.Model):
         if self.start_time is None:
             return "Not Started"
         # If there's a pause without a resume, the match is paused
-        if self.pause_resume_sessions.filter(resumed_at__isnull=True).exists():
+        if self.match.pause_resume_sessions.filter(resumed_at__isnull=True).exists():
             return "Paused"
         return "Ongoing"
 
@@ -93,8 +93,8 @@ class MatchTimeManager(models.Model):
         return f"Time Manager for Match {self.match.id} - Status: {self.match_status}"
 
 class MatchPauseResume(models.Model):
-    match_time_manager = models.ForeignKey('MatchTimeManager', on_delete=models.CASCADE, related_name='pause_resume_sessions')
-    paused_at = models.DateTimeField(help_text="The time when the match was paused.")
+    match = models.ForeignKey(Match, on_delete=models.CASCADE, related_name='pause_resume_sessions')
+    paused_at = models.DateTimeField(help_text="The time when the match was paused.",default=now)
     resumed_at = models.DateTimeField(null=True, blank=True, help_text="The time when the match resumed.")
     is_before_half = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
