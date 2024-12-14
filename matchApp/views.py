@@ -285,8 +285,9 @@ def game_stimulation_alerts():
 def match_time_manager_view(request, pk=None):
     if request.method == 'POST':
         if pk:
-            instance = get_object_or_404(MatchTimeManager, pk=pk)
-            form = MatchTimeManagerForm(request.POST, instance=instance)
+            match_time_manager = get_object_or_404(MatchTimeManager,pk=pk)
+            form = MatchTimeManagerForm(request.POST, instance=match_time_manager)
+            
         else:
             form = MatchTimeManagerForm(request.POST)
         
@@ -457,6 +458,7 @@ def resume_match(request, resume_id):
 def get_leaked_duration(match,match_time_manager,is_before_half=True):
     
     leaked_time = 0
+    pause_running_time = False
     if match_time_manager.first_half_start_time and not match_time_manager.second_half_start_time:
         match_pause_resume = MatchPauseResume.objects.filter(match=match,is_before_half=is_before_half)
         resumed_data = match_pause_resume.exclude(resumed_at__isnull=True)
@@ -492,13 +494,17 @@ def get_match_time_api(request,match_id):
         match_duration = event.match_duration
         half_time_duration = match_duration / 2
 
+
+        if not match_time_manager.first_half_start_time:
+                return JsonResponse({
+                    'success':False,
+                    'message':'Start First half to Calulate the time',
+                    'status':400,
+                },status=400)
         first_half_start_time = match_time_manager.first_half_start_time.time().strftime('%H:%M %p')
-        if not first_half_start_time:
-            return JsonResponse({
-                'success':False,
-                'message':'Start First half to Calulate the time',
-                'status':400,
-            })
+        
+             
+        
 
 
         running_time = datetime.now() - match_time_manager.first_half_start_time
@@ -512,19 +518,24 @@ def get_match_time_api(request,match_id):
         
         
         # return
-        data_running_time = running_time
-        data_remaning_time = half_time_duration - data_running_time
+        data_running_time = running_time.seconds
+        data_remaning_time = half_time_duration - running_time
+
 
         data = {
+            'match':match.id,
+            'time_manager':match_time_manager.id,
             'start_time':match_time_manager.start_time,
             'game_duration':format_duration(event.match_duration),
             'half_time_duration': format_duration(half_time_duration),
             'first_half_start_time':first_half_start_time,
             'second_half_start_time':match_time_manager.second_half_start_time,
-            'running_time':data_running_time.seconds,
+            'running_time':data_running_time,
             'remaning_time':format_duration(data_remaning_time),
             'leakage_time':leckage_time,
             'pause_running_time':pause_running_time,
+            'is_half_time_over':match_time_manager.is_half_time_over,
+            'is_match_ended':match_time_manager.match_ended
         }
 
         return JsonResponse({
@@ -544,13 +555,26 @@ def get_match_time_api(request,match_id):
 @csrf_exempt
 def actual_start_match_api(request,match_id):
 
+    type = int(request.GET.get('type'))
+
+    print(type)
+
     if request.method == "POST":
 
         match_time_manager = get_object_or_404(MatchTimeManager,match=match_id)
 
         current_time = datetime.now()
-        match_time_manager.first_half_start_time = current_time
-
+        if type == 0:
+            match_time_manager.first_half_start_time = current_time
+        elif type == 1:
+            match_time_manager.second_half_start_time = current_time
+        else:
+            return JsonResponse({
+                'success':False,
+                "message":"Invalid Query request",
+                'status':400
+            },status=400)
+        
         match_time_manager.save()
 
         # print('check date time',datetime.now().time())
@@ -601,7 +625,7 @@ def add_substitutiton_api(request):
         }, status=405)
 
 
-
+    
 
 
 

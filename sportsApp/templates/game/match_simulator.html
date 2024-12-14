@@ -53,7 +53,7 @@
 
                 <div>
                     <p id="game-half-duration"></p>
-                    <p id="game-total-time-running" class="timer_box timer" data-timer-type="m-s"></p>
+                    <p id="game-total-time-running" class="timer_box timer" data-timer-type="h-m-s"></p>
                     <p id="game-total-time-remaining"></p>
 
                 </div>
@@ -64,7 +64,8 @@
                 </div>
             </div>
             <div class="holder center">
-                <button class="global_btn outline" onclick="handleClickStartMatch('{{match.id}}')">Start First Half</button>
+                <button class="global_btn outline" id="start-match-button" onclick="handleClickStartMatch('{{match.id}}')">Start First Half</button>
+
                 <button class="global_btn plain" id="pause-resume-button" onclick="handleLoadPauseResumeData('{{match.id}}')">
                     Load Time Data
                 </button>

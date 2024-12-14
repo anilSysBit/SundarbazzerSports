@@ -131,12 +131,13 @@ class MatchTimeManagerForm(forms.ModelForm):
     class Meta:
         model = MatchTimeManager
         fields = [
-            'match',
             'start_time',
             'extra_time_first_half',
             'extra_time_full_time',
+            'is_half_time_over',
             'match_ended'
         ]
+        
         widgets = {
             'start_time': forms.DateTimeInput(attrs={'type': 'datetime-local','required':True}),
             'extra_time_first_half': forms.TimeInput(attrs={'type': 'duration'}),

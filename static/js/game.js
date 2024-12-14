@@ -370,18 +370,20 @@ const handleSubmitSubstitution =async(event,player_out,player_in)=>{
 // handle click start match
 
 
-const handleRequestGameStart =async(id)=>{
+const handleRequestGameStart =async(id,type=0)=>{
     const form = document.getElementById('simulation-form');
 
     const formData = new FormData(form)
+
     const formValues = Object.fromEntries(formData.entries());
 
 
     try{
-        const response = await fetch(`/match/start-match/${id}/`, {
+        const response = await fetch(`/match/start-match/${id}/?type=${type}`, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': formValues.csrfmiddlewaretoken, // Include CSRF token
+                
             },
             body: formValues, // Send FormData directly for compatibility with Django
         });
@@ -521,6 +523,38 @@ function formatTime(minutes, seconds, hours, days, format) {
     return formattedTime;
 }
 
+
+
+// finish and end the match
+
+const handleUpdateMatchTimeManager =async(id,newFormData)=>{
+    const form = document.getElementById("simulation-form")
+
+    const formData = new FormData(form);
+
+    // Convert FormData to a plain object
+    const data = Object.fromEntries(formData.entries());
+    // console.log(data)
+    const response = await fetch(`/match/match-schedule/${id}/`,
+        {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': data.csrfmiddlewaretoken, // Include CSRF token
+            },
+            body: newFormData,
+        }
+    )
+    const responseData = await response.json()
+    console.log('Response of update match time manager',responseData)
+    if(!response.ok){
+        console.log('gonig here')
+        snack.showSnack(message=responseData?.message || "Error POST request.",type='error')
+        return;
+    }
+
+    snack.showSnack(message=responseData.message || 'Success',type='success')
+}
+
 let currentStopwatch;
 async function updateGameTimeData (id){
     const data = await fetchGameTimeData(id)
@@ -534,6 +568,44 @@ async function updateGameTimeData (id){
     const timerType = total_time_running_date.getAttribute('data-timer-type')
     const leaked_time = document.getElementById('game-total-leakage-time')
     const remaning_time = document.getElementById('game-total-remaning-time')
+    const start_button = document.getElementById("start-match-button")
+
+    if(!data?.is_half_time_over && !data?.first_half_start_time){
+        start_button.textContent = 'Start First Half'
+        
+    }
+    else if(data?.first_half_start_time && !data?.is_half_time_over){
+        start_button.textContent = 'Finish First Half'
+        start_button.onclick =()=>{
+            if(confirm("Are you sure you want to finish first half?")){
+                const formData = new FormData();
+                formData.append('is_half_time_over',true)
+                handleUpdateMatchTimeManager(data?.time_manager,formData)
+                updateGameTimeData(data?.match)
+            }
+        }
+    }
+    else if(data?.is_half_time_over && !data?.second_half_start_time){
+        start_button.textContent = 'Start Second Half'
+        start_button.onclick =()=> {
+            if(confirm("Are you sure you want to finish first half?")){
+                handleRequestGameStart(data?.match,type=1)
+            }
+        }
+    }else if(data?.second_half_start_time && data?.first_half_start_time && data?.is_half_time_over){
+        start_button.textContent = 'Finish Game'
+        start_button.onclick =()=> {
+            if(confirm("Are you sure you want to finish the Game?")){
+                const formData = new FormData();
+                formData.append('match_ended',true)
+                handleUpdateMatchTimeManager(data?.time_manager,formData)
+                updateGameTimeData(data?.match)
+            }
+        }
+    }else{
+        start_button.textContent = 'Game Already over'
+        start_button.onclick = ()=> null
+    }
 
     remaning_time.textContent = `Remaning Time : ${data?.remaning_time}`
     
@@ -597,7 +669,7 @@ const fetchGameTimeData =async(id)=>{
 
     console.log('fetch tiem api resopnse',responseData)
     if(!response.ok){
-        snack.showSnack(message="Error Fetching the match data try again.",type='error')
+        snack.showSnack(message=responseData?.message || "Error Fetching the match data try again.",type='error')
         return;
     }
 
@@ -622,6 +694,7 @@ const handleLoadPauseResumeData =async(match)=>{
         console.log('Response of pause resume initial data',responseData)
         if(!response.ok){
             snack.showSnack(message=responseData.message || 'Something Went Wrong',type='error')
+
             return;
         }
 

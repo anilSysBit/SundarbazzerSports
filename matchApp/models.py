@@ -54,6 +54,8 @@ class MatchTimeManager(models.Model):
 
     first_half_start_time = models.DateTimeField(blank=True,null=True)
     second_half_start_time = models.DateTimeField(blank=True,null=True)
+
+    is_half_time_over = models.BooleanField(default=False)
     
     extra_time_first_half = models.DurationField(
         default=timedelta(0),
@@ -111,6 +113,11 @@ class MatchPauseResume(models.Model):
     def __str__(self):
         return f"Pause at {self.paused_at}, Resume at {self.resumed_at or 'Not Resumed'}"
 # Match Interruption Model
+
+
+
+class MatchStatics(models.Model):
+    end_date_time = models.DateTimeField(null=True,blank=True)
 
 class MatchInterruption(models.Model):
     INTERRUPTIONS_CAUSES = [
