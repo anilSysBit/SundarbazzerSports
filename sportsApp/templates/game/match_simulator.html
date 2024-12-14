@@ -120,7 +120,7 @@
                     {% endfor%}
                     <tr>
                         <td>Extra Players ({{count.team1.extra}})</td>
-                        <td><button onclick="sendSelectedData()">send selected data</button></td>
+                        <!-- <td><button onclick="sendSelectedData()">send selected data</button></td> -->
                     </tr>
                     {% for player in player1.extra_players %}
                     <tr class="select-checkbox-row">
@@ -139,51 +139,52 @@
 
         </div>
 
-
-        
         <div class="team">
-
+            <p>Active Players ({{count.team2.active}})</p>
             <table class="responsive-table">
                 <thead>
                     <tr>
-                        <th>SN</th>
+                        <th>Select</th>
+                        <th hidden>teamid</th>
+                        <th hidden>teamname</th>
                         <th>JERSEY</th>
                         <th>NAME</th>
+                        <th>G</th>
+                        <th>F</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for player in player2.active_players %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{player.jersey_no}}</td>
-                        <td>{{player.designation}} - {{player.name}}</td>
+                    <tr class="select-checkbox-row" data-player-id="{{ player.id }}">
+                        <td ><input type="checkbox" class="select-checkbox" value="{{player.id}}"></td>
+                        <td id="team_name" hidden>{{player.team.name}}</td>
+                        <td id="jersey">{{player.jersey_no}}</td>
+                        <td id="name">{{player.designation}} - {{player.name}}</td>
+                        <td class="goal-count-2">{{ player.goal_count }}</td> <!-- Use class instead of ID -->
+                        <td class="foul-count-2">{{ player.foul_count }}</td> <!-- Use class instead of ID -->
+
                     </tr>
 
                     {% endfor%}
-                </tbody>
-            </table>
-            <p>Extra Players</p>
-
-            <table class="responsive-table">
-                <thead>
                     <tr>
-                        <th>SN</th>
-                        <th>JERSEY</th>
-                        <th>NAME</th>
+                        <td>Extra Players ({{count.team2.extra}})</td>
+                        <!-- <td><button onclick="sendSelectedData()">send selected data</button></td> -->
                     </tr>
-                </thead>
-                <tbody>
                     {% for player in player2.extra_players %}
-                    <tr>
+                    <tr class="select-checkbox-row">
+                        <td><input type="checkbox" class="select-checkbox" value="{{player.id}}"></td>
+                        <td id="team_name" hidden>{{player.team.name}}</td>
+                        <td id="jersey">{{player.jersey_no}}</td>
+                        <td id="name">{{player.designation}} - {{player.name}}</td>
+                        <td id="goal-count-1">{{ player.goal_count }}</td>
+                        <td id="foul-count-2">{{ player.foul_count }}</td>
                         
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{player.jersey_no}}</td>
-                        <td>{{player.designation}} - {{player.name}}</td>
                     </tr>
 
                     {% endfor%}
                 </tbody>
             </table>
+
         </div>
     </div>
 

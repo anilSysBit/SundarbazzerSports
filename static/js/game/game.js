@@ -137,9 +137,26 @@ function updateMatchData() {
                 });
             });
 
-            // Update team 2 players' goal and foul counts
+            
+            // Update team 1 players' goal and foul counts
             data.team2.active_players.forEach(player => {
+                const goalCells = document.querySelectorAll('.goal-count-2');
+                const foulCells = document.querySelectorAll('.foul-count-2');
+                
+                // Loop through all goal and foul count cells for Team 1 and update based on player ID
+                goalCells.forEach(cell => {
+                    if (cell.closest('tr').dataset.playerId == player.id) {
+                        cell.textContent = player.goal_count;
+                    }
+                });
+
+                foulCells.forEach(cell => {
+                    if (cell.closest('tr').dataset.playerId == player.id) {
+                        cell.textContent = player.foul_count;
+                    }
+                });
             });
+
         })
         .catch(error => {
             console.error('Error fetching match data:', error);
