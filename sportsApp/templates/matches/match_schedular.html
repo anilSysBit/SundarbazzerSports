@@ -2,7 +2,7 @@
 
 <!-- <button class="global_btn" onclick="handleOpenGoalAlert()">asd alert</button> -->
 
-<form class="custom_alert_box goal_alert_box dialog-overlay" method="dialog" id="match-schedule-alert-box" onsubmit="handleMatchSchedular(event,'{{match.time_manager.id}}')">
+<form class="custom_alert_box goal_alert_box dialog-overlay" method="dialog" id="match-schedule-alert-box" onsubmit="handleMatchSchedular(event,'{{match.id}}')">
     {% csrf_token %}
     <input type="text" hidden value="{{match.id}}" name="match">
     <!-- <input type="text" hidden name="player" id="player"> -->

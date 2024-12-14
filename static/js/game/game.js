@@ -392,15 +392,32 @@ const handleRequestGameStart =async(id,type=0)=>{
 
         console.log('response data of start time',responseData)
         if(!response.ok){
-            snack.showSnack(message="Error starting the time",type="error")
+            snack.showSnack(message=responseData?.message || "Error starting the time","error")
             return;
         }
 
-        snack.showSnack(message=responseData?.message || "Success",type='success')
+        snack.showSnack(message=responseData?.message || "Success",'success');
 
-        updateGameTimeData(id);
+        console.log('update type',type)
+        switch(type){
+            case 0:
+                updateButtonActions(id,type=1)
+                break;
+            case 1:
+                updateButtonActions(id,type=2)
+                break;
 
+            case 2:
+                updateButtonActions(id,type=3)
+                break;
 
+            case 3:
+                updateButtonActions(id)
+                break;
+
+            default:
+                console.log('no default')
+        }
 
 
     }catch(error){
@@ -408,6 +425,56 @@ const handleRequestGameStart =async(id,type=0)=>{
     }
 }
 
+
+const updateButtonActions =(id,type)=>{
+    const start_button = document.getElementById("start-match-button")
+
+    switch(type){
+        case 0:
+            start_button.textContent = 'Start First Half'
+            start_button.onclick =()=> {
+            if(confirm("Are you sure you want to start first half?")){
+                handleRequestGameStart(id,type=0)
+                
+            }
+        };
+        break;
+
+        case 1:
+            start_button.textContent = 'Finish First Half'
+            start_button.onclick =async()=>{
+            if(confirm("Are you sure you want to finish first half?")){
+                handleRequestGameStart(id,type=1)
+                
+                }
+            };
+            break;
+
+        case 2:
+            start_button.textContent = 'Start Second Half'
+            start_button.onclick =()=> {
+            if(confirm("Are you sure you want to start second half?")){
+                handleRequestGameStart(id,type=2)
+            }
+        }
+        break;
+
+        case 3:
+            start_button.textContent = 'Finish Game'
+            start_button.onclick =()=> {
+            if(confirm("Are you sure you want to finish the Game?")){
+                handleRequestGameStart(id,type=3)
+                }
+            }
+            break;
+
+
+        default:
+            start_button.textContent = 'Game Already over'
+            start_button.onclick = ()=> null
+
+    }
+}
 const runTimer =(start_time)=>{
     const datetime = new Date(start_time);
 
@@ -527,7 +594,7 @@ function formatTime(minutes, seconds, hours, days, format) {
 
 // finish and end the match
 
-const handleUpdateMatchTimeManager =async(id,newFormData)=>{
+const handleUpdateMatchTimeManager =async(id)=>{
     const form = document.getElementById("simulation-form")
 
     const formData = new FormData(form);
@@ -541,7 +608,7 @@ const handleUpdateMatchTimeManager =async(id,newFormData)=>{
             headers: {
                 'X-CSRFToken': data.csrfmiddlewaretoken, // Include CSRF token
             },
-            body: newFormData,
+            body:formData
         }
     )
     const responseData = await response.json()
@@ -549,15 +616,53 @@ const handleUpdateMatchTimeManager =async(id,newFormData)=>{
     if(!response.ok){
         console.log('gonig here')
         snack.showSnack(message=responseData?.message || "Error POST request.",type='error')
-        return;
+        return responseData;
     }
 
     snack.showSnack(message=responseData.message || 'Success',type='success')
+    return responseData
+}
+
+
+
+const handleLoadGameRecentData =(match)=>{
+    updateGameRunner(match)
+}
+async function updateGameRunner (id){
+    const start_button = document.getElementById("start-match-button")
+    const responseData = await fetchGameTimeData(id);
+    const data = responseData?.data
+    
+    console.log('data',data)
+
+    updateGameTimeData(id,responseData)
+    if(responseData.start_status == 'not_started'){
+        updateButtonActions(id,type=0)
+        return;
+    }
+
+    if(data?.first_half_start_time && !data?.is_half_time_over && !data?.second_half_start_time){
+        updateButtonActions(id,type=1)
+    }
+    else if(data?.is_half_time_over && !data?.second_half_start_time){
+        updateButtonActions(id,type=2)
+    }else if(data?.second_half_start_time && data?.first_half_start_time && data?.is_half_time_over && !data?.is_match_ended){
+        updateButtonActions(id,type=3)
+    }else{
+        updateButtonActions(id)
+    }
 }
 
 let currentStopwatch;
-async function updateGameTimeData (id){
-    const data = await fetchGameTimeData(id)
+async function updateGameTimeData (id,fetchedData){
+    let responseData;
+    if(fetchedData){
+        responseData = fetchedData
+    }else{
+
+        responseData = await fetchGameTimeData(id)
+    }
+    const data = responseData.data
 
 
     const game_start_time = document.getElementById('game-start-time')
@@ -568,44 +673,7 @@ async function updateGameTimeData (id){
     const timerType = total_time_running_date.getAttribute('data-timer-type')
     const leaked_time = document.getElementById('game-total-leakage-time')
     const remaning_time = document.getElementById('game-total-remaning-time')
-    const start_button = document.getElementById("start-match-button")
 
-    if(!data?.is_half_time_over && !data?.first_half_start_time){
-        start_button.textContent = 'Start First Half'
-        
-    }
-    else if(data?.first_half_start_time && !data?.is_half_time_over){
-        start_button.textContent = 'Finish First Half'
-        start_button.onclick =()=>{
-            if(confirm("Are you sure you want to finish first half?")){
-                const formData = new FormData();
-                formData.append('is_half_time_over',true)
-                handleUpdateMatchTimeManager(data?.time_manager,formData)
-                updateGameTimeData(data?.match)
-            }
-        }
-    }
-    else if(data?.is_half_time_over && !data?.second_half_start_time){
-        start_button.textContent = 'Start Second Half'
-        start_button.onclick =()=> {
-            if(confirm("Are you sure you want to finish first half?")){
-                handleRequestGameStart(data?.match,type=1)
-            }
-        }
-    }else if(data?.second_half_start_time && data?.first_half_start_time && data?.is_half_time_over){
-        start_button.textContent = 'Finish Game'
-        start_button.onclick =()=> {
-            if(confirm("Are you sure you want to finish the Game?")){
-                const formData = new FormData();
-                formData.append('match_ended',true)
-                handleUpdateMatchTimeManager(data?.time_manager,formData)
-                updateGameTimeData(data?.match)
-            }
-        }
-    }else{
-        start_button.textContent = 'Game Already over'
-        start_button.onclick = ()=> null
-    }
 
     remaning_time.textContent = `Remaning Time : ${data?.remaning_time}`
     
@@ -650,14 +718,7 @@ async function updateGameTimeData (id){
     }
 }
 
-function handleClickStartMatch (id){
-    if(confirm("Are you sure you want to start the match")){
-        console.log('Game Confirmed')
-        handleRequestGameStart(id);
-    }else{
-        console.log('Cancelled the confiramtion')
-    }
-}
+
 
 
 const fetchGameTimeData =async(id)=>{
@@ -670,10 +731,10 @@ const fetchGameTimeData =async(id)=>{
     console.log('fetch tiem api resopnse',responseData)
     if(!response.ok){
         snack.showSnack(message=responseData?.message || "Error Fetching the match data try again.",type='error')
-        return;
+        return responseData;
     }
 
-    return responseData.data
+    return responseData
 }
 
 
@@ -681,6 +742,8 @@ const fetchGameTimeData =async(id)=>{
 
 
 // load pause resume api time load data
+
+
 
 const handleLoadPauseResumeData =async(match)=>{
     
@@ -701,6 +764,7 @@ const handleLoadPauseResumeData =async(match)=>{
         if(responseData.data){
             managePauseResumeDom(responseData.data)
         }
+
 
 
     }catch(error){

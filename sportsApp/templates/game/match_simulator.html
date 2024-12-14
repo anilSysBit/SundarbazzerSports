@@ -47,6 +47,7 @@
 
                     <button onclick="updateGameTimeData('{{match.id}}')">Refresh time</button>
                     <!-- <p class="match_date_time">{{match.time_manager.start_time}} </p> -->
+                     
                     <P id="game-start-time">First Half Start Time : {% if match.time_manager.first_half_start_time%}{{match.time_manager.first_half_start_time}}  {% else %} Not Started Yet( Assumed to start on {{match.time_manager.start_time}}) {%endif%}</P>
                     <p id="game-total-duration">Duration: {{event.match_duration}}</p>
                 </div>
@@ -59,12 +60,12 @@
                 </div>
 
                 <div class="block">
-                    <p id="game-total-remaning-time">Remaning time:</p>
-                    <p id="game-total-leakage-time">Leakage Time : 0 min</p>
+                    <p id="game-total-remaning-time">Remaning time: 0</p>
+                    <p id="game-total-leakage-time">Leakage Time : 00:00:00</p>
                 </div>
             </div>
             <div class="holder center">
-                <button class="global_btn outline" id="start-match-button" onclick="handleClickStartMatch('{{match.id}}')">Start First Half</button>
+                <button class="global_btn outline" id="start-match-button" onclick="handleLoadGameRecentData('{{match.id}}')">Load Recent Data</button>
 
                 <button class="global_btn plain" id="pause-resume-button" onclick="handleLoadPauseResumeData('{{match.id}}')">
                     Load Time Data
@@ -189,6 +190,7 @@
     <script>
         const matchId = "{{match.id}}";
     </script>
-    <script src="{% static 'js/game.js' %}"></script>
+    <script src="{% static 'js/game/game.js' %}"></script>
+    <script src="{% static 'js/game/fetchGame.js' %}"></script>
 
 {% endblock content %}

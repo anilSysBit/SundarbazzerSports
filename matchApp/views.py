@@ -285,7 +285,8 @@ def game_stimulation_alerts():
 def match_time_manager_view(request, pk=None):
     if request.method == 'POST':
         if pk:
-            match_time_manager = get_object_or_404(MatchTimeManager,pk=pk)
+            match = get_object_or_404(Match,pk=pk)
+            match_time_manager = get_object_or_404(MatchTimeManager,match=match)
             form = MatchTimeManagerForm(request.POST, instance=match_time_manager)
             
         else:
@@ -459,22 +460,19 @@ def get_leaked_duration(match,match_time_manager,is_before_half=True):
     
     leaked_time = 0
     pause_running_time = False
-    if match_time_manager.first_half_start_time and not match_time_manager.second_half_start_time:
-        match_pause_resume = MatchPauseResume.objects.filter(match=match,is_before_half=is_before_half)
-        resumed_data = match_pause_resume.exclude(resumed_at__isnull=True)
-        if match_pause_resume.count() > 0:
-            if resumed_data.count() > 0:
-                for data in resumed_data:
-                    leaked_duration = data.resumed_at - data.paused_at
-                    
-                    leaked_time += leaked_duration.seconds
+    match_pause_resume = MatchPauseResume.objects.filter(match=match,is_before_half=is_before_half)
+    resumed_data = match_pause_resume.exclude(resumed_at__isnull=True)
+    if match_pause_resume.count() > 0:
+        if resumed_data.count() > 0:
+            for data in resumed_data:
+                leaked_duration = data.resumed_at - data.paused_at
+                
+                leaked_time += leaked_duration.seconds
 
-            latest_pivot = match_pause_resume.latest('created_at')
-            # print('latest pivot',latest_pivot)
-            if latest_pivot.paused_at and latest_pivot.resumed_at is None:
-                pause_running_time = True
-            else:
-                pause_running_time = False
+        latest_pivot = match_pause_resume.latest('created_at')
+        print('latest pivot',latest_pivot)
+        if latest_pivot.paused_at and latest_pivot.resumed_at is None:
+            pause_running_time = True
         else:
             pause_running_time = False
 
@@ -499,7 +497,7 @@ def get_match_time_api(request,match_id):
                 return JsonResponse({
                     'success':False,
                     'message':'Start First half to Calulate the time',
-                    'status':400,
+                    'start_status':'not_started',
                 },status=400)
         first_half_start_time = match_time_manager.first_half_start_time.time().strftime('%H:%M %p')
         
@@ -509,7 +507,7 @@ def get_match_time_api(request,match_id):
 
         running_time = datetime.now() - match_time_manager.first_half_start_time
 
-        pause_resume_overview = get_leaked_duration(match,match_time_manager,is_before_half=True)
+        pause_resume_overview = get_leaked_duration(match,match_time_manager,is_before_half= not match_time_manager.is_half_time_over)
 
         print('time',pause_resume_overview)
         leckage_time = pause_resume_overview['leaked_time']
@@ -532,8 +530,8 @@ def get_match_time_api(request,match_id):
             'second_half_start_time':match_time_manager.second_half_start_time,
             'running_time':data_running_time,
             'remaning_time':format_duration(data_remaning_time),
-            'leakage_time':leckage_time,
-            'pause_running_time':pause_running_time,
+            'leakage_time':0 if (not match_time_manager.second_half_start_time and match_time_manager.is_half_time_over) else leckage_time,
+            'pause_running_time':True if (match_time_manager.is_half_time_over and not match_time_manager.second_half_start_time) else pause_running_time ,
             'is_half_time_over':match_time_manager.is_half_time_over,
             'is_match_ended':match_time_manager.match_ended
         }
@@ -552,6 +550,7 @@ def get_match_time_api(request,match_id):
         "message":"Invalid GET request",
     },status=405)
 
+
 @csrf_exempt
 def actual_start_match_api(request,match_id):
 
@@ -560,36 +559,86 @@ def actual_start_match_api(request,match_id):
     print(type)
 
     if request.method == "POST":
+        match = get_object_or_404(Match,pk=match_id)
+        _mtm = get_object_or_404(MatchTimeManager,match=match) #match time manager
 
-        match_time_manager = get_object_or_404(MatchTimeManager,match=match_id)
 
-        current_time = datetime.now()
-        if type == 0:
-            match_time_manager.first_half_start_time = current_time
-        elif type == 1:
-            match_time_manager.second_half_start_time = current_time
+        if not _mtm.match_ended:
+            if type == 0:
+                if now() <= _mtm.start_time:
+                    return JsonResponse({
+                        'success':False,
+                        'message':f"Cannot Start the Match Before the Start time ({_mtm.start_time}).Update start time to start match now."
+                    },status=400)
+                
+                _mtm.first_half_start_time = now()
+                _mtm.save()
+                return JsonResponse({
+                    'success':True,
+                    "message":"Match First Half Started Successfully",
+                })
+            elif type == 2:
+                if(_mtm.start_time and _mtm.first_half_start_time and _mtm.is_half_time_over):
+                    _mtm.second_half_start_time = now()
+                    _mtm.save()
+
+                    return JsonResponse({
+                        'success':True,
+                        "message":"Match Second Half started Successfully",
+                    })
+                return JsonResponse({
+                    'success':False,
+                    'message':'Match doesn\'t have first half detail to start second half. Is half time over should be true.',
+                },status=400)
+
+            elif type == 1:
+                if _mtm.first_half_start_time and not _mtm.is_half_time_over:
+                    _mtm.is_half_time_over = True
+                    _mtm.save()
+
+                    return JsonResponse({
+                        'success':True,
+                        "message":"Match First Half Over Successfully",
+                        })
+                return JsonResponse({
+                    'success':False,
+                    'message':'Match already half time over. Reinitialize To change.',
+                },status=400)
+
+            elif type == 3:
+                if (_mtm.is_half_time_over and not _mtm.match_ended and _mtm.first_half_start_time and _mtm.second_half_start_time):
+                    _mtm.match_ended = True
+                    _mtm.save()
+
+                    return JsonResponse({
+                        'success':True,
+                        "message":"Match Ended Successfully",
+                    })
+                return JsonResponse({
+                    'success':False,
+                    'message':'Data is not correct on match to finish the match.',
+                },status=400)
+            
+            else:
+                return JsonResponse({
+                    'success':False,
+                    "message":"Invalid Query request",
+                    'status':400
+                },status=400)
         else:
             return JsonResponse({
                 'success':False,
-                "message":"Invalid Query request",
-                'status':400
+                'message':"This match already Ended. Cannot make changes further"
             },status=400)
         
-        match_time_manager.save()
-
-        # print('check date time',datetime.now().time())
-
-        return JsonResponse({
-            'success':True,
-            'message':f"Successfully started the match on ({current_time.strftime('%H:%M %p')}). This time will calcuate all the durations.",
-            'status':200,
-        })
 
     return JsonResponse({
         'success':False,
         "message":"Invalid POST request",
         'status':400
     })
+
+
 
 
 
