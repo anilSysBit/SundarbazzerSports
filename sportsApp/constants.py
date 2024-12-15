@@ -14,17 +14,17 @@ class GENDER_OPTIONS():
 
 
 class PLAYER_POSITION(models.TextChoices):
-    GOALKEEPER = 'GK', 'Goalkeeper'
-    RIGHT_BACK = 'RB', 'Right Back'
-    LEFT_BACK = 'LB', 'Left Back'
-    LEFT_CENTER_BACK = 'LCB', 'Left Center Back'
-    RIGHT_CENTER_BACK = 'RCB', 'Right Center Back'
-    LEFT_MIDFIELDER = 'LM', 'Left Midfielder'
-    RIGHT_MIDFIELDER = 'RM', 'Right Midfielder'
-    RIGHT_WINGER = 'RW', 'Right Winger'
-    LEFT_WINGER = 'LW', 'Left Winger'
-    LEFT_CENTER_FORWARD = 'LCF', 'Left Center Forward'
-    RIGHT_CENTER_FORWARD = 'RCF', 'Right Center Forward'
+    GOAL_KEEPER = 'GK', 'Goal_Keeper'  # Stored as 'GK', displayed as 'Goal Keeper'
+    DEFENSE_CENTER_LEFT = 'LCB', 'Defense Center-Left'  # LCB stays the same
+    DEFENSE_CENTER_RIGHT = 'RCB', 'Defense Center-Right'
+    DEFENSE_LEFT = 'LB', 'Defense Left'
+    DEFENSE_RIGHT = 'RB', 'Defense Right'
+    MIDDLE_LEFT = 'LM', 'Middle Left'
+    MIDDLE_RIGHT = 'RM', 'Middle Right'
+    FRONT_RIGHT = 'RW', 'Front Right'
+    FRONT_LEFT = 'LW', 'Front Left'
+    FRONT_CENTER_LEFT = 'LCF', 'Front Center-Left'
+    FRONT_CENTER_RIGHT = 'RCF', 'Front Center-Right'
 
 
 class GOAL_TYPE(models.TextChoices):

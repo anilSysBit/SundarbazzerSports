@@ -95,6 +95,8 @@ class PlayerAdmin(admin.ModelAdmin):
         'image_preview',
         'designation'
     )
+    list_filter = ('team',)
+    
     def image_preview(self,obj):
         if obj.profile_image:
             return mark_safe(f'<img src="{obj.profile_image.url}" width="100" height="100"/>')

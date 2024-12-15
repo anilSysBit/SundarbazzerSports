@@ -40,6 +40,8 @@ class OrganizerEventListSerializer(serializers.ModelSerializer):
         fields = ['title','event_type','banner','event_age_limit','entry_fee','registration_start_date','resistration_end_date','event_start_date','event_end_date','is_verified','created_at','updated_at']
         read_only_fields = ['created_at','updated_at']
 
+
+
 class EventOrganizerSerializer(serializers.ModelSerializer):
     
     email = serializers.EmailField(write_only=True)
@@ -101,4 +103,7 @@ class EventTeamSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data= super().to_representation(instance)
         return TeamSmallSerializer(instance.team).data
+
+
+
 

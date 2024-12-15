@@ -14,7 +14,8 @@ from .views import (
 
 from .serializers import match_serializers
 
-from .serializers import match_serializers
+from .serializers import team_serializers
+
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -29,7 +30,7 @@ team_list = TeamViewSet.as_view({
 
 
 router.register(r'team-requests',TeamRequestViewSet,basename='teamrequest')
-router.register(r'teams',TeamViewSet,basename='teams')
+# router.register(r'teams',TeamViewSet,basename='teams')
 # router.register(r'events',EventViewSet,basename='event')
 
 
@@ -63,4 +64,11 @@ urlpatterns = [
         name='create-match'
         ),
 
+    # get players of the team
+
+    path('players/<int:team_id>/',team_serializers.TeamPlayerViewSet.as_view(),name='get-team-players'),
+
+
+    # teams
+    path('teams/',team_serializers.TeamListViewSet.as_view(),name='team-list'),
 ]
