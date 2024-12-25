@@ -211,6 +211,17 @@ def add_goal_view(request):
     if request.method == 'POST':
         form = GoalForm(request.POST)
 
+        form_data = request.POST.copy()
+        match = form_data['match']
+
+        _mtm = get_object_or_404(MatchTimeManager,match=match)
+
+        if _mtm.match_ended:
+            return JsonResponse({
+                'success': False,
+                'message': 'Cannot Add goal After match is ended',
+            }, status=400)
+        
 
         if form.is_valid():
             player = form.cleaned_data['player']
@@ -241,7 +252,16 @@ def add_goal_view(request):
 def add_foul_view(request):
     if request.method == 'POST':
         form = FoulForm(request.POST)
+        form_data = request.POST.copy()
+        match = form_data['match']
+        _mtm = get_object_or_404(MatchTimeManager,match=match)
 
+        if _mtm.match_ended:
+            return JsonResponse({
+                'success': False,
+                'message':'Cannot add goal after match is ended',
+                'errors': 'Cannot Add goal After match is ended',
+            }, status=400)
 
         if form.is_valid():
             player = form.cleaned_data['player']
@@ -529,8 +549,6 @@ def get_match_time_api(request,match_id):
         print('time',pause_resume_overview)
         leckage_time = pause_resume_overview['leaked_time']
         pause_running_time = pause_resume_overview['pause_running_time']
-
-        
         
         # return
         data_running_time = running_time.seconds - leckage_time
@@ -696,12 +714,25 @@ def actual_start_match_api(request,match_id):
 
 
 # substitution form
+def check_match_ended(match_id):
+    _mtm = get_object_or_404(MatchTimeManager,match=match_id)
+    print('going here',_mtm)
+    if _mtm.match_ended:
+        return True
+    return False
 
 def add_substitutiton_api(request):
 
     if request.method == 'POST':
         form = SubstitutionForm(request.POST)
-
+        form_data = request.POST.copy()
+        print(form_data)
+        match_id = form_data['match']
+        if check_match_ended(match_id):
+            return JsonResponse({
+                'success': False,
+                'message':'Cannot Make Change after Game is Over',
+            }, status=400)
 
         if form.is_valid():
             player_out = form.cleaned_data['player_out']
