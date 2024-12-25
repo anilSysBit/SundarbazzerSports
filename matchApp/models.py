@@ -56,7 +56,7 @@ class MatchTimeManager(models.Model):
     second_half_start_time = models.DateTimeField(blank=True,null=True)
 
     is_half_time_over = models.BooleanField(default=False)
-    
+    match_end_date_time = models.DateTimeField(blank=True,null=True)
     extra_time_first_half = models.DurationField(
         default=timedelta(0),
         blank=True,

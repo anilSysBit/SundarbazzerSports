@@ -6,9 +6,9 @@ from rest_framework.views import APIView
 from rest_framework import generics
 from sportsApp.models import TeamRequest,Team,Event, EventOrganizer
 from matchApp.models import Match
-from .serializers.team_serializers import TeamRequestSerializer,TeamSerializer,UserProfileSerializer
+from ._serializers.team_serializers import TeamRequestSerializer,TeamSerializer,UserProfileSerializer
 from django.contrib.auth.models import User
-from .serializers.event_serializers import EventListSerializer, EventOrganizerSerializer,OrganizerEventListSerializer
+from ._serializers.event_serializers import EventListSerializer
 from rest_framework.permissions import IsAuthenticated,IsAdminUser,AllowAny
 from .permissions import IsAnonymous,HasTeamGroupPermission,HasEventOrganizerGroupPermission
 from rest_framework.decorators import action
@@ -101,59 +101,15 @@ class TeamProfileAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
-class EventProfileApiView(APIView):
-    permission_classes= []
-
-    # @permission_classes([IsAuthenticated])
-
-    def get(self,request):
-        user= request.user
-
-        if not hasattr(user, 'organizer'):
-            return Response({'detail': 'No organizer associated with this user.'}, status=status.HTTP_404_NOT_FOUND)
-        
-        organizer = user.organizer
-
-        serializer = EventOrganizerSerializer(organizer, context={'request': request})
-        return Response(serializer.data,status=status.HTTP_200_OK)
-    
-
-    def post(self,request):
-        serializer = EventOrganizerSerializer(data = request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
-
-
 
 class EventUserViewSet(APIView):
     def get(self,request):
        events = Event.objects.all()
-       serializer = EventListSerializer(events,many=True)
+       serializer = EventListSerializer(events,many=True,context={'request':request})
        return Response(serializer.data,status=status.HTTP_200_OK)
 
 
 
-class OrganizerEventViewSet(APIView):
-
-    permission_classes =[HasEventOrganizerGroupPermission]
-
-
-    def get(self,request):
-        user = request.user
-
-        if not hasattr(user, 'organizer'):
-            return Response({'detail': 'You are not an organizer'}, status=status.HTTP_404_NOT_FOUND)
-
-        organizer = user.organizer
-
-        events = Event.objects.filter(event_organizer=organizer)
-
-        serializer = OrganizerEventListSerializer(events,many=True)
-
-        return Response(serializer.data,status=status.HTTP_200_OK)
-    
 
 
 

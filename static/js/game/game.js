@@ -449,6 +449,7 @@ const updateButtonActions =(id,type)=>{
     switch(type){
         case 0:
             start_button.textContent = 'Start First Half'
+            updateGameTimeData(id)
             start_button.onclick =()=> {
             if(confirm("Are you sure you want to start first half?")){
                 handleRequestGameStart(id,type=0)
@@ -459,6 +460,7 @@ const updateButtonActions =(id,type)=>{
 
         case 1:
             start_button.textContent = 'Finish First Half'
+            updateGameTimeData(id)
             start_button.onclick =async()=>{
             if(confirm("Are you sure you want to finish first half?")){
                 handleRequestGameStart(id,type=1)
@@ -469,6 +471,8 @@ const updateButtonActions =(id,type)=>{
 
         case 2:
             start_button.textContent = 'Start Second Half'
+            updateGameTimeData(id)
+
             start_button.onclick =()=> {
             if(confirm("Are you sure you want to start second half?")){
                 handleRequestGameStart(id,type=2)
@@ -478,6 +482,7 @@ const updateButtonActions =(id,type)=>{
 
         case 3:
             start_button.textContent = 'Finish Game'
+            updateGameTimeData(id)
             start_button.onclick =()=> {
             if(confirm("Are you sure you want to finish the Game?")){
                 handleRequestGameStart(id,type=3)

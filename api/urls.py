@@ -7,14 +7,14 @@ from .views import (
     TeamViewSet,
     UserProfileAPIView,
     TeamProfileAPIView,
-    EventProfileApiView,
     EventUserViewSet,
-    OrganizerEventViewSet,
     )
 
-from .serializers import match_serializers
+from ._serializers import match_serializers
 
-from .serializers import team_serializers
+from ._serializers import team_serializers
+
+from ._serializers import event_serializers
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -48,16 +48,14 @@ urlpatterns = [
 
     path('events/',EventUserViewSet.as_view(),name='events'),
 
+    path('event/<int:pk>/',event_serializers.EventDetailView.as_view(),name='user-event-view'),
+
     path('team/profile/',TeamProfileAPIView.as_view(),name='team-profile'),
 
-    path('organizer/profile/',EventProfileApiView.as_view(),name='organizer-profile'),
-
-    path('organizer/create/',EventProfileApiView.as_view(),name='create-organizer'),
-
-    path('organizer/events/',OrganizerEventViewSet.as_view(),name='organizer-events'),
-    
     path('matches/',match_serializers.UserListMatchViewSet.as_view(),name='matches'),
 
+    path('match/<int:pk>/',match_serializers.MatchSingleViewSet.as_view(),name='match-view'),
+    path('match/<int:match_id>/players/<int:team_id>/', match_serializers.MatchTeamPlayersView.as_view(), name='match-team-players'),
     path(
         'match/create/<int:event_id>/',
         match_serializers.MatchViewSet.as_view(),
