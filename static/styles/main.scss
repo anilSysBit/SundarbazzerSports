@@ -351,6 +351,14 @@ nav {
 
 }
 
+.errorlist{
+  margin-top: 5px;
+  li{
+    font-size: 0.8px;
+    color: rgb(255, 50, 50);
+  }
+}
+
 .leaderboard_button,.global_btn {
   padding-left: 20px;
   padding-right: 20px;
@@ -395,6 +403,23 @@ nav {
     color: black;
   }
 }
+
+.bold{
+  font-weight: bold;
+  &.f-m{
+    font-size: 0.9rem;
+  }
+}
+.button_group{
+  &.mt-10{
+    margin-top: 10px;
+  }
+  &.mb-10{
+    margin-bottom: 10px;
+  }
+}
+
+
 
 .big_primary{
   font-size: 50px;
@@ -3045,5 +3070,163 @@ $text-color: white;
               background-color: #2980b9;
           }
       }
+  }
+}
+
+
+
+
+
+.login-page {
+  display: flex;
+  place-content: center;
+  place-items: center;
+  min-height: 90vh;
+  border-radius: 10px;
+  // background-color: #353535;
+  // border: 1px solid white;
+  margin-top: 30px;
+  padding: 0px 50px;
+
+
+  .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 50px;
+    // border: 1px solid rgb(129, 127, 127);
+    // box-shadow: 1px 1px 10px rgb(104, 104, 104);
+    border-radius: 20px;
+    padding: 1px;
+    width: 60%;
+    background-image: linear-gradient(to right,rgb(38, 39, 49),rgb(35, 38, 39));
+
+    .logo{
+      img{
+        height: 200px;
+      }
+    }
+    .login-card {
+      // background: #2a2a2a;
+      border-radius: 20px;
+      padding: 3rem;
+      // width: 400px;
+      width: 50%;
+      // box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      position: relative;
+
+      .player-wrapper {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1rem;
+
+        .player-image {
+          width: 150px;
+          height: auto;
+        }
+      }
+
+      h2 {
+        margin-bottom: 2rem;
+        color: #fff;
+        font-size: 1.5rem;
+        text-align: center;
+      }
+
+      form {
+        .input-group {
+          margin-bottom: 1rem;
+          position: relative;
+
+          .errorlist{
+              li{
+                font-size: 0.8rem;
+          color: rgb(255, 48, 48);
+              }
+  
+          }
+          .label{
+            text-align: left;
+            width: 100%;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            margin-left: 10px;
+            // border: 1px solid white;
+          }
+
+          .login-input {
+            width: 100%;
+            padding: 0.75rem 2rem;
+            border: 1px solid #444;
+            border-radius: 15px;
+            background-color: #1e1e1e;
+            color: #fff;
+            font-size: 0.9rem;
+
+            &:focus {
+              outline: none;
+              border-color: #6a5acd;
+            }
+          }
+
+          .password-icon {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            color: #aaa;
+            cursor: pointer;
+          }
+        }
+
+        .forgot-password {
+          display: block;
+          margin-bottom: 1.5rem;
+          color: #aaa;
+          font-size: 0.9rem;
+          text-decoration: none;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+
+        .login-btn {
+          width: 100%;
+          padding: 0.75rem;
+          background-color: #65558F;
+          // background-image: linear-gradient(to right,#65558F,rgb(38, 23, 42));
+          color: #fff;
+          border: none;
+          border-radius: 20px;
+          cursor: pointer;
+          font-size: 1rem;
+          margin-bottom: 1rem;
+          transition: background-color 0.3s;
+
+          &:hover {
+            background-color: #5a4ebc;
+          }
+        }
+
+        .google-login-btn {
+          width: 100%;
+          padding: 0.75rem;
+          // background-color: #fff;
+          // color: #000;
+          color: orange;
+          border: none;
+          border-radius: 20px;
+          cursor: pointer;
+          font-size: 1rem;
+          transition: background-color 0.3s;
+
+          &:hover {
+            background-color: #f5f5f5;
+          }
+        }
+      }
+    }
   }
 }

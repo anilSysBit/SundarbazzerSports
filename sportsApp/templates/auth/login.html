@@ -1,0 +1,44 @@
+{% extends 'auth/loginlayout.html' %}
+
+
+{% block content %}
+
+<div class="login-card">
+    <h2>Login</h2>
+    <!-- Uncomment the image if needed -->
+    <!-- <img src="https://picsum.photos/200" alt="Player" class="player-image"> -->
+
+    <form method="POST" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="input-group">
+            <input
+                type="text"
+                name="username"
+                placeholder="Username or Email"
+                class="login-input"
+                required
+            />
+        </div>
+        <div class="input-group">
+            <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                class="login-input"
+                required
+            />
+            <!-- <span class="password-icon">👁️</span> -->
+        </div>
+        <a href="{% url 'forgot_password' %}" class="forgot-password">
+            Forgot Password? Click to reset.
+        </a>
+        <button type="submit" class="login-btn">
+            Login
+        </button>
+
+        <a href="#" class="forgot-password">
+            New Team! Register as New Team
+        </a>
+    </form>
+</div>
+{% endblock content %}

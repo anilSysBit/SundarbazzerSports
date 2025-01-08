@@ -6,6 +6,8 @@ from django.conf import settings
 
 
 
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
 
 def send_registration_mail(team_name,email,registration_number):
         subject = 'Your Account Details'
@@ -27,3 +29,17 @@ def send_registration_mail(team_name,email,registration_number):
         """
         send_mail(subject, message, settings.EMAIL_HOST_USER, [email], fail_silently=False)
     
+
+def send_otp_email(user_email, otp):
+    subject = "Your OTP for Verification"
+    from_email = "no-reply@gpn.com"
+    recipient_list = [user_email]
+
+    # Render the HTML template with context
+    context = {"otp": otp}
+    email_body = render_to_string("./emails/otp_email.html", context)
+
+    # Send the email
+    email = EmailMessage(subject, email_body, from_email, recipient_list)
+    email.content_subtype = "html"  # Specify HTML content
+    email.send()

@@ -1,0 +1,131 @@
+{% extends 'auth/loginlayout.html' %}
+
+
+{% block content %}
+<style>
+    .otp-container {
+display: flex;
+justify-content: center;
+gap: 10px;
+}
+
+.otp-box {
+width: 50px;
+height: 50px;
+text-align: center;
+color: white;
+font-size: 24px;
+background-color:transparent;
+border: 2px solid #ccc;
+border-radius: 5px;
+outline: none;
+transition: border-color 0.3s ease;
+}
+
+.otp-box:focus {
+border-color: #007bff;
+}
+
+.otp-box:invalid {
+border-color: red;
+}
+</style>
+
+
+<form action="{% url 'forgot_password' %}" id="resend-otp-form" class="internal_form" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="email" value="{{request.session.email}}">
+</form>
+
+<div class="login-card">
+    <h2>Verify Your OTP</h2>
+    <p class="sm_text">An OTP is sent to your <span class="underline bold f-m">{{request.session.email}}</span>.<br> Plz Check your Gmail</p>
+    
+
+    <form method="POST" class="mt-10" action="{% url 'verify_otp' %}" onsubmit="combineOtpValues()">
+      {% csrf_token %}
+      
+      <input type="hidden" name="otp" id="otp-input" value="" required>
+
+
+      <div class="otp-container">
+        {% for i in range %}
+          <input
+          type="text"
+          name="otp_{{ i }}"
+          maxlength="1"
+          class="otp-box"
+          value="{{ otp_values.i }}"
+          id="otp-box"
+          type="text"
+          name="otp_{{ i }}"
+          maxlength="1"
+          class="otp-box"
+          onchange="handleOnChange(event,this)"
+          value="{{ otp_values.i }}"
+          {% if otp_values.i %} disabled {% endif %}
+          oninput="handleOnInput(event,this)"
+          onkeydown="handleBackspace(event, this)"
+          />
+        {% endfor %}
+      </div>
+
+        {% if form.otp.errors %}
+        {{form.otp.errors}}
+    {% endif %}
+      <div class="button_group mt-10">
+        <button type="submit" class="global_btn mt-10 mb-10">
+            Verify
+          </button>
+          <button class="global_btn outline" id="resend-otp-btn">
+            Resend Otp
+          </button>
+      </div>
+
+      <a href="{% url 'forgot_password' %}" class="forgot-password sm_text mt-10">
+        Go to Forgot Password
+      </a>
+    </form>
+  </div>
+
+
+  <script>
+
+document.getElementById('resend-otp-btn').addEventListener('click', function () {
+    // Optionally, you can disable the button temporarily to prevent multiple clicks
+    this.disabled = true;
+    
+    // Trigger the form submission
+    document.getElementById('resend-otp-form').submit();
+  });
+
+function combineOtpValues() {
+        let otpString = '';
+        
+        // Loop through all OTP input fields
+        const otpInputs = document.querySelectorAll('.otp-box');
+        otpInputs.forEach(input => {
+            otpString += input.value; // Append each value to the otpString
+        });
+
+        // Set the combined OTP string in the hidden input field
+        document.getElementById('otp-input').value = otpString;
+    }
+    function handleOnInput(event,inputElement){
+        inputElement.nextElementSibling && inputElement.nextElementSibling.focus()
+    }
+     function handleBackspace(event, inputElement) {
+        inputElement.value = ''
+        if (event.key === 'Backspace') {
+            // Prevent the default backspace behavior (deleting the character)
+            event.preventDefault();
+            
+            // Move focus to the previous input field
+            const previousInput = inputElement.previousElementSibling;
+            if (previousInput) {
+                previousInput.focus();
+            }
+        }
+    }
+  </script>
+{% endblock content %}

@@ -15,53 +15,100 @@ import json
 import base64
 from django.conf import settings
 from django.core.paginator import Paginator
-from .forms import PlayerForm,EventForm,TeamForm,EventTeamForm
+from .forms import PlayerForm,EventForm,TeamForm,EventTeamForm,OTPRequestForm,OTPForm,PasswordResetForm
 from matchApp.forms import MatchForm
 from django.contrib import messages
 from . import constants
 from django.db.models import Count,Q
+from .utils import send_otp_email
+
+from .models import PointTable,TieSheet,RecentEvents,LatestNews,Team,TeamRequest,Coach,Player,OTP
+import random
+from django.contrib.auth import update_session_auth_hash
 
 
-from .models import PointTable,TieSheet,RecentEvents,LatestNews,Team,TeamRequest,Coach,Player
-
-# Create your views here.
-def index(request):
-    recent_events = RecentEvents.objects.all().order_by('-date')[:5]
-    # return HttpResponse("<h1 style=text-align:center;margin-top:50px;>Welcome Nepal Sports Game API</h1>")
-    latest_news = LatestNews.objects.all()
-    return render(request,'main.html',{'recent_events':recent_events,'latest_news':latest_news})
+# auth
 
 
-def leaderboard(request):
-    # point_table = PointTable.objects.all().order_by('-points')
-    tie_sheet = Match.objects.select_related('team1__team','team2__team','event').all()
-
-    return render(request,'./leaderboard/leaderboard.html',{'tie_sheet':tie_sheet})
+def login_view(request):
+    return render(request,"./auth/login.html")
 
 
-def events(request):
-    recent_events = Event.objects.all()
-    return render(request,'./eventPage.html',{'events':recent_events})
+def send_otp_view(request):
+    if request.method == 'POST':
+        form = OTPRequestForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            user = User.objects.get(email=email)
+            otp_code = random.randint(1000, 9999)
+            OTP.objects.update_or_create(user=user, defaults={'otp': otp_code})
+            
+            request.session['email'] = email
+            send_otp_email(email, otp_code)
+
+            messages.success(request, "OTP sent to your email. Please check your inbox.")
+            return redirect('verify_otp')
+        else:
+            # If form is not valid, the errors will automatically be attached to the form fields
+            messages.error(request, "There was an error with your email. Please check and try again.")
+
+    else:
+        form = OTPRequestForm()
+
+    return render(request, 'auth/send_otp.html', {'form': form})
 
 
-def latest_news_page(request, news_id):
-    data = get_object_or_404(LatestNews, id=news_id)
-    return render(request, './news/newsView.html', {'data': data})
+def verify_otp(request):
+    # Check if email exists in session
+    email = request.session.get('email')
 
+    if not email:
+        messages.error(request, "Email session has expired or is missing. Please request an OTP again.")
+        return redirect('send_otp')  # Redirect to OTP request page if email is not found in session
 
+    if request.method == 'POST':
+        form = OTPForm(request.POST)
+        
+        if form.is_valid():
+            user_otp = form.cleaned_data.get('otp')
 
+            print('user otp',user_otp)
 
+            # Retrieve the user based on email from the session
+            try:
+                user = User.objects.get(email=email)
+                otp_instance = OTP.objects.filter(user=user).first()
 
+                if otp_instance and otp_instance.otp == user_otp and otp_instance.is_valid():
+                    messages.success(request, "OTP verified successfully!")
+                    request.session['otp'] = user_otp  # Save OTP to session for further use
+                    return redirect('change_password')  # Redirect to change password page
+                else:
+                    messages.error(request, "Invalid or expired OTP.")
+            except User.DoesNotExist:
+                messages.error(request, "User not found.")
+        else:
+            messages.error(request, "Please enter a valid OTP.")
+    else:
+        form = OTPForm()
 
-def success_state(request):
-    return render(request,"./teams/successRequest.html")
+    return render(request, './auth/verify_otp.html', {'range':range(4),'form': form})
 
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordResetForm(request.POST)
+        if form.is_valid():
+            new_password = form.cleaned_data.get('new_password')
+            user = request.user
+            user.set_password(new_password)
+            user.save()
+            update_session_auth_hash(request, user)  # To keep the user logged in
+            messages.success(request, "Password changed successfully!")
+            return redirect('login')
+    else:
+        form = PasswordResetForm()
 
-
-
-
-
-
+    return render(request, './auth/change_password.html', {'form': form})
 """
     Player  Views
 """

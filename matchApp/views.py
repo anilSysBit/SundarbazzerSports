@@ -586,6 +586,7 @@ def get_match_time_api(request,match_id):
                 'is_half_time_over':match_time_manager.is_half_time_over,
                 'is_match_ended':match_time_manager.match_ended
             }
+            
         else:
                     data = {
             'match':match.id,

@@ -165,4 +165,42 @@ class EventTeamForm(forms.ModelForm):
 
 
 
+class OTPForm(forms.Form):
+    otp = forms.CharField(max_length=6, required=True, widget=forms.TextInput(attrs={
+        'placeholder': 'Enter OTP'
+    }))
+
+    
+class OTPRequestForm(forms.Form):
+    email = forms.EmailField(label="Email", max_length=100)
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if not User.objects.filter(email=email).exists():
+            raise ValidationError("No account found with this email address.")
+        return email
+
+class PasswordResetForm(forms.Form):
+    new_password = forms.CharField(
+        max_length=128, 
+        required=True,
+        widget=forms.PasswordInput(attrs={'placeholder': 'New Password'})
+    )
+    confirm_password = forms.CharField(
+        max_length=128, 
+        required=True,
+        widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password'})
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_password = cleaned_data.get("new_password")
+        confirm_password = cleaned_data.get("confirm_password")
+
+        if new_password != confirm_password:
+            raise forms.ValidationError("Passwords do not match.")
+        return cleaned_data
+
+
+
 

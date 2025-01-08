@@ -6,9 +6,14 @@ from sportsApp.view2 import EventView
 
 urlpatterns = [
     path('',EventView.index , name='home'),
-    path('leaderboard/',views.leaderboard,name='leaderboard'),
+    # path('leaderboard/',views.leaderboard,name='leaderboard'),
     # path("events/",views.events, name='events'),
-    path("news/<int:news_id>/",views.latest_news_page,name='news_detail'),
+    # path("news/<int:news_id>/",views.latest_news_page,name='news_detail'),
+
+    path("login/",views.login_view,name='login'),
+    path('forgot-password',views.send_otp_view,name='forgot_password'),
+    path('verify-otp',views.verify_otp,name='verify_otp'),
+    path('change-password',views.verify_otp,name='change_password'),
 
 
     # Team url admin panel
@@ -48,7 +53,7 @@ urlpatterns = [
     path('player-data-api/<int:player_id>/',views.player_data_api,name='player-api'),
 
     # path("create-team/",views.submit_team_request,name='submit_team_request'),
-    path("success_state/",views.success_state,name="success_state"),
+    # path("success_state/",views.success_state,name="success_state"),
     path('payment/',views.esewa_payment,name='payment'),
     path('payment/request/',views.payment_request,name='payment_request'),
     path('esewa/response/',views.esewa_response,name='esewa_response'),

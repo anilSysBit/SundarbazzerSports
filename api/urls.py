@@ -16,6 +16,8 @@ from ._serializers import team_serializers
 
 from ._serializers import event_serializers
 
+from ._serializers import user_serializers
+
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -36,7 +38,14 @@ router.register(r'team-requests',TeamRequestViewSet,basename='teamrequest')
 
 urlpatterns = [
     path('',include(router.urls)),
+
     path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+
+    path('verify-login/', user_serializers.VerifyLoginView.as_view(), name='api_verify_login'),
+    # otp url validation
+    path('send-otp/', user_serializers.SendOTPView.as_view(), name='api_send_otp'),
+    path('verify-otp/', user_serializers.VerifyOTPView.as_view(), name='api_verify_otp'),
+    path('change-password/', user_serializers.ChangePasswordView.as_view(), name='api_change_password'),
 
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
