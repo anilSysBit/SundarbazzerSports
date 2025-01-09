@@ -24,13 +24,27 @@ from .utils import send_otp_email
 
 from .models import PointTable,TieSheet,RecentEvents,LatestNews,Team,TeamRequest,Coach,Player,OTP
 import random
-from django.contrib.auth import update_session_auth_hash
-
+from django.contrib.auth import update_session_auth_hash,authenticate,login,logout
 
 # auth
 
 
 def login_view(request):
+
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+
+        # Authenticate the user
+        user = authenticate(request, username=email, password=password)
+        if user is not None:
+            # Log the user in
+            login(request, user)
+            messages.success(request, "Login successful!")
+            return redirect("home")  # Redirect to a protected view
+        else:
+            messages.error(request, "Invalid email or password.")
+
     return render(request,"./auth/login.html")
 
 
@@ -64,7 +78,7 @@ def verify_otp(request):
 
     if not email:
         messages.error(request, "Email session has expired or is missing. Please request an OTP again.")
-        return redirect('send_otp')  # Redirect to OTP request page if email is not found in session
+        return redirect('forgot_password')  # Redirect to OTP request page if email is not found in session
 
     if request.method == 'POST':
         form = OTPForm(request.POST)
@@ -95,16 +109,32 @@ def verify_otp(request):
     return render(request, './auth/verify_otp.html', {'range':range(4),'form': form})
 
 def change_password(request):
+    email = request.session.get('email')
+    otp = request.session.get('otp')
+
+    if not otp or otp is None:
+        return redirect("verify_otp")
+
+    user = get_object_or_404(User, email=email)
+
     if request.method == 'POST':
         form = PasswordResetForm(request.POST)
         if form.is_valid():
             new_password = form.cleaned_data.get('new_password')
-            user = request.user
             user.set_password(new_password)
             user.save()
             update_session_auth_hash(request, user)  # To keep the user logged in
             messages.success(request, "Password changed successfully!")
+            # Remove a specific session key
+            if 'email' in request.session:
+                del request.session['email']
+
+            if 'otp' in request.session:
+                del request.session['otp']
             return redirect('login')
+        else:
+            messages.error(request,"Invalid Password / Password Donot Match")
+            print('error',form.errors)
     else:
         form = PasswordResetForm()
 

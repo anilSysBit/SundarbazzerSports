@@ -354,7 +354,7 @@ nav {
 .errorlist{
   margin-top: 5px;
   li{
-    font-size: 0.8px;
+    font-size: 0.8rem;
     color: rgb(255, 50, 50);
   }
 }
@@ -3102,8 +3102,10 @@ $text-color: white;
     background-image: linear-gradient(to right,rgb(38, 39, 49),rgb(35, 38, 39));
 
     .logo{
+      height: 100%;
       img{
-        height: 200px;
+        // height: 200px;
+        height: 100%;
       }
     }
     .login-card {

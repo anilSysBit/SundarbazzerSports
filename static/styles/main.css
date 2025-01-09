@@ -308,7 +308,7 @@ nav .part3 {
   margin-top: 5px;
 }
 .errorlist li {
-  font-size: 0.8px;
+  font-size: 0.8rem;
   color: rgb(255, 50, 50);
 }
 
@@ -2561,8 +2561,11 @@ p {
   width: 60%;
   background-image: linear-gradient(to right, rgb(38, 39, 49), rgb(35, 38, 39));
 }
+.login-page .login-container .logo {
+  height: 100%;
+}
 .login-page .login-container .logo img {
-  height: 200px;
+  height: 100%;
 }
 .login-page .login-container .login-card {
   border-radius: 20px;

@@ -1,10 +1,14 @@
 from typing import Any
 from django.contrib import admin
-from .models import TeamRequest,TeamOwner,Payment,Team,Transaction,EventMember,EventTeam,EventOrganizer,EventRequest, PointTable,Coach,RecentEvents,LatestNews,Player,Messages,Subscriber,Event,TeamStatus,Sponser,TeamDesign
+from .models import TeamRequest,TeamOwner,Payment,OTP,Team,Transaction,EventMember,EventTeam,EventOrganizer,EventRequest, PointTable,Coach,RecentEvents,LatestNews,Player,Messages,Subscriber,Event,TeamStatus,Sponser,TeamDesign
 
 from django.utils.html import mark_safe
 from .utils import send_registration_mail
 # Register your models here.
+
+@admin.register(OTP)
+class OTPAdmin(admin.ModelAdmin):
+    list_display = ('otp','user','created_at','is_valid')
 
 @admin.register(TeamRequest)
 class TeamRequestAdmin(admin.ModelAdmin):

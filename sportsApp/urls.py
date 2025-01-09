@@ -13,7 +13,7 @@ urlpatterns = [
     path("login/",views.login_view,name='login'),
     path('forgot-password',views.send_otp_view,name='forgot_password'),
     path('verify-otp',views.verify_otp,name='verify_otp'),
-    path('change-password',views.verify_otp,name='change_password'),
+    path('change-password',views.change_password,name='change_password'),
 
 
     # Team url admin panel

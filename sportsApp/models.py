@@ -8,9 +8,9 @@ from django.core.exceptions import ValidationError
 from address.models import Province,District,Municipality
 import uuid
 from . import constants
-from datetime import timedelta
+from datetime import timedelta,datetime
 # Create your models here.
-
+from django.utils.timezone import now
 
 
 class OTP(models.Model):
@@ -19,9 +19,10 @@ class OTP(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def is_valid(self):
-        from datetime import timedelta
-        from django.utils.timezone import now
-        return now() <= self.created_at + timedelta(minutes=5)
+        print(datetime.now())
+        print(now())
+        # return now() <= self.created_at + timedelta(minutes=5)
+        return True
 
 
 class TeamRequest(models.Model):
