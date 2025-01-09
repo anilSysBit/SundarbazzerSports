@@ -1,5 +1,6 @@
 from django.db import models
-from sportsApp.models import Event,EventTeam,Player,Team
+from sportsApp.models import Event,EventTeam
+from team.models import Team,Player,Coach
 from datetime import datetime
 from django.contrib.auth.models import User,Group
 from django.utils.crypto import get_random_string

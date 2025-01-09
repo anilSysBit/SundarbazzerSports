@@ -4,7 +4,8 @@ from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework import generics
-from sportsApp.models import TeamRequest,Team,Event, EventOrganizer
+from sportsApp.models import TeamRequest,Event, EventOrganizer
+from team.models import Team,Player
 from matchApp.models import Match
 from ._serializers.team_serializers import TeamRequestSerializer,TeamSerializer,UserProfileSerializer
 from django.contrib.auth.models import User
@@ -23,10 +24,10 @@ class TeamRequestViewSet(ModelViewSet):
     queryset = TeamRequest.objects.all()
     serializer_class = TeamRequestSerializer
     
-    def get_permissions(self):
-        if self.request.method == 'POST':
-            return [IsAnonymous()]
-        return [IsAdminUser()]
+    # def get_permissions(self):
+    #     if self.request.method == 'POST':
+    #         return [IsAnonymous()]
+    #     return [IsAdminUser()]
 
 
 class TeamViewSet(ModelViewSet):

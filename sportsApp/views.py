@@ -22,7 +22,8 @@ from . import constants
 from django.db.models import Count,Q
 from .utils import send_otp_email
 
-from .models import PointTable,TieSheet,RecentEvents,LatestNews,Team,TeamRequest,Coach,Player,OTP
+from .models import TieSheet,RecentEvents,LatestNews,Team,TeamRequest,OTP
+from team.models import PointTable,Team,Player,Coach
 import random
 from django.contrib.auth import update_session_auth_hash,authenticate,login,logout
 
@@ -32,11 +33,11 @@ from django.contrib.auth import update_session_auth_hash,authenticate,login,logo
 def login_view(request):
 
     if request.method == "POST":
-        email = request.POST.get("email")
+        username = request.POST.get("username")
         password = request.POST.get("password")
 
         # Authenticate the user
-        user = authenticate(request, username=email, password=password)
+        user = authenticate(request, username=username, password=password)
         if user is not None:
             # Log the user in
             login(request, user)
@@ -47,6 +48,13 @@ def login_view(request):
 
     return render(request,"./auth/login.html")
 
+def logout_view(request):
+    # Log the user out
+    logout(request)
+    # Optional: Add a success message
+    messages.success(request, "You have been logged out successfully.")
+    # Redirect to the login page or home page
+    return redirect("login")
 
 def send_otp_view(request):
     if request.method == 'POST':
@@ -232,12 +240,24 @@ def change_player_status(request,player_id):
 
 
 
+def check_template_permission(request):
+    permission = {
+        'is_team':False,
+        'is_organizer':False,
+    }
 
+    if request.user.is_staff:
+        permission['is_organizer'] = True
+    elif request.user.groups.filter(name='TeamGroup').exists():
+        permission['is_organizer'] = True
+
+    return permission
 
 """ 
     Team Views
 """
 def create_team_view(request):
+    rno = request.GET.get('rno')
     if request.method == 'POST':
         form = TeamForm(request.POST, request.FILES)
         if form.is_valid():
@@ -247,6 +267,19 @@ def create_team_view(request):
         else:
             messages.error(request, "Please correct the errors below.")
     else:
+        if rno:
+            team_request = get_object_or_404(TeamRequest,registration_number=rno)
+            default_values = {
+                'name':team_request.name,
+                'phone':team_request.phone,
+                'email':team_request.email,
+                'short_name':team_request.short_name,
+                'address':team_request.address,
+            }
+            if team_request:
+                form = TeamForm(initial = default_values)
+                return render(request, 'teams/create_team.html', {'form': form})
+
         form = TeamForm()
 
     return render(request, 'teams/create_team.html', {'form': form})

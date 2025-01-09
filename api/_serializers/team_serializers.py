@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from sportsApp.models import TeamRequest, Team,Player
+from team.models import  Team,Player
+from sportsApp.models import TeamRequest
 from matchApp.models import Match
 
 

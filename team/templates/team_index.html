@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/main.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="icon" href="{% static 'images/favico.webp' %}" type="image/x-icon">
+    <title>Document</title>
+</head>
+<body>
+    <div class="wrapper">
+
+        {% if messages %}
+  {% for message in messages %}
+    <script>
+        document.addEventListener("DOMContentLoaded",function(){
+            showSnackBar('{{message}}','success')
+        })
+    </script>
+  {% endfor %}
+{% endif %}
+        <!-- Sidebar -->
+
+          
+        
+
+        <div class="content">
+            {% block content %}
+
+
+            {% endblock content %}
+        </div>
+</div>
+</body>
+<script  src="{% static 'js/index.js' %}"></script>
+<script src="{% static 'js/alert.js' %}"></script>
+</html>

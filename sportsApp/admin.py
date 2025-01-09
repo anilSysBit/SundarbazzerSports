@@ -1,6 +1,6 @@
 from typing import Any
 from django.contrib import admin
-from .models import TeamRequest,TeamOwner,Payment,OTP,Team,Transaction,EventMember,EventTeam,EventOrganizer,EventRequest, PointTable,Coach,RecentEvents,LatestNews,Player,Messages,Subscriber,Event,TeamStatus,Sponser,TeamDesign
+from .models import TeamRequest,Payment,OTP,Transaction,EventMember,EventTeam,EventOrganizer,EventRequest,RecentEvents,LatestNews,Messages,Subscriber,Event,Sponser
 
 from django.utils.html import mark_safe
 from .utils import send_registration_mail
@@ -8,11 +8,11 @@ from .utils import send_registration_mail
 
 @admin.register(OTP)
 class OTPAdmin(admin.ModelAdmin):
-    list_display = ('otp','user','created_at','is_valid')
+    list_display = ('otp','user','created_at','is_valid',)
 
 @admin.register(TeamRequest)
 class TeamRequestAdmin(admin.ModelAdmin):
-    list_display = ('registration_number','name', 'total_players','sports_genere','created_at')
+    list_display = ('registration_number','name','email','phone','sports_genere','created_at')
     ordering = ('-created_at',)
     actions = ['send_registration_email_action']
 
@@ -23,41 +23,6 @@ class TeamRequestAdmin(admin.ModelAdmin):
             send_registration_mail(team_request.name,email, registration_number)
         self.message_user(request, "Emails sent successfully")
     send_registration_email_action.short_description = "Send registration email"
-
-class PlayerInline(admin.StackedInline):
-    model = Player
-    extra = 1
-
-class CoachInline(admin.StackedInline):
-    model = Coach
-    extra = 1
-
-class TeamDesignInline(admin.StackedInline):
-    model = TeamDesign
-class TeamOwnerInline(admin.StackedInline):
-    model = TeamOwner
-
-@admin.register(Team)
-class TeamAdmin(admin.ModelAdmin):
-    inlines = [TeamOwnerInline,TeamDesignInline,CoachInline]
-    list_display = ('id','name','logo_preview','email' ,'total_players','sports_genere','is_verified','created_at')
-    readonly_fields = ('user',)
-    def logo_preview(self,obj):
-        if obj.logo:
-            return mark_safe(f'<img src="{obj.logo.url}" width="50" height="50"/>')
-        return "No Image"
-    logo_preview.short_description="Image"
-    
-
-@admin.register(PointTable)
-class PointTableAdmin(admin.ModelAdmin):
-    list_display = ('team', 'points', 'status')
-    # list_filter = ('status', 'team__name')
-    # search_fields = ('team__name',)
-    ordering = ('points','team')
-
-
-
 
 
 # Recent Events Admin
@@ -89,52 +54,14 @@ class LatestNewsAdmin(admin.ModelAdmin):
     
 
 
-@admin.register(Player)
-class PlayerAdmin(admin.ModelAdmin):
-    list_display = (
-        'name',
-        'jersey_no',
-        'team',
-        'age',
-        'image_preview',
-        'designation'
-    )
-    list_filter = ('team',)
-    
-    def image_preview(self,obj):
-        if obj.profile_image:
-            return mark_safe(f'<img src="{obj.profile_image.url}" width="100" height="100"/>')
-        return "No Image"
-    image_preview.short_description="Image"
-
-@admin.register(Coach)
-class CoachAdmin(admin.ModelAdmin):
-    list_display = (
-        "name",
-        "team",
-        "image_preview"
-    )
-
-
-
-    def image_preview(self,obj):
-        if obj.image:
-            return mark_safe(f'<img src="{obj.image.url}" width="100" height="100"/>')
-        return "No Image"
-    image_preview.short_description="Image"
 
 
 
 
-@admin.register(TeamStatus)
-class TeamStatusAdmin(admin.ModelAdmin):
-    list_display = ('team', 'total_match_played', 'created_at')
-    search_fields = ('team__name',)
-    # list_filter = ('created_at',)
 
 
 
-@admin.register(Event)
+# @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     list_display = ('id','title', 'event_age_limit', 'is_verified', 'entry_fee', 'registration_start_date', 'registration_end_date', 'event_start_date', 'event_end_date', 'created_at', 'updated_at')
     search_fields = ('title',)
@@ -161,17 +88,17 @@ class MessagesAdmin(admin.ModelAdmin):
 
 
 # Event organzier Admin
-@admin.register(EventOrganizer)
+# @admin.register(EventOrganizer)
 class EventOrganizerAdmin(admin.ModelAdmin):
     list_display = ('name','user','updated_at')
 
 # event request
-@admin.register(EventRequest)
+# @admin.register(EventRequest)
 class EventRequest(admin.ModelAdmin):
     list_display = ('requestor_name','email','phone')
 
 # Admin to add Event members
-@admin.register(EventMember)
+# @admin.register(EventMember)
 class EventMemberAdmin(admin.ModelAdmin):
     list_display = ('first_name','last_name','role','salary','organizer')
 

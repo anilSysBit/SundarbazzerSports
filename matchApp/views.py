@@ -19,6 +19,11 @@ from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 from django.utils.timezone import now
 
+def team_permission(request,render):
+    is_team = request.user.groups.filter(name='TeamGroup').exists() and not request.user.is_staff
+    if not is_team:
+        return render
+
 
 def match_list_view(request):
     
@@ -539,7 +544,7 @@ def get_match_time_api(request,match_id):
         
 
 
-        running_time = datetime.now() - match_time_manager.first_half_start_time
+        running_time = now() - match_time_manager.first_half_start_time
 
         if match_time_manager.is_half_time_over and match_time_manager.second_half_start_time:
             running_time = datetime.now() - match_time_manager.second_half_start_time

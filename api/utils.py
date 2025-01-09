@@ -14,3 +14,9 @@ def ErrorResponse(status,message,data=None):
     
     return Response(responseObj)
 
+
+def team_permission(request):
+    if request.user.groups.filter(name='TeamGroup').exists() and not request.user.is_staff:
+        return True
+    return False
+    

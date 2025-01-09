@@ -7,4 +7,6 @@ from django.conf import settings
 
 
 def index(request):
-    return render(request,'./event/event_home.html')
+    if request.user:
+        return render(request,'./event/event_home.html')
+    return redirect('login')

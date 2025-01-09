@@ -1,5 +1,7 @@
 from django import forms
-from .models import Team,Payment,Player,EventTeam,Event
+from .models import Payment,EventTeam,Event
+
+from team.models import Team,Player
 from django.core.mail import send_mail
 from django.conf import settings
 from django.utils.crypto import get_random_string

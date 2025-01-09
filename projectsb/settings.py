@@ -51,7 +51,10 @@ INSTALLED_APPS = [
     'matchApp',
     'api',
     'address',
+    'team',
 ]
+
+# AUTH_USER_MODEL = 'sportsApp.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -78,6 +81,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'sportsApp.context_processors.permissions_processor'
             ],
         },
     },
@@ -143,10 +147,10 @@ SIMPLE_JWT = {
 
 LANGUAGE_CODE = 'en-us'
 
-# TIME_ZONE = 'Asia/Kathmandu'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kathmandu'
+# TIME_ZONE = 'UTC'
 
-# USE_I18N = True
+USE_I18N = True
 
 # USE_L10N = True
 

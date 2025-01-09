@@ -59,7 +59,7 @@ urlpatterns = [
 
     path('event/<int:pk>/',event_serializers.EventDetailView.as_view(),name='user-event-view'),
 
-    path('team/profile/',TeamProfileAPIView.as_view(),name='team-profile'),
+    # path('team/profile/',TeamProfileAPIView.as_view(),name='team-profile'),
 
     path('matches/',match_serializers.UserListMatchViewSet.as_view(),name='matches'),
 

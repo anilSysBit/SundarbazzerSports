@@ -11,6 +11,7 @@ urlpatterns = [
     # path("news/<int:news_id>/",views.latest_news_page,name='news_detail'),
 
     path("login/",views.login_view,name='login'),
+    path("logout/",views.logout_view,name='logout'),
     path('forgot-password',views.send_otp_view,name='forgot_password'),
     path('verify-otp',views.verify_otp,name='verify_otp'),
     path('change-password',views.change_password,name='change_password'),

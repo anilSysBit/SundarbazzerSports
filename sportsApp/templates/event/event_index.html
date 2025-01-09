@@ -22,30 +22,34 @@
   {% endfor %}
 {% endif %}
         <!-- Sidebar -->
+        {% if permissions.is_organizer %}
         <div class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-              <h1>Admin Panel</h1>
-              <p>{{request.user}}</p>
-            </div>
-            <ul class="sidebar-list">
-              <li><a href="#" class="sidebar-item">Dashboard</a></li>
-              <li id="dropdown-content">
-                <a href="#" class="sidebar-item" id="team-dropdown-toggle">
-                  Teams
-                </a>
-                <ul class="dropdown" id="team-dropdown">
-                  <li class="dropdown-item"><a href="{% url 'team' %}">All Teams</a></li>
-                  <li class="dropdown-item"><a href="{% url 'create-team' %}">Create Team</a></li>
-                </ul>
-              </li>
-              <li><a href="{% url 'match' %}" class="sidebar-item">Matches</a></li>
-              <li><a href="{% url 'event' %}" class="sidebar-item">Events</a></li>
-              <li><a href="#" class="sidebar-item">Users</a></li>
-              <li><a href="#" class="sidebar-item">Live</a></li>
-              <li><a href="#" class="sidebar-item">Sponsers</a></li>
-              <li><a href="#" class="sidebar-item">Logout</a></li>
-            </ul>
+          <div class="sidebar-header">
+            <h1>Admin Panel</h1>
+            <p>{{request.user}}</p>
           </div>
+          <ul class="sidebar-list">
+            <li><a href="#" class="sidebar-item">Dashboard</a></li>
+            <li id="dropdown-content">
+              <a href="#" class="sidebar-item" id="team-dropdown-toggle">
+                Teams
+              </a>
+              <ul class="dropdown" id="team-dropdown">
+                <li class="dropdown-item"><a href="{% url 'team' %}">All Teams</a></li>
+                <li class="dropdown-item"><a href="{% url 'create-team' %}">Create Team</a></li>
+              </ul>
+            </li>
+            <li><a href="{% url 'match' %}" class="sidebar-item">Matches</a></li>
+            <li><a href="{% url 'event' %}" class="sidebar-item">Events</a></li>
+            <li><a href="#" class="sidebar-item">Users</a></li>
+            <li><a href="#" class="sidebar-item">Live</a></li>
+            <li><a href="#" class="sidebar-item">Sponsers</a></li>
+            <li><a href="{% url 'logout' %}" class="sidebar-item">Logout</a></li>
+          </ul>
+        </div>
+        {% else %}
+        {% include 'temp_team/team_sidebar.html' %}
+        {% endif %}
           
         
 
