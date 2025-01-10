@@ -29,11 +29,13 @@
             </div>
 
             <!-- Email -->
+            {% if permissions.is_organizer %}
             <div class="form-control">
-                <label for="email">Email</label>
+                <label for="email">Email Address</label>
                 {{form.email}}
 
             </div>
+            {% endif %}
 
             <!-- Email -->
             <div class="form-control">
@@ -106,9 +108,15 @@
        </div>
             <!-- Submit Button -->
              <div class="form-control">
+            {% if permissions.is_team %}
+            <button type="submit" class="global_btn">Update</button>
+            {% else %}
             <button type="submit" class="global_btn">Submit</button>
+            {% endif %}
+
 
              </div>
         </form>
     </div>
 </div>
+

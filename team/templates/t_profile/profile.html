@@ -1,0 +1,19 @@
+{% extends 'team_index.html' %}
+
+
+{% block content %}
+
+    {% include 'teams/components/create_team_form.html' %}
+
+
+    {% if res_data.errors %}
+    <div class="errors">
+        <ul>
+            {% for error in res_data.errors %}
+                <li style="color: red;text-align: center;">{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% endif %}
+{% endblock %}

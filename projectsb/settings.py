@@ -143,6 +143,12 @@ SIMPLE_JWT = {
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
     'AUTH_HEADER_PREFIX': 'Bearer',
 }
+
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Default authentication backend
+    'sportsApp.authentication.EmailOrUsernameBackend',  # Add the custom backend
+]
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 

@@ -6,6 +6,7 @@ from django.contrib import messages
 from sportsApp.utils import send_registration_email
 from django.utils.crypto import get_random_string
 from django.contrib.auth.models import User,Group
+from .models import Team
 # Create your views here.
 
 
@@ -69,3 +70,23 @@ def register_team(request,res_id):
 def team_success_view(request):
     message = "A mail is sent to your gmail including with login credentials. You can login to our site with that credentials.\nThank your for regestering"
     return render(request,'./temp_team/success.html',{'header':"Successfully Registered Your Team",'message':message})
+
+
+
+def edit_team_profile(request):
+    user = request.user
+    
+    team = get_object_or_404(Team, user=user)
+
+    if request.method == 'POST':
+        form = TeamForm(request.POST, request.FILES, instance=team)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Team updated successfully.")
+            return redirect('team_profile')  # Adjust 'team_detail' to your team detail or list view name
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = TeamForm(instance=team)
+
+    return render(request, 't_profile/profile.html', {'form': form, 'team': team})

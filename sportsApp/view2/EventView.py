@@ -4,11 +4,15 @@ from django.core.exceptions import ValidationError
 from django.http import HttpResponseBadRequest
 from django.db import IntegrityError
 from django.conf import settings
+from sportsApp.utils import is_staff,is_team
 
 
 def index(request):
     if request.user:
-        return render(request,'./event/event_home.html')
+        if is_staff(request.user):
+            return render(request,'./event/event_home.html')
+        elif is_team(request.user):
+            return render(request,'team_dashboard.html')
     return redirect('login')
 
 

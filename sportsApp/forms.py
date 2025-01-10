@@ -64,7 +64,7 @@ class TeamForm(AddressMixin,forms.ModelForm):
         fields = [
             'name', 'total_players', 'sports_genere', 'short_name', 'is_organizers_team',
             'email', 'address', 'province', 'district', 'municipality', 'is_verified',
-            'user', 'logo', 'banner', 'gender','phone'
+            'logo', 'banner', 'gender','phone'
         ]
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Enter team name'}),
@@ -75,6 +75,20 @@ class TeamForm(AddressMixin,forms.ModelForm):
             'phone': forms.TextInput(attrs={'max_length':10}),
         }
 
+
+    def __init__(self, *args, **kwargs):
+        super(TeamForm, self).__init__(*args, **kwargs)
+        # If we are editing an existing team, exclude the email field
+        if self.instance and self.instance.pk:
+            self.fields['email'].disabled = True  # Disable the email field for editing
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        # Only validate the email if it's a new entry (not an edit)
+        if not self.instance.pk:  # This means it's a new object, not an edit
+            if User.objects.filter(email=email).exists():
+                raise ValidationError("This email is already taken by another user.")
+        return email
 
 class PlayerForm(forms.ModelForm):
     class Meta:

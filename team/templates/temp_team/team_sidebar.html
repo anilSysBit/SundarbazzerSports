@@ -1,10 +1,10 @@
 <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <h1>Team Panel</h1>
-      <p>{{request.user}}</p>
+      <p class="sm_text">{{request.user}}</p>
     </div>
     <ul class="sidebar-list">
-      <li><a href="#" class="sidebar-item">Dashboard</a></li>
+      <li><a href="{% url 'home' %}" class="sidebar-item">Dashboard</a></li>
       <li id="dropdown-content">
         <a href="#" class="sidebar-item" id="team-dropdown-toggle">
           Players
@@ -14,7 +14,7 @@
           <li class="dropdown-item"><a href="{% url 'create-team' %}">Create Players</a></li>
         </ul>
       </li>
-      <li><a href="" class="sidebar-item">Profile</a></li>
+      <li><a href="{% url 'team_profile' %}" class="sidebar-item">Profile</a></li>
       <li><a href="" class="sidebar-item">Events</a></li>
       <li><a href="" class="sidebar-item">Jersey</a></li>
       <li><a href="{% url 'logout' %}" class="sidebar-item">Logout</a></li>
