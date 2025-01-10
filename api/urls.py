@@ -31,7 +31,6 @@ team_list = TeamViewSet.as_view({
 })
 
 
-router.register(r'team-requests',TeamRequestViewSet,basename='teamrequest')
 # router.register(r'teams',TeamViewSet,basename='teams')
 # router.register(r'events',EventViewSet,basename='event')
 
@@ -40,6 +39,8 @@ urlpatterns = [
     path('',include(router.urls)),
 
     path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+
+    path('team-requests/',TeamRequestViewSet.as_view(),name='team-requests'),
 
     path('verify-login/', user_serializers.VerifyLoginView.as_view(), name='api_verify_login'),
     # otp url validation

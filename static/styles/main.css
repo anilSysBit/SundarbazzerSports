@@ -2662,4 +2662,8 @@ p {
 }
 .login-page .login-container .login-card form .google-login-btn:hover {
   background-color: #f5f5f5;
+}
+
+.register_team {
+  padding: 0px 80px;
 }/*# sourceMappingURL=main.css.map */

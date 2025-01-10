@@ -20,13 +20,13 @@ from matchApp.forms import MatchForm
 from django.contrib import messages
 from . import constants
 from django.db.models import Count,Q
-from .utils import send_otp_email
+from .utils import send_otp_email,is_staff,is_team
+from django.contrib.auth.decorators import user_passes_test
 
 from .models import TieSheet,RecentEvents,LatestNews,Team,TeamRequest,OTP
 from team.models import PointTable,Team,Player,Coach
 import random
 from django.contrib.auth import update_session_auth_hash,authenticate,login,logout
-
 # auth
 
 
@@ -256,8 +256,10 @@ def check_template_permission(request):
 """ 
     Team Views
 """
+
+@user_passes_test(is_staff)
 def create_team_view(request):
-    rno = request.GET.get('rno')
+    
     if request.method == 'POST':
         form = TeamForm(request.POST, request.FILES)
         if form.is_valid():
@@ -267,19 +269,6 @@ def create_team_view(request):
         else:
             messages.error(request, "Please correct the errors below.")
     else:
-        if rno:
-            team_request = get_object_or_404(TeamRequest,registration_number=rno)
-            default_values = {
-                'name':team_request.name,
-                'phone':team_request.phone,
-                'email':team_request.email,
-                'short_name':team_request.short_name,
-                'address':team_request.address,
-            }
-            if team_request:
-                form = TeamForm(initial = default_values)
-                return render(request, 'teams/create_team.html', {'form': form})
-
         form = TeamForm()
 
     return render(request, 'teams/create_team.html', {'form': form})

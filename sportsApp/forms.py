@@ -64,7 +64,7 @@ class TeamForm(AddressMixin,forms.ModelForm):
         fields = [
             'name', 'total_players', 'sports_genere', 'short_name', 'is_organizers_team',
             'email', 'address', 'province', 'district', 'municipality', 'is_verified',
-            'user', 'logo', 'banner', 'gender'
+            'user', 'logo', 'banner', 'gender','phone'
         ]
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Enter team name'}),
@@ -72,6 +72,7 @@ class TeamForm(AddressMixin,forms.ModelForm):
             'address': forms.TextInput(attrs={'placeholder': 'Enter team address'}),
             'short_name': forms.TextInput(attrs={'placeholder': 'Enter short name'}),
             'total_players': forms.NumberInput(attrs={'min': 1, 'max': 50}),
+            'phone': forms.TextInput(attrs={'max_length':10}),
         }
 
 

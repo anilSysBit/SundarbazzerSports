@@ -2,6 +2,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import MatchStatus,TieSheet
 from team.models import Team,PointTable
+from sportsApp.utils import send_registration_email
 
 @receiver(post_save, sender=MatchStatus)
 def update_point_table(sender, instance, created, **kwargs):
@@ -33,3 +34,14 @@ def create_point_table(sender, instance, created, **kwargs):
         PointTable.objects.create(team=instance)
 
 
+# @receiver(post_save,sender=Team)
+# def send_team_creation_email(sender, instance, created, **kwargs):
+#     if created:
+#         # Prepare data to send
+#             user_email = instance.email  # Assuming the Team model has an email field
+#             username = instance.user.username
+#             password = instance.user.password
+#             ins
+
+#             # Call the utility function to send the email
+#             send_registration_email(user_email, instance.name,insta.username,data.password,)

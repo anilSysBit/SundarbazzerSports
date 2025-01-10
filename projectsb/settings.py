@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'team',
 ]
 
+LOGIN_URL = '/login'
 # AUTH_USER_MODEL = 'sportsApp.CustomUser'
 
 MIDDLEWARE = [

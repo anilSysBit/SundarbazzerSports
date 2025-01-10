@@ -8,116 +8,13 @@
 
 {% load static %}
 
+
 <div class="main_team_request_container create_team mt-10">
     {% if permissions.is_team %}
         <!-- <p>haha</p> -->
     {% endif %}
-    <div class="basic-form">
-        <!-- <div class="image_container">
-            <img src="https://th.bing.com/th/id/R.f310137ff80cddb1010ecd94f844ac76?rik=S8Kvren8U7hMYQ&pid=ImgRaw&r=0" alt="">
-        </div> -->
-        
-        <div class="form-container">
-            {% if permissions.is_organizer %}
-            <h2>Create a Team</h2>
-            {% else %}
-            <h2>Update Your Profile</h2>
-            {% endif %}
-            <form action="" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <!-- Display errors if any -->
+    {% include 'teams/components/create_team_form.html' with header="Create Team"%}
 
-                <!-- Basic details -->
-                 <p>Basic Details</p>
-               <div class="form-seperation-box flex">
-                <div class="form-control">
-                    <label for="name">Team Name</label>
-                    {{form.name}}
-    
-
-                </div>
-                <div class="form-control">
-                    <label for="name">Team Tag</label>
-                    {{form.short_name}}    
-                </div>
-    
-                <!-- Email -->
-                <div class="form-control">
-                    <label for="email">Email</label>
-                    {{form.email}}
-    
-                </div>
-
-                            <!-- Gender -->
-           <div class="form-control">
-            <label for="gender">Gender</label>
-            {{form.gender}}
-           </div>
-               </div>
-
-               <!-- images -->
-                <p>Images</p>
-               <div class="form-seperation-box flex">
-                <!-- logo -->
-                <div class="form-control">
-                    <label for="logo">Logo</label>
-                <div class="button-wrap">
-                <input type="file" id="logo" name="logo" accept="image/*" onchange="previewImage(event, 'logoPreview')">
-                </div>
-                {% if team.logo %}
-    
-                <img id="logoPreview" src="{{team.logo.url}}"  alt="Banner Preview" style=" max-width: 300px; max-height: 100px;">
-                {% else%}
-                <img id="logoPreview" src="#"  alt="Logo Preview" style="display:none; max-width:300px; max-height: 100px;">
-                {% endif %}
-                </div>
-                
-                <div class="form-control">
-                    <label for="banner">Banner</label>
-                <div class="button-wrap">
-                    <!-- Banner -->
-                <input type="file" id="banner" name="banner" accept="image/*" onchange="previewImage(event, 'bannerPreview')">
-                </div>
-                {% if team.banner %}
-    
-                <img id="bannerPreview" src="{{team.banner.url}}"  alt="Banner Preview" style=" max-width: 300px; max-height: 100px;">
-                {% else%}
-                <img id="bannerPreview" src="#"  alt="Logo Preview" style="display:none; max-width:300px; max-height: 100px;">
-                {% endif %}
-                </div>
-
-               </div>
-
-    <!-- address -->
-     <p>Address Details</p>
-           <div class="form-seperation-box flex">
-            <div class="form-control">
-                <label for="gender">Province</label>
-                {{form.province}}
-               </div>
-               <div class="form-control">
-                <label for="gender">District</label>
-                {{form.district}}
-               </div>
-               <div class="form-control">
-                <label for="gender">Province</label>
-                {{form.municipality}}
-               </div>
-                <!-- area -->
-                <div class="form-control">
-                <label for="address">Area</label>
-                {{form.address}}
-
-            </div>
-           </div>
-                <!-- Submit Button -->
-                 <div class="form-control">
-                <button type="submit" class="global_btn">Submit</button>
-
-                 </div>
-            </form>
-        </div>
-    </div>
 </div>
 {% if res_data.errors %}
 <div class="errors">
@@ -128,6 +25,8 @@
     </ul>
 </div>
 {% endif %}
+
+
 <!-- <p style="margin-top: 50px;text-align: center;">Note: After Submitting this form you will receive an email with username and password by which you can login to our site and manage your team and everything about you</p> -->
 
 <script src="{% static 'js/address.js' %}"></script>

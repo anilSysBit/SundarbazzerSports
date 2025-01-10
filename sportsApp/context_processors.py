@@ -5,6 +5,8 @@ def permissions_processor(request):
         "is_staff": False,
     }
 
+    
+
     # Update permissions based on the authenticated user
     if request.user.is_authenticated:
 

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/main.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="icon" href="{% static 'images/favico.webp' %}" type="image/x-icon">
+    <title>Document</title>
+</head>
+<body>
+    <div class="main_team_request_container register_team create_team mt-10">
+        {% if permissions.is_team %}
+            <!-- <p>haha</p> -->
+        {% endif %}
+        <!-- <h2>Team Registration</h2> -->
+        {% include 'teams/components/create_team_form.html' with header="Team Registration"%}
+    
+    </div>
+    {% if res_data.errors %}
+    <div class="errors">
+        <ul>
+            {% for error in res_data.errors %}
+                <li style="color: red;text-align: center;">{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    
+    
+    <!-- <p style="margin-top: 50px;text-align: center;">Note: After Submitting this form you will receive an email with username and password by which you can login to our site and manage your team and everything about you</p> -->
+    
+</body>
+<script src="{% static 'js/address.js' %}"></script>
+<script  src="{% static 'js/index.js' %}"></script>
+<script src="{% static 'js/alert.js' %}"></script>
+</html>

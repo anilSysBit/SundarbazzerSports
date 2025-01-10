@@ -10,3 +10,8 @@ def index(request):
     if request.user:
         return render(request,'./event/event_home.html')
     return redirect('login')
+
+
+def edit_profile_view(request):
+    if request.method == 'POST':
+        return render('')

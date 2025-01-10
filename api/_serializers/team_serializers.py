@@ -27,6 +27,7 @@ class TeamRequestSerializer(serializers.ModelSerializer):
         fields = '__all__'  # Include all fields in the serializer
 
 
+
 class TeamSerializer(serializers.ModelSerializer):
     logo = serializers.SerializerMethodField()
     banner = serializers.SerializerMethodField()
