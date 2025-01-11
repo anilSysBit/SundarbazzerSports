@@ -51,6 +51,12 @@ body {
 .mt-10{
   margin-top: 10px;
 }
+
+.content_on_middle{
+  display: flex;
+  place-content: center;
+  place-items: center;
+}
 .ball-container {
   position: absolute;
   overflow: hidden;
@@ -3238,4 +3244,30 @@ $text-color: white;
 .register_team{
   // border: 2px solid white;
   padding: 0px 80px;
+}
+
+
+.team_dashboard{
+  border: 1px solid white;
+  margin-top: 20px;
+  .dashboard_box{
+    display: flex;
+    column-gap: 20px;
+    .box{
+      // width: 50%;
+      border: 1px solid red;
+    }
+  }
+  .other_details{
+    width: 70%;
+  }
+  .jersey_box{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    place-content: center;
+    place-items: center;
+    // margin-top: 20px;
+    // width: 20%;
+  }
 }

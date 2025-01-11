@@ -7,7 +7,9 @@
 
   <h2>Events</h2>
     <div class="filter_box">
+        {% if permissions.is_organizer %}
         <a href="{% url 'create-event' %}">Create New Event</a>
+        {% endif %}
         <div class="search">
            <input type="search" placeholder="Search"/>
            <button class="global_btn"><span class="material-symbols-outlined">
@@ -21,6 +23,7 @@
 
    <!-- Popop alert for team deletiion -->
 
+   {% if  permissions.is_organizer %}
   <form class="custom_alert_box" id="alert-box-active" onsubmit="handleSubmitVerifyTeam(event)">
     <!-- {% csrf_token %} -->
   </form>
@@ -28,6 +31,7 @@
   <form class="custom_alert_box"  id="alert-box-delete-team" onsubmit="handleDeleteTeam(event)">
     <!-- {% csrf_token %} -->
   </form>
+  {% endif %}
 
    <form class="team_listing" id="team-form" method="post">
     {% csrf_token %}
@@ -82,6 +86,7 @@
                         </span>
                     </button>
                   </a>
+                  {% if permissions.is_organizer %}
                   <a href="{% url 'edit-event' event.id %}">
                     <button class="global_btn outline" type="button">
                       <span class="icon material-symbols-outlined">
@@ -89,6 +94,7 @@
                         </span>
                     </button>
                   </a>
+                  {% endif %}
                   </div>
                   
                 </td>

@@ -10,13 +10,15 @@
           Players
         </a>
         <ul class="dropdown" id="team-dropdown">
-          <li class="dropdown-item"><a href="{% url 'team' %}">All Players</a></li>
-          <li class="dropdown-item"><a href="{% url 'create-team' %}">Create Players</a></li>
+          <li class="dropdown-item"><a href="{% url 'team-players' %}">All Players</a></li>
+          {% if team %}
+          <li class="dropdown-item"><a href="{% url 'create-player' team_id=team.id%}">Create Player</a></li>
+          {% endif %}
         </ul>
       </li>
       <li><a href="{% url 'team_profile' %}" class="sidebar-item">Profile</a></li>
-      <li><a href="" class="sidebar-item">Events</a></li>
-      <li><a href="" class="sidebar-item">Jersey</a></li>
+      <li><a href="{% url 'team_ongoing_events' %}" class="sidebar-item">Events</a></li>
+      <li><a href="{% url 'team_jersey' %}" class="sidebar-item">Jersey</a></li>
       <li><a href="{% url 'logout' %}" class="sidebar-item">Logout</a></li>
     </ul>
 

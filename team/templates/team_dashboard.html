@@ -1,9 +1,11 @@
-{% extends 'team_index.html' %}
-
-
-{% block content %}
 
     <div class="team_dashboard">
-        <h2>Hello Team Name</h2>
+        <div class="dashboard_box">
+            <div class="other_details box"></div>
+            <div class="jersey_box box">
+                {% include 'jersey/jersey.html' with height=200 width=200 %}
+                
+                <a href="{% url 'team_jersey' %}"><button class="global_btn">Change Jersey Color</button></a>
+            </div>
+        </div>
     </div>
-{% endblock content %}

@@ -6,7 +6,10 @@ from django.contrib import messages
 from sportsApp.utils import send_registration_email
 from django.utils.crypto import get_random_string
 from django.contrib.auth.models import User,Group
-from .models import Team
+from .models import Team,Player
+from sportsApp.models import Event
+from sportsApp.constants import EventStatus
+from django.db.models import Q
 # Create your views here.
 
 
@@ -90,3 +93,33 @@ def edit_team_profile(request):
         form = TeamForm(instance=team)
 
     return render(request, 't_profile/profile.html', {'form': form, 'team': team})
+
+
+
+def team_dashboard(request):
+    user = request.user
+    team = get_object_or_404(Team,user=user)
+    # coach = get_object_or_404(Coach,team_id=team_id)
+    coach = None
+      
+    # players = Player.objects.filter(team=team)
+    return render(request,'./teams/teamProfile.html',{'team':team,'coach':coach,'basic_detail':True,})
+
+
+def team_players(request):
+    user = request.user
+    team = get_object_or_404(Team,user=user)
+    players = Player.objects.filter(team=team)
+    return render(request,'./players/team_player_list.html',{'team':team,'players':players})
+
+
+def team_ongoing_events_view(request):
+    events = Event.objects.filter(Q(status=EventStatus.INITIATED ) | Q(status=EventStatus.REGISTRATION))
+
+    return render(request,"event/event_list.html",{'events':events})
+
+def team_jersey_view(request):
+    user = request.user
+    team = get_object_or_404(Team,user = user)
+
+    return render(request,'jersey/team_jersey_page.html',{'team':team})

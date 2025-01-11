@@ -2,79 +2,9 @@
 
 
 {% block teamcontent %}
-<form class="custom_alert_box"  id="alert-box-delete-player" onsubmit="deletePlayerSubmit(event)">
-  {% csrf_token %}
-</form>
 
 
-<form class="custom_alert_box" id="alert-box-active" onsubmit="handleChangePlayerStatus(event)">
-  {% csrf_token %}
-</form>
-
-<div class="responsive-table-box players_table">
-    <h2 >Players</h2>
-
-    
-    <div class="filter_box">
-        <div class="filter_box">
-            <a href="{% url 'create-player' team_id=team.id %}">Create New Player</a>
-            <div class="search">
-               <input type="search" placeholder="Search"/>
-               <button class="global_btn"><span class="material-symbols-outlined">
-                search
-                </span></button>
-            </div>
-        </div>
-    </div>
-    <table class="responsive-table">
-      <thead>
-        <tr>
-          <th>SN</th>
-          <th>Name</th>
-          <th>Jersey No</th>
-          <th>Designation</th>
-          <th>Active Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        {% for player in players %}
-        <tr>
-          <td>{{ forloop.counter|add:0 }}</td>
-          <td>{{player.name}}</td>
-          <td>{{player.jersey_no}}</td>
-          <td>{{player.designation}}</td>
-          <td>
-            <div class="checkbox_wrapper">
-              <input type="checkbox" 
-              id="team_checkbox{{ player.id }}"
-                  {% if player.is_active %} checked {% endif %} 
-                  onchange="handleChangeTeamCheckbox('{{ player.id }}','{{player.name}}')"
-                  />
-            </div>
-          </td>
-          <td>
-            <div class="td_actions">
-                <button class="global_btn outline" type="button" onclick="handleDeletePlayer('{{player.id}}','Do you want to delete this player {{player.name}}?','You make lose the player data if you delete.')">
-                  <span class="icon material-symbols-outlined">
-                    delete
-                    </span>
-                </button>
-                <a href="/update-player/{{player.id}}">
-                  <button class="global_btn" type="button">
-                    <span class="icon material-symbols-outlined">
-                      edit
-                      </span>
-                  </button>
-                </a>
-              </div>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+{% include 'players/player_list.html' %}
   
   
 {% endblock teamcontent %}

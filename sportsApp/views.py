@@ -175,17 +175,23 @@ def view_players(request,team_id):
 def create_player(request,team_id):
     team = get_object_or_404(Team,id=team_id)
     form = PlayerForm(request.POST or None, request.FILES or None)
+    temp_name = './teams/create_player.html'
+    redirect_link = redirect('team-players',team.id)
 
+    if is_team(request.user):
+        temp_name = './players/team_create_player_page.html'
+        redirect_link = redirect('team-players')
+        
     if request.method == 'POST':
         if form.is_valid():
             form.save()
             messages.success(request, "Player created successfully!")
-            return redirect('team-players',team.id)
+            return redirect_link
         else:
-            return render(request,'./teams/create_player.html',{'team':team,'form':form},status=400)
+            return render(request,temp_name,{'team':team,'form':form},status=400)
 
             
-    return render(request,'./teams/create_player.html',{'team':team,'form':form})
+    return render(request,temp_name,{'team':team,'form':form})
 
 
 # updating player function

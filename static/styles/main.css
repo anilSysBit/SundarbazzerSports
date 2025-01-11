@@ -46,6 +46,12 @@ body {
   margin-top: 10px;
 }
 
+.content_on_middle {
+  display: flex;
+  place-content: center;
+  place-items: center;
+}
+
 .ball-container {
   position: absolute;
   overflow: hidden;
@@ -2666,4 +2672,27 @@ p {
 
 .register_team {
   padding: 0px 80px;
+}
+
+.team_dashboard {
+  border: 1px solid white;
+  margin-top: 20px;
+}
+.team_dashboard .dashboard_box {
+  display: flex;
+  -moz-column-gap: 20px;
+       column-gap: 20px;
+}
+.team_dashboard .dashboard_box .box {
+  border: 1px solid red;
+}
+.team_dashboard .other_details {
+  width: 70%;
+}
+.team_dashboard .jersey_box {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  place-content: center;
+  place-items: center;
 }/*# sourceMappingURL=main.css.map */

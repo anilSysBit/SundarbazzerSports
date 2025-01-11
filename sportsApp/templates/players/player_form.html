@@ -1,0 +1,120 @@
+{% if form.errors %}
+<div class="error-messages">
+    <p class="correct_error">Please correct the following errors:</p>
+    <ul>
+        {% for field, errors in form.errors.items %}
+            <li class="white"><strong>{{ field }}:</strong> {{ errors|join:", " }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<div class="basic-form">
+    <div class="form-container create_player">
+        <form method="post"  enctype="multipart/form-data" class="mt-10">
+            {% csrf_token %}
+            
+            <!-- Team field -->
+            <input type="hidden" name="team" value="{{team.id}}">
+        
+            <p>Basic Details</p>
+            <div class="form-seperation-box flex">
+            <!-- Name field -->
+            <div class="form-control">
+                <label for="name">Name</label>
+                <input type="text" required name="name" value="{{ form.name.value|default_if_none:'' }}" id="name" class="custom-input">
+            
+               </div>
+                <!-- Jersey Number field -->
+               <div class="form-control">
+                <label for="jersey_no">Jersey Number</label>
+                <input type="number" required name="jersey_no" value="{{ form.jersey_no.value|default_if_none:'' }}" id="jersey_no" class="custom-input">
+        
+                <span class="custom-error">{{form.jersey_no.errors}}</span>
+        
+               </div>
+                <!-- Age field -->
+                <div class="form-control">
+                    <label for="age">Age</label>
+                <input type="number" min="15" max="30" required name="age" value="{{ form.age.value|default_if_none:'' }}" id="age" class="custom-input">
+            
+                </div>
+                <!-- Email field -->
+                <div class="form-control">
+                    <label for="email">Email</label>
+                <input type="email"  name="email" value="{{ form.email.value|default_if_none:'' }}" id="email" class="custom-input">
+            
+                </div>
+                        <!-- Phone field -->
+            <div class="form-control">
+                <label for="phone">Phone</label>
+            <input type="text" name="phone" maxlength="10" value="{{ form.phone.value|default_if_none:'' }}" id="phone" class="custom-input">
+        
+            </div>
+        
+                    <!-- Address field -->
+                    <div class="form-control">
+                        <label for="address">Address</label>
+                    <textarea name="address" id="address" class="custom-textarea">{{ form.address.value|default_if_none:'' }}</textarea>
+                
+                    </div>
+            </div>
+        
+            <p>Images</p>
+            <div class="form-seperation-box flex">
+            <!-- Profile Image field -->
+            <div class="form-control">
+                <label for="profile_image">Profile Image</label>
+                <div class="button-wrap">
+            <input type="file" accept="image/*" name="profile_image" id="profile_image" onchange="previewImage(event, 'bannerPreview')">
+            
+        </div>
+        <!-- <p>{{player.profile_image}}</p> -->
+        {% if player.profile_image %}
+        
+        <img id="bannerPreview" src="{{player.profile_image.url}}"  alt="Banner Preview" style=" max-width: 300px; max-height: 100px;">
+        {% else%}
+        <img id="bannerPreview" src="#"  alt="Banner Preview" style="display:none; max-width:300px; max-height: 100px;">
+        {% endif %}
+            </div>
+            </div>
+        
+            <p>Game Info</p>
+            <div class="form-seperation-box flex">
+                        <!-- Weight field -->
+           <div class="form-control">
+            <label for="weight">Weight</label>
+            <input type="number" name="weight" value="{{ form.weight.value|default_if_none:'' }}" id="weight" class="custom-input">
+        
+           </div>
+        
+            <!-- Height field -->
+            <div class="form-control">
+                <label for="height">Height</label>
+            <input type="number" name="height" value="{{ form.height.value|default_if_none:'' }}" id="height" class="custom-input">
+        
+            </div>
+            <!-- Blood Group field -->
+            <div class="form-control">
+                <label for="blood_group">Blood Group</label>
+            {{ form.blood_group }}
+        
+            </div>
+        
+            <!-- Designation field -->
+            <div class="form-control">
+                <label for="designation">Designation</label>
+            {{ form.designation }}
+            </div>
+        
+            </div>
+            
+        
+        
+        
+          
+            <!-- Submit button -->
+            <button type="submit" class="global_btn">{% if player %} Update {% else %} Create{% endif %}</button>
+        </form>
+        </div>
+</div>

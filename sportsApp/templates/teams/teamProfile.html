@@ -29,7 +29,11 @@
     
 
   {% if basic_detail %}
+  {% if permissions.is_organizer %}
   {% include 'teams/basic_detail.html' %}
+  {% else %}
+  {% include 'team_dashboard.html' with height=300 width=400 %}
+  {% endif %}
   {% endif %}
 
 
